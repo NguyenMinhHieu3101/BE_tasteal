@@ -37,6 +37,8 @@ This project uses the following technologies:
 
 ## Project Structure
 
+![3layer-model](https://github.com/NguyenMinhHieu3101/BE_tasteal/assets/105068972/4a5dd692-36d5-43fe-b281-56a2d4f5a410)
+
 - `API`: This folder contains the source code for the web API.
   - `Controllers`: This folder contains the controllers that handle incoming requests.
   - `Program.c	s`: This file is responsible for configuring and running the web host. After .NET6 we don't have to use Startup.cs anymore. And the code in the Program file is more concise and simple. TODO: Code Coverage is not ignoring this file when running GitHub Actions using dot net cli and SonarCloud.
