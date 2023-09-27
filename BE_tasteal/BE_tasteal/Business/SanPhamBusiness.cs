@@ -31,8 +31,8 @@ namespace BE_tasteal.Business
 
         public async Task<SanPhamEntity?> Add(SanPhamDto entity)
         {
-
-            var sanpham = await _sanphamResposity.InsertAsync(_mapper.Map<SanPhamEntity>(entity));
+            var newSanPham = _mapper.Map<SanPhamEntity>(entity);
+            var sanpham = await _sanphamResposity.InsertAsync(newSanPham);
 
             _logger.LogInformation($"Added sanPham ", entity);
             return sanpham;

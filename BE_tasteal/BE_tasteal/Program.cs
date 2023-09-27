@@ -6,7 +6,9 @@ using BE_tasteal.Entity.DTO;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Interface;
+using BE_tasteal.Persistence.Interface.GenericRepository;
 using BE_tasteal.Persistence.Repository;
+using BE_tasteal.Persistence.Repository.GenericRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -40,7 +42,9 @@ try
         builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         //add service repository
-        builder.Services.AddSingleton<ConnectionManager>();
+        builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+        builder.Services.AddScoped<ConnectionManager>();
         builder.Services.AddScoped<DbContext, MyDbContext>();
 
         builder.Services.AddScoped<ISanPhamResposity, SanPhamResposity>();

@@ -2,7 +2,6 @@
 using BE_tasteal.Business.Interface;
 using BE_tasteal.Entity.DTO;
 using BE_tasteal.Entity.Entity;
-using BE_tasteal.Persistence.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BE_tasteal.API.Controllers
@@ -14,13 +13,13 @@ namespace BE_tasteal.API.Controllers
     [ApiVersion("1.0")]
     public class SanPhamController : Controller
     {
-        private readonly ISanPhamResposity _sanPhamResposity;
+        // private readonly ISanPhamResposity _sanPhamResposity;
         private readonly IBusiness<SanPhamDto, SanPhamEntity> _sanPhambusiness;
 
-        public SanPhamController(ISanPhamResposity sanPhamResposity,
+        public SanPhamController(
             IBusiness<SanPhamDto, SanPhamEntity> sanPhambusiness)
         {
-            _sanPhamResposity = sanPhamResposity;
+            // _sanPhamResposity = sanPhamResposity;
             _sanPhambusiness = sanPhambusiness;
         }
 
@@ -31,12 +30,12 @@ namespace BE_tasteal.API.Controllers
         {
             try
             {
-                Console.WriteLine("asdasdasdadas");
-                var sanpham = await _sanPhamResposity.GetAll();
+                var sanpham = await _sanPhambusiness.GetAll();
                 return Ok(sanpham);
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return NotFound();
             }
 

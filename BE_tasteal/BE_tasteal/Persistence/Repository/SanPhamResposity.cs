@@ -1,26 +1,26 @@
 ﻿using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Interface;
+using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
 
 namespace BE_tasteal.Persistence.Repository
 {
-    public class SanPhamResposity : ISanPhamResposity
+    public class SanPhamResposity : GenericRepository<SanPhamEntity>, ISanPhamResposity
     {
-        private readonly MyDbContext _context;
-        private readonly ConnectionManager _connectionManager;
         public SanPhamResposity(MyDbContext context,
-           ConnectionManager connectionManager)
+           ConnectionManager connectionManager) : base(context, connectionManager)
         {
-            _context = context;
-            _connectionManager = connectionManager;
+
         }
 
         #region get data by dapper
         public async Task<List<SanPhamEntity>> GetAll()
         {
-            using (var connection = _connectionManager.GetConnection())
+            Console.WriteLine("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            using (var connection = _connection.GetConnection())
             {
+
                 string query = @"
                 SELECT
                     sp.MaSanPham,
@@ -53,19 +53,6 @@ namespace BE_tasteal.Persistence.Repository
                 return lookup.Values.ToList();
             }
 
-        }
-        #endregion
-
-
-        #region write/upadte by linq
-        public async Task<SanPhamEntity> InsertAsync(SanPhamEntity entity)
-        {
-            _context.Attach(entity);
-            var entityEntry = await _context.Set<SanPhamEntity>().AddAsync(entity);
-
-            await _context.SaveChangesAsync();
-
-            return entityEntry.Entity;
         }
         #endregion
     }
