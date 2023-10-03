@@ -33,25 +33,25 @@ try
 
     app.Run();
 
-    #region config
+    #region config Service
     void ConfigureServices(IServiceCollection services)
     {
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-        builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
-        builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+        services.ConfigureOptions<ConfigureSwaggerOptions>();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         //add service repository
-        builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-        builder.Services.AddScoped<ConnectionManager>();
-        builder.Services.AddScoped<DbContext, MyDbContext>();
+        services.AddScoped<ConnectionManager>();
+        services.AddScoped<DbContext, MyDbContext>();
 
-        builder.Services.AddScoped<ISanPhamResposity, SanPhamResposity>();
+        services.AddScoped<ISanPhamResposity, SanPhamResposity>();
 
-        builder.Services.AddScoped<IBusiness<SanPhamDto, SanPhamEntity>, SanPhamBusiness>();
+        services.AddScoped<IBusiness<SanPhamDto, SanPhamEntity>, SanPhamBusiness>();
 
-        builder.Services.AddDbContext<MyDbContext>(option =>
+        services.AddDbContext<MyDbContext>(option =>
         {
             var connectionString = builder.Configuration.GetConnectionString("DefaultString");
             option.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
@@ -59,18 +59,18 @@ try
 
         // Invoking action filters to validate the model state for all entities received in POST and PUT requests
         // https://code-maze.com/aspnetcore-modelstate-validation-web-api/
-        builder.Services.AddScoped<ValidationFilterAttribute>();
-        builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+        services.AddScoped<ValidationFilterAttribute>();
+        services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
         builder.Host.ConfigureAppSettings();
-        builder.Services
+        services
             .AddControllers()
             .AddJsonOptions(option =>
             {
                 option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
 
-        builder.Services.AddApiVersioning(option =>
+        services.AddApiVersioning(option =>
         {
             option.AssumeDefaultVersionWhenUnspecified = true;
             option.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
@@ -78,7 +78,7 @@ try
             option.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader());
         });
 
-        builder.Services.AddVersionedApiExplorer(options =>
+        services.AddVersionedApiExplorer(options =>
         {
             options.GroupNameFormat = "'v'VVV";
             options.SubstituteApiVersionInUrl = true;
@@ -98,7 +98,9 @@ try
                    .ReadFrom.Configuration(builder.Configuration)
                    .CreateLogger());
     }
+    #endregion
 
+    #region config middleware
     void ConfigureMiddleware(WebApplication app)
     {
         using (var scope = app.Services.CreateScope())

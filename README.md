@@ -11,10 +11,11 @@ To get started, you need to:
 
 ```
 "ConnectionStrings": {
-  "DefaultString": "Server=(localdb)\\mssqllocaldb;Database=ApiTemplate;Trusted_Connection=True;"
+  "DefaultString": "Server=yourhost;Port=port;Database=DbName;Uid=user;Pwd=password;"
 }
 ```
 
+- Run Update-Database in terminal
 - run the application using Visual Studio 2022 or the .NET CLI
 
 ## Technologies
@@ -41,7 +42,7 @@ This project uses the following technologies:
 
 - `API`: This folder contains the source code for the web API.
   - `Controllers`: This folder contains the controllers that handle incoming requests.
-  - `Program.c	s`: This file is responsible for configuring and running the web host. After .NET6 we don't have to use Startup.cs anymore. And the code in the Program file is more concise and simple. TODO: Code Coverage is not ignoring this file when running GitHub Actions using dot net cli and SonarCloud.
+  - `Program.cs`: This file is responsible for configuring and running the web host. After .NET6 we don't have to use Startup.cs anymore. And the code in the Program file is more concise and simple. TODO: Code Coverage is not ignoring this file when running GitHub Actions using dot net cli and SonarCloud.
   - `Middleware`: Implements the IMiddleware interface and is responsible for global error handling. It intercepts exceptions thrown by the application and throw the corret exception.
   - `ValidationFilterAttribute.cs`: Validates DTO required properties.
 - `Business`: This project uses a generic Interface in all classes, in order to make it simple to make dependency injection. We only need to register one time in the Program.cs file and it is going to inject all business classes into the system commented. All classes receive an AutoMapper and a Log via dependency injection.
