@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BE_tasteal.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231003133937_tasteal-db-init")]
-    partial class tastealdbinit
+    [Migration("20231006070806_update-erd-meeting1")]
+    partial class updateerdmeeting1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,7 +45,7 @@ namespace BE_tasteal.Migrations
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.Cart_ItemEntity", b =>
                 {
-                    b.Property<int>("item_id")
+                    b.Property<int>("cart_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -58,7 +58,7 @@ namespace BE_tasteal.Migrations
                     b.Property<int?>("ingredient_id")
                         .HasColumnType("int");
 
-                    b.HasKey("item_id");
+                    b.HasKey("cart_id");
 
                     b.HasIndex("account_id");
 
@@ -83,6 +83,10 @@ namespace BE_tasteal.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("comment_id");
+
+                    b.HasIndex("account_id");
+
+                    b.HasIndex("recipe_id");
 
                     b.ToTable("Comment");
                 });
@@ -132,16 +136,22 @@ namespace BE_tasteal.Migrations
                     b.Property<string>("image")
                         .HasColumnType("text");
 
+                    b.Property<bool>("isLiquid")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int>("measurement_unit_id")
                         .HasColumnType("int");
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("nutrition_info_id")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("ratio")
+                        .HasColumnType("decimal(10, 2)");
 
                     b.Property<int>("type_id")
                         .HasColumnType("int");
@@ -149,8 +159,6 @@ namespace BE_tasteal.Migrations
                     b.HasKey("ingredient_id");
 
                     b.HasIndex("measurement_unit_id");
-
-                    b.HasIndex("nutrition_info_id");
 
                     b.HasIndex("type_id");
 
@@ -197,22 +205,6 @@ namespace BE_tasteal.Migrations
                     b.HasKey("MaLoaiSanPham");
 
                     b.ToTable("LoaiSanPham");
-                });
-
-            modelBuilder.Entity("BE_tasteal.Entity.Entity.Measurement_UnitEntity", b =>
-                {
-                    b.Property<int>("unit_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("unit_id");
-
-                    b.ToTable("Measurement_Unit");
                 });
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.Nutrition_InfoEntity", b =>
@@ -268,9 +260,35 @@ namespace BE_tasteal.Migrations
                     b.ToTable("Nutrition_Info");
                 });
 
+            modelBuilder.Entity("BE_tasteal.Entity.Entity.OccasionEntity", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("image")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("start_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Occasion");
+                });
+
             modelBuilder.Entity("BE_tasteal.Entity.Entity.Pantry_ItemEntity", b =>
                 {
-                    b.Property<int>("item_id")
+                    b.Property<int>("pantry_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -283,13 +301,40 @@ namespace BE_tasteal.Migrations
                     b.Property<int?>("ingredient_id")
                         .HasColumnType("int");
 
-                    b.HasKey("item_id");
+                    b.HasKey("pantry_id");
 
                     b.HasIndex("account_id");
 
                     b.HasIndex("ingredient_id");
 
                     b.ToTable("Pantry_Item");
+                });
+
+            modelBuilder.Entity("BE_tasteal.Entity.Entity.PlanEntity", b =>
+                {
+                    b.Property<int>("plan_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("account_id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("date")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("recipe_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("serving_size")
+                        .HasColumnType("int");
+
+                    b.HasKey("plan_id");
+
+                    b.HasIndex("account_id");
+
+                    b.HasIndex("recipe_id");
+
+                    b.ToTable("Plan");
                 });
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.RatingEntity", b =>
@@ -409,19 +454,35 @@ namespace BE_tasteal.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("amount")
-                        .HasColumnType("decimal(65,30)");
+                        .HasColumnType("decimal(10, 2)");
 
                     b.Property<bool>("is_required")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("note")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("recipe_id", "ingredient_id");
 
                     b.HasIndex("ingredient_id");
 
                     b.ToTable("Recipe_Ingredient");
+                });
+
+            modelBuilder.Entity("BE_tasteal.Entity.Entity.Recipe_OccasionEntity", b =>
+                {
+                    b.Property<int>("recipe_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("occasion_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("recipe_id", "occasion_id");
+
+                    b.HasIndex("occasion_id");
+
+                    b.ToTable("recipe_OccasionEntities");
                 });
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.SanPhamEntity", b =>
@@ -459,6 +520,25 @@ namespace BE_tasteal.Migrations
                     b.Navigation("Ingredient");
                 });
 
+            modelBuilder.Entity("BE_tasteal.Entity.Entity.CommentEntity", b =>
+                {
+                    b.HasOne("BE_tasteal.Entity.Entity.AccountEntity", "Account")
+                        .WithMany()
+                        .HasForeignKey("account_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BE_tasteal.Entity.Entity.RecipeEntity", "Recipe")
+                        .WithMany()
+                        .HasForeignKey("recipe_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Recipe");
+                });
+
             modelBuilder.Entity("BE_tasteal.Entity.Entity.CookBookEntity", b =>
                 {
                     b.HasOne("BE_tasteal.Entity.Entity.AccountEntity", "account")
@@ -470,6 +550,12 @@ namespace BE_tasteal.Migrations
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.CookBook_RecipeEntity", b =>
                 {
+                    b.HasOne("BE_tasteal.Entity.Entity.CookBookEntity", "cook_book")
+                        .WithMany()
+                        .HasForeignKey("cook_book_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BE_tasteal.Entity.Entity.RecipeEntity", "RecipeEntity")
                         .WithMany()
                         .HasForeignKey("recipe_id")
@@ -477,19 +563,15 @@ namespace BE_tasteal.Migrations
                         .IsRequired();
 
                     b.Navigation("RecipeEntity");
+
+                    b.Navigation("cook_book");
                 });
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.IngredientEntity", b =>
                 {
-                    b.HasOne("BE_tasteal.Entity.Entity.Measurement_UnitEntity", "measurement_unit")
-                        .WithMany()
-                        .HasForeignKey("measurement_unit_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BE_tasteal.Entity.Entity.Nutrition_InfoEntity", "nutrition_info")
                         .WithMany()
-                        .HasForeignKey("nutrition_info_id")
+                        .HasForeignKey("measurement_unit_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -500,8 +582,6 @@ namespace BE_tasteal.Migrations
                         .IsRequired();
 
                     b.Navigation("ingredient_type");
-
-                    b.Navigation("measurement_unit");
 
                     b.Navigation("nutrition_info");
                 });
@@ -519,6 +599,25 @@ namespace BE_tasteal.Migrations
                     b.Navigation("IngredientEntity");
 
                     b.Navigation("account");
+                });
+
+            modelBuilder.Entity("BE_tasteal.Entity.Entity.PlanEntity", b =>
+                {
+                    b.HasOne("BE_tasteal.Entity.Entity.AccountEntity", "AccountEntity")
+                        .WithMany()
+                        .HasForeignKey("account_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BE_tasteal.Entity.Entity.RecipeEntity", "RecipeEntity")
+                        .WithMany()
+                        .HasForeignKey("recipe_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccountEntity");
+
+                    b.Navigation("RecipeEntity");
                 });
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.RatingEntity", b =>
@@ -594,6 +693,25 @@ namespace BE_tasteal.Migrations
                     b.Navigation("ingredient");
 
                     b.Navigation("recipe");
+                });
+
+            modelBuilder.Entity("BE_tasteal.Entity.Entity.Recipe_OccasionEntity", b =>
+                {
+                    b.HasOne("BE_tasteal.Entity.Entity.OccasionEntity", "OccasionEntity")
+                        .WithMany()
+                        .HasForeignKey("occasion_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BE_tasteal.Entity.Entity.RecipeEntity", "RecipeEntity")
+                        .WithMany()
+                        .HasForeignKey("recipe_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OccasionEntity");
+
+                    b.Navigation("RecipeEntity");
                 });
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.SanPhamEntity", b =>

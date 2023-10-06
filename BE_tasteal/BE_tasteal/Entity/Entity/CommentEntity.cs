@@ -13,5 +13,9 @@ namespace BE_tasteal.Entity.Entity
         public int account_id { get; set; }
         [Column(TypeName = "text")]
         public string? comment { get; set; }
+        [ForeignKey("recipe_id")]
+        public RecipeEntity Recipe { get; set; }
+        [ForeignKey("account_id")]
+        public AccountEntity Account { get; set; }
     }
 }
