@@ -47,9 +47,13 @@ try
         services.AddScoped<ConnectionManager>();
         services.AddScoped<DbContext, MyDbContext>();
 
-        services.AddScoped<ISanPhamResposity, SanPhamResposity>();
-
+        //business
         services.AddScoped<IBusiness<SanPhamDto, SanPhamEntity>, SanPhamBusiness>();
+        services.AddScoped<IBusiness<RecipeDto, RecipeEntity>, RecipeBusiness>();
+
+        //repo
+        services.AddScoped<ISanPhamResposity, SanPhamResposity>();
+        services.AddScoped<IRecipeRepository, RecipeRepository>();
 
         services.AddDbContext<MyDbContext>(option =>
         {

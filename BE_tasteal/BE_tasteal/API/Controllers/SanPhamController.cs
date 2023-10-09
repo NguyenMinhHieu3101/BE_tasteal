@@ -10,7 +10,7 @@ namespace BE_tasteal.API.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
     [Consumes("application/json")]
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class SanPhamController : Controller
     {
         // private readonly ISanPhamResposity _sanPhamResposity;
@@ -19,7 +19,6 @@ namespace BE_tasteal.API.Controllers
         public SanPhamController(
             IBusiness<SanPhamDto, SanPhamEntity> sanPhambusiness)
         {
-            // _sanPhamResposity = sanPhamResposity;
             _sanPhambusiness = sanPhambusiness;
         }
 
