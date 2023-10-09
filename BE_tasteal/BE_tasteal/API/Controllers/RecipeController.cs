@@ -26,21 +26,16 @@ namespace BE_tasteal.API.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> AddRecipe([FromBody] RecipeDto _recipe)
         {
-            RecipeDto re = new RecipeDto();
-
-            re.name = "ád";
-            re.rating = 1;
-            re.totalTime = new TimeSpan(50);
-            re.active_time = new TimeSpan(50);
-            re.serving_size = 5;
-            re.introduction = "ádkjasd";
-            re.author_note = "";
-            re.is_private = true;
-            re.image = "";
-            re.author = null;
-            re.nutrition_info_id = null;
-
-            return Created(string.Empty, await _recipeBusiness.Add(re));
+            return Created(string.Empty, await _recipeBusiness.Add(_recipe));
+        }
+        [HttpGet]
+        [Route("Search")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(RecipeEntity))]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> SearchRecipe([FromBody] RecipeSearchEntity option)
+        {
+            throw new NotImplementedException();
         }
     }
 }

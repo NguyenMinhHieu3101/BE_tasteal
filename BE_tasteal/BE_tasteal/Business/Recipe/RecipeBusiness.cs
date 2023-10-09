@@ -2,7 +2,7 @@
 using BE_tasteal.Business.Interface;
 using BE_tasteal.Entity.DTO;
 using BE_tasteal.Entity.Entity;
-using BE_tasteal.Persistence.Interface;
+using BE_tasteal.Persistence.Interface.RecipeRepo;
 
 namespace BE_tasteal.Business
 {
@@ -11,13 +11,16 @@ namespace BE_tasteal.Business
         private readonly IMapper _mapper;
         private readonly ILogger<SanPhamBusiness> _logger;
         private readonly IRecipeRepository _recipeResposity;
+        private readonly IRecipeSearchRepo _recipeSearchRepo;
         public RecipeBusiness(IMapper mapper,
            ILogger<SanPhamBusiness> logger,
-           IRecipeRepository recipeResposity)
+           IRecipeRepository recipeResposity,
+           IRecipeSearchRepo recipeSearchRepo)
         {
             _mapper = mapper;
             _logger = logger;
             _recipeResposity = recipeResposity;
+            _recipeSearchRepo = recipeSearchRepo;
         }
         public async Task<RecipeEntity?> Add(RecipeDto entity)
         {
@@ -29,6 +32,11 @@ namespace BE_tasteal.Business
         }
 
         public Task<List<RecipeEntity?>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<RecipeEntity>> Search(RecipeSearchEntity option)
         {
             throw new NotImplementedException();
         }

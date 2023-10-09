@@ -14,8 +14,8 @@ namespace BE_tasteal.Entity.Entity
         [MaxLength(255)]
         public string? name { get; set; }
         public float rating { get; set; }
-        public TimeSpan totalTime { get; set; }
-        public TimeSpan active_time { get; set; }
+        public TimeSpan? totalTime { get; set; }
+        public TimeSpan? active_time { get; set; }
         public int serving_size { get; set; }
         [MaxLength(500)]
         public string? introduction { get; set; }

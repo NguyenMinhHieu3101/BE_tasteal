@@ -1,13 +1,12 @@
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
-using BE_tasteal.Persistence.Interface;
+using BE_tasteal.Persistence.Interface.RecipeRepo;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
-using System.Data.Common;
 
 namespace BE_tasteal.Persistence.Repository.RecipeSearch
 {
-    public class RecipeSearchRepo : GenericRepository<RecipeEntity>
+    public class RecipeSearchRepo : GenericRepository<RecipeEntity>, IRecipeSearchRepo
     {
         public RecipeSearchRepo(MyDbContext context,
            ConnectionManager connectionManager) : base(context, connectionManager)
@@ -18,7 +17,6 @@ namespace BE_tasteal.Persistence.Repository.RecipeSearch
         #region get data by dapper
         public async Task<List<RecipeEntity>> Search(RecipeSearchEntity data)
         {
-            Console.WriteLine("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             using (var connection = _connection.GetConnection())
             {
 
