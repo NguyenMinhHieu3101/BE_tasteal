@@ -1,5 +1,5 @@
 ﻿using BE_tasteal.API.AppSettings;
-using BE_tasteal.Business.Interface;
+using BE_tasteal.Business.Recipe;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,14 +8,12 @@ namespace BE_tasteal.API.Controllers
 {
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Produces("application/json")]
-    [Consumes("application/json")]
     [ApiVersion("1.0")]
     public class RecipeController : Controller
     {
-        private readonly IBusiness<RecipeDto, RecipeEntity> _recipeBusiness;
+        private readonly IRecipeBusiness<RecipeDto, RecipeEntity> _recipeBusiness;
         public RecipeController(
-            IBusiness<RecipeDto, RecipeEntity> recipeBusiness)
+            IRecipeBusiness<RecipeDto, RecipeEntity> recipeBusiness)
         {
             _recipeBusiness = recipeBusiness;
         }
@@ -28,14 +26,22 @@ namespace BE_tasteal.API.Controllers
         {
             return Created(string.Empty, await _recipeBusiness.Add(_recipe));
         }
-        [HttpGet]
+        [HttpPost]
         [Route("Search")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(RecipeEntity))]
-        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RecipeEntity))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> SearchRecipe([FromBody] RecipeSearchDto option)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var recipe = await _recipeBusiness.Search(option);
+                return Ok(recipe);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.ToString());
+            }
         }
     }
 }

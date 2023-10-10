@@ -1,7 +1,6 @@
 using BE_tasteal.API.AppSettings;
 using BE_tasteal.API.Middleware;
 using BE_tasteal.Business;
-using BE_tasteal.Business.Interface;
 using BE_tasteal.Business.Recipe;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
@@ -51,8 +50,8 @@ try
         services.AddScoped<DbContext, MyDbContext>();
 
         //business
-        services.AddScoped<IBusiness<SanPhamDto, SanPhamEntity>, SanPhamBusiness>();
-        services.AddScoped<IBusiness<RecipeDto, RecipeEntity>, RecipeBusiness>();
+        services.AddScoped<IRecipeBusiness<SanPhamDto, SanPhamEntity>, SanPhamBusiness>();
+        services.AddScoped<IRecipeBusiness<RecipeDto, RecipeEntity>, RecipeBusiness>();
 
         //repo
         services.AddScoped<ISanPhamResposity, SanPhamResposity>();

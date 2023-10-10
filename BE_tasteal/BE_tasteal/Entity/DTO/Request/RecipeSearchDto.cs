@@ -1,4 +1,4 @@
-namespace BE_tasteal.Entity.Entity
+namespace BE_tasteal.Entity.DTO.Request
 {
     public class RecipeSearchDto
     {

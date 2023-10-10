@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using BE_tasteal.Business.Interface;
+using BE_tasteal.Business.Recipe;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Interface;
 
 namespace BE_tasteal.Business
 {
-    public class SanPhamBusiness : IBusiness<SanPhamDto, SanPhamEntity>
+    public class SanPhamBusiness : IRecipeBusiness<SanPhamDto, SanPhamEntity>
     {
         private readonly IMapper _mapper;
         private readonly ILogger<SanPhamBusiness> _logger;
@@ -36,6 +36,11 @@ namespace BE_tasteal.Business
 
             _logger.LogInformation($"Added sanPham ", entity);
             return sanpham;
+        }
+
+        public Task<List<SanPhamEntity>?> Search(RecipeSearchDto option)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
