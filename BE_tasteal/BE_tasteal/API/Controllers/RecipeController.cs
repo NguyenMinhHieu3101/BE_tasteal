@@ -1,6 +1,6 @@
 ﻿using BE_tasteal.API.AppSettings;
 using BE_tasteal.Business.Interface;
-using BE_tasteal.Entity.DTO;
+using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +33,7 @@ namespace BE_tasteal.API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(RecipeEntity))]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> SearchRecipe([FromBody] RecipeSearchEntity option)
+        public async Task<IActionResult> SearchRecipe([FromBody] RecipeSearchDto option)
         {
             throw new NotImplementedException();
         }

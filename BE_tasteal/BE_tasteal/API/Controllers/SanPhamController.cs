@@ -1,6 +1,6 @@
 ﻿using BE_tasteal.API.AppSettings;
 using BE_tasteal.Business.Interface;
-using BE_tasteal.Entity.DTO;
+using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using Microsoft.AspNetCore.Mvc;
 

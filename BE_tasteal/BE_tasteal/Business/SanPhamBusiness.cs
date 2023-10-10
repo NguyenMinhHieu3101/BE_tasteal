@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BE_tasteal.Business.Interface;
-using BE_tasteal.Entity.DTO;
+using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Interface;
 

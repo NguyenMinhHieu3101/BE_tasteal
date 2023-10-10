@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace BE_tasteal.Entity.DTO
+namespace BE_tasteal.Entity.DTO.Request
 {
     public class RecipeDto
     {

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using BE_tasteal.Business.Interface;
-using BE_tasteal.Entity.DTO;
+using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Interface.RecipeRepo;
 
-namespace BE_tasteal.Business
+namespace BE_tasteal.Business.Recipe
 {
     public class RecipeBusiness : IBusiness<RecipeDto, RecipeEntity>
     {
@@ -36,7 +36,7 @@ namespace BE_tasteal.Business
             throw new NotImplementedException();
         }
 
-        public Task<List<RecipeEntity>> Search(RecipeSearchEntity option)
+        public Task<List<RecipeEntity>> Search(RecipeSearchDto option)
         {
             throw new NotImplementedException();
         }

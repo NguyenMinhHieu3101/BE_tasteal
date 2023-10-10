@@ -4,7 +4,7 @@ using BE_tasteal.Persistence.Interface.RecipeRepo;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
 
-namespace BE_tasteal.Persistence.Repository.RecipeSearch
+namespace BE_tasteal.Entity.DTO.Request
 {
     public class RecipeSearchRepo : GenericRepository<RecipeEntity>, IRecipeSearchRepo
     {
@@ -15,7 +15,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeSearch
         }
 
         #region get data by dapper
-        public async Task<List<RecipeEntity>> Search(RecipeSearchEntity data)
+        public async Task<List<RecipeEntity>> Search(RecipeSearchDto data)
         {
             using (var connection = _connection.GetConnection())
             {

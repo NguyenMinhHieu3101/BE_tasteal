@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BE_tasteal.Entity.DTO;
+using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 
 namespace BE_tasteal.Entity
