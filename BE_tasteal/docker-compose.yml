@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  be_tasteal:
+    image: ${DOCKER_REGISTRY-}betasteal
+    build:
+      context: .
+      dockerfile: BE_tasteal/Dockerfile
