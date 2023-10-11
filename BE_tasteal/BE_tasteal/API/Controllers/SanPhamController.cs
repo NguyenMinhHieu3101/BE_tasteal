@@ -1,6 +1,6 @@
 ﻿using BE_tasteal.API.AppSettings;
-using BE_tasteal.Business.Interface;
-using BE_tasteal.Entity.DTO;
+using BE_tasteal.Business.Recipe;
+using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,16 +10,15 @@ namespace BE_tasteal.API.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
     [Consumes("application/json")]
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class SanPhamController : Controller
     {
         // private readonly ISanPhamResposity _sanPhamResposity;
-        private readonly IBusiness<SanPhamDto, SanPhamEntity> _sanPhambusiness;
+        private readonly IRecipeBusiness<SanPhamDto, SanPhamEntity> _sanPhambusiness;
 
         public SanPhamController(
-            IBusiness<SanPhamDto, SanPhamEntity> sanPhambusiness)
+            IRecipeBusiness<SanPhamDto, SanPhamEntity> sanPhambusiness)
         {
-            // _sanPhamResposity = sanPhamResposity;
             _sanPhambusiness = sanPhambusiness;
         }
 

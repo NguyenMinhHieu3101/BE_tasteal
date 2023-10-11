@@ -17,7 +17,6 @@ namespace BE_tasteal.Persistence.Repository
         #region get data by dapper
         public async Task<List<SanPhamEntity>> GetAll()
         {
-            Console.WriteLine("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             using (var connection = _connection.GetConnection())
             {
 

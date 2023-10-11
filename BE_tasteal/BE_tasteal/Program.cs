@@ -1,14 +1,16 @@
 using BE_tasteal.API.AppSettings;
 using BE_tasteal.API.Middleware;
 using BE_tasteal.Business;
-using BE_tasteal.Business.Interface;
-using BE_tasteal.Entity.DTO;
+using BE_tasteal.Business.Recipe;
+using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Interface;
 using BE_tasteal.Persistence.Interface.GenericRepository;
+using BE_tasteal.Persistence.Interface.RecipeRepo;
 using BE_tasteal.Persistence.Repository;
 using BE_tasteal.Persistence.Repository.GenericRepository;
+using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -47,13 +49,25 @@ try
         services.AddScoped<ConnectionManager>();
         services.AddScoped<DbContext, MyDbContext>();
 
-        services.AddScoped<ISanPhamResposity, SanPhamResposity>();
+        //business
+        services.AddScoped<IRecipeBusiness<SanPhamDto, SanPhamEntity>, SanPhamBusiness>();
+        services.AddScoped<IRecipeBusiness<RecipeDto, RecipeEntity>, RecipeBusiness>();
 
-        services.AddScoped<IBusiness<SanPhamDto, SanPhamEntity>, SanPhamBusiness>();
+        //repo
+        services.AddScoped<ISanPhamResposity, SanPhamResposity>();
+        services.AddScoped<IRecipeRepository, RecipeRepository>();
+        services.AddScoped<IRecipeSearchRepo, RecipeSearchRepo>();
 
         services.AddDbContext<MyDbContext>(option =>
         {
+            //local run
             var connectionString = builder.Configuration.GetConnectionString("DefaultString");
+
+            //docker container run
+            //var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+            //var dbName = Environment.GetEnvironmentVariable("DB_NAME");
+            //var dbPass = Environment.GetEnvironmentVariable("DB_ROOT_PASSWORD");
+            //var connectionString = $"Server={dbHost};Port=3306;Database={dbName};Uid=root;Pwd={dbPass};";
             option.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         });
 

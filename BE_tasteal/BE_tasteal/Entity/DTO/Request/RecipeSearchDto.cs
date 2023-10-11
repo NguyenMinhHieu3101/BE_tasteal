@@ -1,8 +1,6 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace BE_tasteal.Entity.Entity
+namespace BE_tasteal.Entity.DTO.Request
 {
-    public class RecipeSearchEntity
+    public class RecipeSearchDto
     {
         public IEnumerable<int>? IngredientID { get; set; }
         public IEnumerable<int>? ExceptIngredientID { get; set; }

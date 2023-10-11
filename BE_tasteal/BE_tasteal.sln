@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BE_tasteal", "BE_tasteal\BE_tasteal.csproj", "{2C723409-F2F4-412C-8257-00204C100F2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BE_tasteal", "BE_tasteal\BE_tasteal.csproj", "{2C723409-F2F4-412C-8257-00204C100F2A}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{707CD47A-A29C-493D-BB26-B8F01E411EB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{2C723409-F2F4-412C-8257-00204C100F2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C723409-F2F4-412C-8257-00204C100F2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C723409-F2F4-412C-8257-00204C100F2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{707CD47A-A29C-493D-BB26-B8F01E411EB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{707CD47A-A29C-493D-BB26-B8F01E411EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{707CD47A-A29C-493D-BB26-B8F01E411EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{707CD47A-A29C-493D-BB26-B8F01E411EB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
