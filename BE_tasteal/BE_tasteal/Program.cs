@@ -60,7 +60,14 @@ try
 
         services.AddDbContext<MyDbContext>(option =>
         {
+            //local run
             var connectionString = builder.Configuration.GetConnectionString("DefaultString");
+
+            //docker container run
+            //var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+            //var dbName = Environment.GetEnvironmentVariable("DB_NAME");
+            //var dbPass = Environment.GetEnvironmentVariable("DB_ROOT_PASSWORD");
+            //var connectionString = $"Server={dbHost};Port=3306;Database={dbName};Uid=root;Pwd={dbPass};";
             option.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         });
 

@@ -1,8 +1,30 @@
 version: '3.4'
 
+networks:
+  backend:
+
 services:
   be_tasteal:
+    container_name: api_tasteal
     image: ${DOCKER_REGISTRY-}betasteal
     build:
       context: .
       dockerfile: BE_tasteal/Dockerfile
+    environment:
+    - DB_HOST=mysqldb
+    - DB_NAME=tasteal
+    - DB_ROOT_PASSWORD=root 
+    ports:
+    - 8004:80
+    networks:
+    - backend
+  mysqldb:
+    container_name: tasteal-db
+    image: mysql:latest
+    environment:
+    - MYSQL_ROOT_PASSWORD=root
+    ports:
+    - 33060:3306
+    networks:
+    - backend
+  

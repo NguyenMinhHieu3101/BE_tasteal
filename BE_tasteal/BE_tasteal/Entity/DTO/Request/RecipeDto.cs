@@ -9,8 +9,8 @@ namespace BE_tasteal.Entity.DTO.Request
         public string name { get; set; }
         [DefaultValue(0)]
         public float rating { get; set; }
-        public TimeSpan totalTime { get; set; }
-        public TimeSpan active_time { get; set; }
+        public TimeSpan? totalTime { get; set; }
+        public TimeSpan? active_time { get; set; }
         public int serving_size { get; set; }
         [MaxLength(500)]
         [DefaultValue("")]

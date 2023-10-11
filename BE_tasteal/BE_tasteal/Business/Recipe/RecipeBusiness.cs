@@ -24,6 +24,7 @@ namespace BE_tasteal.Business.Recipe
         public async Task<RecipeEntity?> Add(RecipeDto entity)
         {
             var newRecipe = _mapper.Map<RecipeEntity>(entity);
+
             var reipce = await _recipeResposity.InsertAsync(newRecipe);
 
             _logger.LogInformation($"Added new recipe ", entity);
