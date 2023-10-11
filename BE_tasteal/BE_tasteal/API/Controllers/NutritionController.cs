@@ -1,6 +1,4 @@
-﻿using BE_tasteal.Business.Nutrition;
-using BE_tasteal.Entity.DTO.Request;
-using BE_tasteal.Entity.Entity;
+﻿using BE_tasteal.Business.Ingredient;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BE_tasteal.API.Controllers
@@ -10,14 +8,33 @@ namespace BE_tasteal.API.Controllers
     [ApiVersion("1.0")]
     public class NutritionController : Controller
     {
-        private readonly INutritionBusiness<Nutrition_InfoDto, Nutrition_InfoEntity> _nutritionBusiness;
+        private readonly IIngredientBusiness _ingredientBusiness;
 
         public NutritionController(
-           INutritionBusiness<Nutrition_InfoDto, Nutrition_InfoEntity> nutritionBusiness)
+           IIngredientBusiness ingredientBusiness)
         {
-            _nutritionBusiness = nutritionBusiness;
+            _ingredientBusiness = ingredientBusiness;
         }
 
+        [HttpPost]
+        [Route("addfromexcel")]
+        public IActionResult UploadExcelFile(IFormFile file)
+        {
+            try
+            {
+                if (file == null || file.Length <= 0)
+                {
+                    return BadRequest("Invalid file");
+                }
+                var ingredient = _ingredientBusiness.AddFromExel(file);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest(ex);
+            }
 
+        }
     }
 }

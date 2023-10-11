@@ -1,6 +1,7 @@
 using BE_tasteal.API.AppSettings;
 using BE_tasteal.API.Middleware;
 using BE_tasteal.Business;
+using BE_tasteal.Business.Ingredient;
 using BE_tasteal.Business.Recipe;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
@@ -52,6 +53,7 @@ try
         //business
         services.AddScoped<IRecipeBusiness<SanPhamDto, SanPhamEntity>, SanPhamBusiness>();
         services.AddScoped<IRecipeBusiness<RecipeDto, RecipeEntity>, RecipeBusiness>();
+        services.AddScoped<IIngredientBusiness, IngredientBusiness>();
 
         //repo
         services.AddScoped<ISanPhamResposity, SanPhamResposity>();
@@ -69,6 +71,11 @@ try
             //var dbPass = Environment.GetEnvironmentVariable("DB_ROOT_PASSWORD");
             //var connectionString = $"Server={dbHost};Port=3306;Database={dbName};Uid=root;Pwd={dbPass};";
             option.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        });
+
+        services.Configure<IISServerOptions>(option =>
+        {
+            option.AllowSynchronousIO = true;
         });
 
         // Invoking action filters to validate the model state for all entities received in POST and PUT requests
