@@ -8,7 +8,7 @@ namespace BE_tasteal.Entity.Entity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int plan_id { get; set; }
+        public int id { get; set; }
         public int account_id { get; set; }
         public int recipe_id { get; set; }
         public DateTime date { get; set; }

@@ -8,7 +8,7 @@ namespace BE_tasteal.Entity.Entity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int nutrition_info_id { get; set; }
+        public int id { get; set; }
         public int calories { get; set; }
         public int fat { get; set; }
         public int saturated_fat { get; set; }
