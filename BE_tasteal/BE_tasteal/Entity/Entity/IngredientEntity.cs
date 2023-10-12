@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BE_tasteal.Entity.Entity
@@ -14,11 +15,12 @@ namespace BE_tasteal.Entity.Entity
         public required string name { get; set; }
         [Column(TypeName = "text")]
         public string? image { get; set; }
-        public int measurement_unit_id { get; set; }
-        public int type_id { get; set; }
-        public int nutrition_info_id { get; set; }
+        public int? nutrition_info_id { get; set; }
+        public int? type_id { get; set; }
+        [DefaultValue(false)]
         public bool isLiquid { get; set; }
         [Column(TypeName = "decimal(10, 2)")]
+        [DefaultValue(1)]
         public decimal ratio { get; set; }
 
         #region foreign key

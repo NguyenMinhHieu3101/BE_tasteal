@@ -12,6 +12,5 @@ namespace BE_tasteal.Entity.Entity
         [Required]
         [MaxLength(255)]
         public required string name { get; set; }
-        public int measurement_unit_id { get; set; }
     }
 }
