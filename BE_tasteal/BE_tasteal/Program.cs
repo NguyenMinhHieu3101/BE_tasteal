@@ -8,9 +8,11 @@ using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Interface;
 using BE_tasteal.Persistence.Interface.GenericRepository;
+using BE_tasteal.Persistence.Interface.IngredientRepo;
 using BE_tasteal.Persistence.Interface.RecipeRepo;
 using BE_tasteal.Persistence.Repository;
 using BE_tasteal.Persistence.Repository.GenericRepository;
+using BE_tasteal.Persistence.Repository.IngredientRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -59,6 +61,7 @@ try
         services.AddScoped<ISanPhamResposity, SanPhamResposity>();
         services.AddScoped<IRecipeRepository, RecipeRepository>();
         services.AddScoped<IRecipeSearchRepo, RecipeSearchRepo>();
+        services.AddScoped<IIngredientRepo, IngredientRepo>();
 
         services.AddDbContext<MyDbContext>(option =>
         {

@@ -6,10 +6,10 @@ namespace BE_tasteal.Persistence.Repository.GenericRepository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
     {
-        public readonly DbContext _context;
+        public readonly MyDbContext _context;
         public readonly ConnectionManager _connection;
 
-        public GenericRepository(DbContext context,
+        public GenericRepository(MyDbContext context,
              ConnectionManager connectionManager)
         {
             _context = context;

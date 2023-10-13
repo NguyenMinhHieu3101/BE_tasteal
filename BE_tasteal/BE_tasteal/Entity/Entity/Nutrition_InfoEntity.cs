@@ -9,19 +9,33 @@ namespace BE_tasteal.Entity.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        public int? calories { get; set; }
-        public int? fat { get; set; }
-        public int? saturated_fat { get; set; }
-        public int? trans_fat { get; set; }
-        public int? cholesterol { get; set; }
-        public int? carbohydrates { get; set; }
-        public int? fiber { get; set; }
-        public int? sugars { get; set; }
-        public int? protein { get; set; }
-        public int? sodium { get; set; }
-        public int? vitaminD { get; set; }
-        public int? calcium { get; set; }
-        public int? iron { get; set; }
-        public int? potassium { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? calories { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? fat { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? saturated_fat { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? trans_fat { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? cholesterol { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? carbohydrates { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? fiber { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? sugars { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? protein { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? sodium { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? vitaminD { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? calcium { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? iron { get; set; }
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? potassium { get; set; }
     }
 }

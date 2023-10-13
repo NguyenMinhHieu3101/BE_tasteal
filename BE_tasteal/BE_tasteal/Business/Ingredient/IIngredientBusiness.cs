@@ -4,6 +4,6 @@ namespace BE_tasteal.Business.Ingredient
 {
     public interface IIngredientBusiness
     {
-        List<IngredientEntity> AddFromExel(IFormFile excelFile);
+        Task<List<IngredientEntity>> AddFromExelAsync(IFormFile file);
     }
 }

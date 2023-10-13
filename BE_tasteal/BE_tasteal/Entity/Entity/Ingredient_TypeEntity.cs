@@ -11,6 +11,7 @@ namespace BE_tasteal.Entity.Entity
         public int id { get; set; }
         [Required]
         [MaxLength(255)]
-        public required string name { get; set; }
+        [Column(TypeName = "nvarchar")]
+        public string name { get; set; }
     }
 }

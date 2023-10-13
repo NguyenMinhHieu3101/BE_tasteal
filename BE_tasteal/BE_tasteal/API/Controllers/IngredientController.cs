@@ -6,11 +6,11 @@ namespace BE_tasteal.API.Controllers
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
-    public class NutritionController : Controller
+    public class IngredientController : Controller
     {
         private readonly IIngredientBusiness _ingredientBusiness;
 
-        public NutritionController(
+        public IngredientController(
            IIngredientBusiness ingredientBusiness)
         {
             _ingredientBusiness = ingredientBusiness;
@@ -18,7 +18,7 @@ namespace BE_tasteal.API.Controllers
 
         [HttpPost]
         [Route("addfromexcel")]
-        public IActionResult UploadExcelFile(IFormFile file)
+        public async Task<IActionResult> UploadExcelFile(IFormFile file)
         {
             try
             {
@@ -26,8 +26,8 @@ namespace BE_tasteal.API.Controllers
                 {
                     return BadRequest("Invalid file");
                 }
-                var ingredient = _ingredientBusiness.AddFromExel(file);
-                return Ok();
+                var ingredients = await _ingredientBusiness.AddFromExelAsync(file);
+                return Ok(ingredients);
             }
             catch (Exception ex)
             {

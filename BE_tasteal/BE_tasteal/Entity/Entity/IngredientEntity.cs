@@ -12,7 +12,8 @@ namespace BE_tasteal.Entity.Entity
         public int id { get; set; }
         [Required]
         [MaxLength(255)]
-        public required string name { get; set; }
+        [Column(TypeName = "nvarchar")]
+        public string name { get; set; }
         [Column(TypeName = "text")]
         public string? image { get; set; }
         public int? nutrition_info_id { get; set; }
