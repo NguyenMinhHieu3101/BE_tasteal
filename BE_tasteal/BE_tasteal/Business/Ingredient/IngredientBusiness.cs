@@ -31,9 +31,14 @@ namespace BE_tasteal.Business.Ingredient
                     var ingredientName = worksheet.Cells[row, 1].Value?.ToString();
                     if (ingredientName == null)
                         continue;
+                    if (_ingredientRepo.IngredientValid(ingredientName))
+                        continue;
+
                     var ingredientType = worksheet.Cells[row, 2].Value?.ToString();
                     if (ingredientType == null)
                         continue;
+
+
                     Ingredient_TypeEntity type = await _ingredientRepo.GetIngredientType(ingredientType);
 
                     #region nutrition info

@@ -1,4 +1,5 @@
-﻿using BE_tasteal.Entity.Entity;
+﻿using BE_tasteal.Business;
+using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Interface.IngredientRepo;
 using BE_tasteal.Persistence.Repository.GenericRepository;
@@ -7,10 +8,11 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
 {
     public class IngredientRepo : GenericRepository<IngredientEntity>, IIngredientRepo
     {
+        private readonly ILogger<SanPhamBusiness> _logger;
         public IngredientRepo(MyDbContext context,
-          ConnectionManager connectionManager) : base(context, connectionManager)
+          ConnectionManager connectionManager, ILogger<SanPhamBusiness> logger) : base(context, connectionManager)
         {
-
+            _logger = logger;
         }
 
         public bool IngredientTypeValid(string name)
@@ -46,6 +48,7 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
             var entity = await _context.Set<Ingredient_TypeEntity>().AddAsync(ingredient_Type);
 
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Add new ingredient type: " + entity.Entity);
             return entity.Entity;
         }
 
@@ -55,7 +58,7 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
             var entityEntry = await _context.Set<Nutrition_InfoEntity>().AddAsync(nutri);
 
             await _context.SaveChangesAsync();
-
+            _logger.LogInformation("Add new nutrition info: " + entityEntry.Entity);
             return entityEntry.Entity;
         }
     }
