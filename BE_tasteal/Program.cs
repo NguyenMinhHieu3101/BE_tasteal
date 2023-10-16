@@ -66,7 +66,7 @@ try
         services.AddDbContext<MyDbContext>(option =>
         {
             //local run
-            var connectionString = builder.Configuration.GetConnectionString("DefaultString");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
             //docker container run
             //var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
