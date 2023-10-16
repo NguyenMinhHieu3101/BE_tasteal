@@ -135,11 +135,11 @@ try
         }
 
         var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-
+        app.UseSwagger();
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.UseSwagger();
+
             app.UseSwaggerUI(options =>
             {
                 foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions.Reverse())
