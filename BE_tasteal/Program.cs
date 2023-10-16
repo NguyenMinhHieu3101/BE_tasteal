@@ -110,13 +110,13 @@ try
 
         //serilog
         Log.Information("Starting web host");
-        var serilogUrl = builder.Configuration.GetRequiredSection("Seq").Get<Seq>()?.Url;
+        //var serilogUrl = builder.Configuration.GetRequiredSection("Seq").Get<Seq>()?.Url;
         builder.Host.UseSerilog(new LoggerConfiguration()
                    .Enrich.FromLogContext()
                    .Enrich.WithMachineName()
                    .WriteTo.Console()
                    .WriteTo.Debug()
-                   .WriteTo.Seq(serverUrl: serilogUrl!)
+                   //.WriteTo.Seq(serverUrl: serilogUrl!)
                    .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", Serilog.Events.LogEventLevel.Warning)
                    .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
                    .ReadFrom.Configuration(builder.Configuration)
