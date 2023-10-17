@@ -108,19 +108,19 @@ try
             options.SubstituteApiVersionInUrl = true;
         });
 
-        //serilog
-        Log.Information("Starting web host");
-        //var serilogUrl = builder.Configuration.GetRequiredSection("Seq").Get<Seq>()?.Url;
-        builder.Host.UseSerilog(new LoggerConfiguration()
-                   .Enrich.FromLogContext()
-                   .Enrich.WithMachineName()
-                   .WriteTo.Console()
-                   .WriteTo.Debug()
-                   //.WriteTo.Seq(serverUrl: serilogUrl!)
-                   .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", Serilog.Events.LogEventLevel.Warning)
-                   .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
-                   .ReadFrom.Configuration(builder.Configuration)
-                   .CreateLogger());
+        ////serilog
+        //Log.Information("Starting web host");
+        ////var serilogUrl = builder.Configuration.GetRequiredSection("Seq").Get<Seq>()?.Url;
+        //builder.Host.UseSerilog(new LoggerConfiguration()
+        //           .Enrich.FromLogContext()
+        //           .Enrich.WithMachineName()
+        //           .WriteTo.Console()
+        //           .WriteTo.Debug()
+        //           //.WriteTo.Seq(serverUrl: serilogUrl!)
+        //           .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", Serilog.Events.LogEventLevel.Warning)
+        //           .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
+        //           .ReadFrom.Configuration(builder.Configuration)
+        //           .CreateLogger());
     }
     #endregion
 
@@ -135,20 +135,21 @@ try
         }
 
         var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+
         app.UseSwagger();
+        app.UseSwaggerUI(options =>
+        {
+            foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions.Reverse())
+            {
+                options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+                    description.GroupName.ToUpperInvariant());
+            }
+        });
+        app.UseDeveloperExceptionPage();
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
 
-            app.UseSwaggerUI(options =>
-            {
-                foreach (var description in apiVersionDescriptionProvider.ApiVersionDescriptions.Reverse())
-                {
-                    options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
-                        description.GroupName.ToUpperInvariant());
-                }
-            });
-            app.UseDeveloperExceptionPage();
         }
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();

@@ -130,5 +130,11 @@ namespace BE_tasteal.Business.Ingredient
             }
             return entities;
         }
+
+
+        public async Task<List<IngredientEntity>> GetIngredients()
+        {
+            return await _ingredientRepo.GetIngredient();
+        }
     }
 }

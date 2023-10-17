@@ -136,9 +136,6 @@ namespace BE_tasteal.Migrations
                     b.Property<bool>("isLiquid")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int?>("measurement_unit_id")
-                        .HasColumnType("int");
-
                     b.Property<string>("name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -155,7 +152,7 @@ namespace BE_tasteal.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("measurement_unit_id");
+                    b.HasIndex("nutrition_info_id");
 
                     b.HasIndex("type_id");
 
@@ -565,7 +562,7 @@ namespace BE_tasteal.Migrations
                 {
                     b.HasOne("BE_tasteal.Entity.Entity.Nutrition_InfoEntity", "nutrition_info")
                         .WithMany()
-                        .HasForeignKey("measurement_unit_id");
+                        .HasForeignKey("nutrition_info_id");
 
                     b.HasOne("BE_tasteal.Entity.Entity.Ingredient_TypeEntity", "ingredient_type")
                         .WithMany()
