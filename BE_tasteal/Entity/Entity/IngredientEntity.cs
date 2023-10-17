@@ -28,7 +28,7 @@ namespace BE_tasteal.Entity.Entity
 
         [ForeignKey("type_id")]
         public Ingredient_TypeEntity? ingredient_type { get; set; }
-        [ForeignKey("measurement_unit_id")]
+        [ForeignKey("nutrition_info_id")]
         public Nutrition_InfoEntity? nutrition_info { get; set; }
         #endregion
     }

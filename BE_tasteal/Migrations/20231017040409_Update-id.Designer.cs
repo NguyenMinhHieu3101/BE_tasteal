@@ -11,15 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BE_tasteal.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231006070806_update-erd-meeting1")]
-    partial class updateerdmeeting1
+    [Migration("20231017040409_Update-id")]
+    partial class Updateid
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.AccountEntity", b =>
@@ -45,7 +45,7 @@ namespace BE_tasteal.Migrations
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.Cart_ItemEntity", b =>
                 {
-                    b.Property<int>("cart_id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -58,7 +58,7 @@ namespace BE_tasteal.Migrations
                     b.Property<int?>("ingredient_id")
                         .HasColumnType("int");
 
-                    b.HasKey("cart_id");
+                    b.HasKey("id");
 
                     b.HasIndex("account_id");
 
@@ -93,7 +93,7 @@ namespace BE_tasteal.Migrations
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.CookBookEntity", b =>
                 {
-                    b.Property<int>("cook_book_id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -105,7 +105,7 @@ namespace BE_tasteal.Migrations
                     b.Property<int?>("owner")
                         .HasColumnType("int");
 
-                    b.HasKey("cook_book_id");
+                    b.HasKey("id");
 
                     b.HasIndex("owner");
 
@@ -129,7 +129,7 @@ namespace BE_tasteal.Migrations
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.IngredientEntity", b =>
                 {
-                    b.Property<int>("ingredient_id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -139,26 +139,23 @@ namespace BE_tasteal.Migrations
                     b.Property<bool>("isLiquid")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("measurement_unit_id")
-                        .HasColumnType("int");
-
                     b.Property<string>("name")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar");
 
-                    b.Property<int>("nutrition_info_id")
+                    b.Property<int?>("nutrition_info_id")
                         .HasColumnType("int");
 
                     b.Property<decimal>("ratio")
                         .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("type_id")
+                    b.Property<int?>("type_id")
                         .HasColumnType("int");
 
-                    b.HasKey("ingredient_id");
+                    b.HasKey("id");
 
-                    b.HasIndex("measurement_unit_id");
+                    b.HasIndex("nutrition_info_id");
 
                     b.HasIndex("type_id");
 
@@ -167,19 +164,16 @@ namespace BE_tasteal.Migrations
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.Ingredient_TypeEntity", b =>
                 {
-                    b.Property<int>("ingredient_type_id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("measurement_unit_id")
                         .HasColumnType("int");
 
                     b.Property<string>("name")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar");
 
-                    b.HasKey("ingredient_type_id");
+                    b.HasKey("id");
 
                     b.ToTable("Ingredient_Type");
                 });
@@ -209,53 +203,53 @@ namespace BE_tasteal.Migrations
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.Nutrition_InfoEntity", b =>
                 {
-                    b.Property<int>("nutrition_info_id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("calcium")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("calcium")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("calories")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("calories")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("carbohydrates")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("carbohydrates")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("cholesterol")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("cholesterol")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("fat")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("fat")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("fiber")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("fiber")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("iron")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("iron")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("potassium")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("potassium")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("protein")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("protein")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("saturated_fat")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("saturated_fat")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("sodium")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("sodium")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("sugars")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("sugars")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("trans_fat")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("trans_fat")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.Property<int>("vitaminD")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("vitaminD")
+                        .HasColumnType("decimal(10, 2)");
 
-                    b.HasKey("nutrition_info_id");
+                    b.HasKey("id");
 
                     b.ToTable("Nutrition_Info");
                 });
@@ -288,7 +282,7 @@ namespace BE_tasteal.Migrations
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.Pantry_ItemEntity", b =>
                 {
-                    b.Property<int>("pantry_id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -301,7 +295,7 @@ namespace BE_tasteal.Migrations
                     b.Property<int?>("ingredient_id")
                         .HasColumnType("int");
 
-                    b.HasKey("pantry_id");
+                    b.HasKey("id");
 
                     b.HasIndex("account_id");
 
@@ -312,7 +306,7 @@ namespace BE_tasteal.Migrations
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.PlanEntity", b =>
                 {
-                    b.Property<int>("plan_id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -328,7 +322,7 @@ namespace BE_tasteal.Migrations
                     b.Property<int>("serving_size")
                         .HasColumnType("int");
 
-                    b.HasKey("plan_id");
+                    b.HasKey("id");
 
                     b.HasIndex("account_id");
 
@@ -361,7 +355,7 @@ namespace BE_tasteal.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("active_time")
+                    b.Property<TimeSpan?>("active_time")
                         .HasColumnType("time(6)");
 
                     b.Property<int?>("author")
@@ -375,8 +369,8 @@ namespace BE_tasteal.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("introduction")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
 
                     b.Property<bool>("is_private")
                         .HasColumnType("tinyint(1)");
@@ -395,7 +389,7 @@ namespace BE_tasteal.Migrations
                     b.Property<int>("serving_size")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("totalTime")
+                    b.Property<TimeSpan?>("totalTime")
                         .HasColumnType("time(6)");
 
                     b.HasKey("id");
@@ -571,15 +565,11 @@ namespace BE_tasteal.Migrations
                 {
                     b.HasOne("BE_tasteal.Entity.Entity.Nutrition_InfoEntity", "nutrition_info")
                         .WithMany()
-                        .HasForeignKey("measurement_unit_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("nutrition_info_id");
 
                     b.HasOne("BE_tasteal.Entity.Entity.Ingredient_TypeEntity", "ingredient_type")
                         .WithMany()
-                        .HasForeignKey("type_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("type_id");
 
                     b.Navigation("ingredient_type");
 

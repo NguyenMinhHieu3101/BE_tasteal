@@ -61,5 +61,10 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
             _logger.LogInformation("Add new nutrition info: " + entityEntry.Entity);
             return entityEntry.Entity;
         }
+
+        public async Task<IngredientEntity> Get()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
