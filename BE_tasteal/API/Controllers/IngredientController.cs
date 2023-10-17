@@ -1,4 +1,5 @@
 ﻿using BE_tasteal.Business.Ingredient;
+using BE_tasteal.Entity.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BE_tasteal.API.Controllers
@@ -18,6 +19,8 @@ namespace BE_tasteal.API.Controllers
 
         [HttpPost]
         [Route("addfromexcel")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(List<IngredientEntity>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UploadExcelFile(IFormFile file)
         {
             try
@@ -27,7 +30,7 @@ namespace BE_tasteal.API.Controllers
                     return BadRequest("Invalid file");
                 }
                 var ingredients = await _ingredientBusiness.AddFromExelAsync(file);
-                return Ok(ingredients);
+                return Created(string.Empty, ingredients);
             }
             catch (Exception ex)
             {
@@ -39,6 +42,8 @@ namespace BE_tasteal.API.Controllers
 
         [HttpGet]
         [Route("getall")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IngredientEntity>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAllIngredient()
         {
             try
