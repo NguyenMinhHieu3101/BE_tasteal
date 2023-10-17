@@ -3,6 +3,7 @@ using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Interface.IngredientRepo;
 using BE_tasteal.Persistence.Repository.GenericRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace BE_tasteal.Persistence.Repository.IngredientRepo
 {
@@ -62,9 +63,12 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
             return entityEntry.Entity;
         }
 
-        public async Task<IngredientEntity> Get()
+        public async Task<List<IngredientEntity>> GetIngredient()
         {
-            throw new NotImplementedException();
+            var ingredientsWithType = await _context.ingredient
+                .Include(i => i.ingredient_type)
+                .ToListAsync();
+            return ingredientsWithType;
         }
     }
 }

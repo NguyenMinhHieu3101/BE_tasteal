@@ -36,5 +36,21 @@ namespace BE_tasteal.API.Controllers
             }
 
         }
+
+        [HttpGet]
+        [Route("getall")]
+        public async Task<IActionResult> GetAllIngredient()
+        {
+            try
+            {
+                var ingredients = await _ingredientBusiness.GetIngredients();
+                return Ok(ingredients);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.ToString()}");
+                return BadRequest(ex);
+            }
+        }
     }
 }
