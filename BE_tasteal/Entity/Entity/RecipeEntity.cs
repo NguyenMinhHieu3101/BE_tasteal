@@ -30,5 +30,8 @@ namespace BE_tasteal.Entity.Entity
         public AccountEntity? account { get; set; }
         [ForeignKey("nutrition_info_id")]
         public Nutrition_InfoEntity? nutrition_info { get; set; }
+
+        [NotMapped]
+        public List<IngredientEntity>? ingredients { get; set; }
     }
 }

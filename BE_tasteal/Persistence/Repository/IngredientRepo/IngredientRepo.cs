@@ -34,6 +34,13 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
             }
             return false;
         }
+
+        public async Task<IngredientEntity> GetIngredientByName(string name)
+        {
+            return await _context.ingredient
+                .Include(e => e.nutrition_info)
+                .FirstOrDefaultAsync(e => e.name == name);
+        }
         public async Task<Ingredient_TypeEntity> GetIngredientType(string name)
         {
             var type = _context.ingredient_Type.FirstOrDefault(e => e.name == name);
@@ -63,12 +70,51 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
             return entityEntry.Entity;
         }
 
-        public async Task<List<IngredientEntity>> GetIngredient()
+        public async Task<List<IngredientEntity>> GetAllIngredient()
         {
             var ingredientsWithType = await _context.ingredient
                 .Include(i => i.ingredient_type)
                 .ToListAsync();
             return ingredientsWithType;
+        }
+        /// <summary>
+        /// func add new ingredient
+        /// </summary>
+        /// <param name="flag">flag true when input not in ingredient table</param>
+        public async Task<IngredientEntity> InsertIngredient(IngredientEntity ingredient, bool flag = false)
+        {
+            if (flag)
+            {
+                var defaultNutrition = new Nutrition_InfoEntity
+                {
+                    calories = 0,
+                    fat = 0,
+                    saturated_fat = 0,
+                    trans_fat = 0,
+                    cholesterol = 0,
+                    carbohydrates = 0,
+                    fiber = 0,
+                    sugars = 0,
+                    protein = 0,
+                    sodium = 0,
+                    vitaminD = 0,
+                    calcium = 0,
+                    iron = 0,
+                    potassium = 0,
+                };
+                _context.Attach(defaultNutrition);
+                var newNutrition = await _context.Set<Nutrition_InfoEntity>().AddAsync(defaultNutrition);
+                await _context.SaveChangesAsync();
+                ingredient.nutrition_info_id = newNutrition.Entity.id;
+            }
+            _context.Attach(ingredient);
+            var entityEntry = await _context.Set<IngredientEntity>().AddAsync(ingredient);
+
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Add new nutrition info: " + entityEntry.Entity);
+            entityEntry.Entity.amount = ingredient.amount;
+            return entityEntry.Entity;
         }
     }
 }

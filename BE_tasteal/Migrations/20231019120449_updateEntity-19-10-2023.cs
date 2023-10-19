@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BE_tasteal.Migrations
 {
     /// <inheritdoc />
-    public partial class Updateid : Migration
+    public partial class updateEntity19102023 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,6 +24,12 @@ namespace BE_tasteal.Migrations
                     username = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     password = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    name = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    avatar = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    introduction = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -167,7 +173,7 @@ namespace BE_tasteal.Migrations
                     nutrition_info_id = table.Column<int>(type: "int", nullable: true),
                     type_id = table.Column<int>(type: "int", nullable: true),
                     isLiquid = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    ratio = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
+                    ratio = table.Column<decimal>(type: "decimal(10,2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -205,7 +211,8 @@ namespace BE_tasteal.Migrations
                     image = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     author = table.Column<int>(type: "int", nullable: true),
-                    nutrition_info_id = table.Column<int>(type: "int", nullable: true)
+                    nutrition_info_id = table.Column<int>(type: "int", nullable: true),
+                    createAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -435,7 +442,7 @@ namespace BE_tasteal.Migrations
                 {
                     recipe_id = table.Column<int>(type: "int", nullable: false),
                     ingredient_id = table.Column<int>(type: "int", nullable: false),
-                    amount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
                     note = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     is_required = table.Column<bool>(type: "tinyint(1)", nullable: false)

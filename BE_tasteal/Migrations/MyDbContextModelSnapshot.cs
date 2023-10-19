@@ -25,6 +25,15 @@ namespace BE_tasteal.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("avatar")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("introduction")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("name")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("password")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -144,7 +153,7 @@ namespace BE_tasteal.Migrations
                     b.Property<int?>("nutrition_info_id")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ratio")
+                    b.Property<decimal?>("ratio")
                         .HasColumnType("decimal(10, 2)");
 
                     b.Property<int?>("type_id")
@@ -362,6 +371,9 @@ namespace BE_tasteal.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<DateTime>("createAt")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("image")
                         .HasColumnType("text");
 
@@ -400,10 +412,10 @@ namespace BE_tasteal.Migrations
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.Recipe_DirectionEntity", b =>
                 {
-                    b.Property<int>("recipe_id")
+                    b.Property<int?>("recipe_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("step")
+                    b.Property<int?>("step")
                         .HasColumnType("int");
 
                     b.Property<string>("direction")
@@ -444,7 +456,7 @@ namespace BE_tasteal.Migrations
                     b.Property<int>("ingredient_id")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("amount")
+                    b.Property<decimal?>("amount")
                         .HasColumnType("decimal(10, 2)");
 
                     b.Property<bool>("is_required")

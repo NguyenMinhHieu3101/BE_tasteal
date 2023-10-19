@@ -22,7 +22,11 @@ namespace BE_tasteal.Entity.Entity
         public bool isLiquid { get; set; }
         [Column(TypeName = "decimal(10, 2)")]
         [DefaultValue(1)]
-        public decimal ratio { get; set; }
+        public decimal? ratio { get; set; }
+        [NotMapped]
+        public decimal? amount { get; set; }
+        [NotMapped]
+        public string? note { get; set; }
 
         #region foreign key
 

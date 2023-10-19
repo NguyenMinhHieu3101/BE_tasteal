@@ -17,7 +17,6 @@ namespace BE_tasteal.API.Controllers
         {
             _recipeBusiness = recipeBusiness;
         }
-
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(RecipeEntity))]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]

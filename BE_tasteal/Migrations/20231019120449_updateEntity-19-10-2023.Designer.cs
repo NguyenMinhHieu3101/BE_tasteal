@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BE_tasteal.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231017040409_Update-id")]
-    partial class Updateid
+    [Migration("20231019120449_updateEntity-19-10-2023")]
+    partial class updateEntity19102023
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,6 +27,15 @@ namespace BE_tasteal.Migrations
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<string>("avatar")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("introduction")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("name")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("password")
                         .IsRequired()
@@ -147,7 +156,7 @@ namespace BE_tasteal.Migrations
                     b.Property<int?>("nutrition_info_id")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ratio")
+                    b.Property<decimal?>("ratio")
                         .HasColumnType("decimal(10, 2)");
 
                     b.Property<int?>("type_id")
@@ -365,6 +374,9 @@ namespace BE_tasteal.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<DateTime>("createAt")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("image")
                         .HasColumnType("text");
 
@@ -403,10 +415,10 @@ namespace BE_tasteal.Migrations
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.Recipe_DirectionEntity", b =>
                 {
-                    b.Property<int>("recipe_id")
+                    b.Property<int?>("recipe_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("step")
+                    b.Property<int?>("step")
                         .HasColumnType("int");
 
                     b.Property<string>("direction")
@@ -447,7 +459,7 @@ namespace BE_tasteal.Migrations
                     b.Property<int>("ingredient_id")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("amount")
+                    b.Property<decimal?>("amount")
                         .HasColumnType("decimal(10, 2)");
 
                     b.Property<bool>("is_required")
