@@ -26,6 +26,8 @@ namespace BE_tasteal.Entity.Entity
         public string? image { get; set; }
         public int? author { get; set; }
         public int? nutrition_info_id { get; set; }
+        public DateTime? createdAt { get; set; }
+        public DateTime? updatedAt { get; set; }
         [ForeignKey("author")]
         public AccountEntity? account { get; set; }
         [ForeignKey("nutrition_info_id")]

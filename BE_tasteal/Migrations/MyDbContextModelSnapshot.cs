@@ -371,7 +371,7 @@ namespace BE_tasteal.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<DateTime>("createAt")
+                    b.Property<DateTime?>("createdAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("image")
@@ -400,6 +400,9 @@ namespace BE_tasteal.Migrations
 
                     b.Property<TimeSpan?>("totalTime")
                         .HasColumnType("time(6)");
+
+                    b.Property<DateTime?>("updatedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("id");
 

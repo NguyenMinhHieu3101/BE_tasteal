@@ -59,13 +59,13 @@ namespace BE_tasteal.Business.Recipe
             var newRecipe = await _recipeResposity.InsertAsync(newRecipeEntity);
 
             ////update recipe_ingredient with ingredient and nutri
-            //await _recipeResposity.InsertRecipeIngredient(newRecipe, listEngredient);
+            await _recipeResposity.InsertRecipeIngredient(newRecipe, listEngredient);
 
             ////add direction 
-            //await _recipeResposity.InsertDirection(newRecipe, entity.direction);
+            await _recipeResposity.InsertDirection(newRecipe, entity.direction);
 
             ////update nutrition for recipe
-            //await _recipeResposity.UpdateNutrition(newRecipe, listEngredient);
+            await _recipeResposity.UpdateNutrition(newRecipe, listEngredient);
 
             //_logger.LogInformation($"Added new recipe ", entity);
             return new RecipeEntity();

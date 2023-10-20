@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BE_tasteal.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231019120449_updateEntity-19-10-2023")]
-    partial class updateEntity19102023
+    [Migration("20231020083137_UpdateEntity-20-12-2023")]
+    partial class UpdateEntity20122023
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -374,7 +374,7 @@ namespace BE_tasteal.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<DateTime>("createAt")
+                    b.Property<DateTime?>("createdAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("image")
@@ -403,6 +403,9 @@ namespace BE_tasteal.Migrations
 
                     b.Property<TimeSpan?>("totalTime")
                         .HasColumnType("time(6)");
+
+                    b.Property<DateTime?>("updatedAt")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("id");
 

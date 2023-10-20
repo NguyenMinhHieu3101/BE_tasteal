@@ -25,7 +25,9 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                     amount = ingredient.amount
                 };
                 _context.Attach(newRecipeIngre);
+                await _context.Set<Recipe_IngredientEntity>().AddAsync(newRecipeIngre);
                 await _context.SaveChangesAsync();
+
             }
         }
         public async Task InsertDirection(RecipeEntity recipe, List<RecipeDirectionDto> directions)
@@ -40,6 +42,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                     image = direction.image,
                 };
                 _context.Attach(newDirection);
+                await _context.Set<Recipe_DirectionEntity>().AddAsync(newDirection);
                 await _context.SaveChangesAsync();
             }
         }
@@ -65,10 +68,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
             };
             foreach (var ingre in ingredients)
             {
-                var nutritionOfIngre =
-                    await _context
-                    .Set<Nutrition_InfoEntity>()
-                    .FindAsync(ingre.nutrition_info_id);
+                var nutritionOfIngre = ingre.nutrition_info;
 
                 newNutri.calories += nutritionOfIngre.calories;
                 newNutri.fat += nutritionOfIngre.fat;
@@ -84,12 +84,16 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 newNutri.calcium += nutritionOfIngre.calcium;
                 newNutri.iron += nutritionOfIngre.iron;
                 newNutri.potassium += nutritionOfIngre.potassium;
-
-                _context.Attach(newNutri);
-                await _context.Set<Nutrition_InfoEntity>().AddAsync(newNutri);
-
-                await _context.SaveChangesAsync();
             }
+
+
+            _context.Attach(newNutri);
+            var nutriAdded = await _context.Set<Nutrition_InfoEntity>().AddAsync(newNutri);
+            await _context.SaveChangesAsync();
+
+            recipe.nutrition_info_id = nutriAdded.Entity.id;
+            _context.Attach(newNutri);
+            await _context.SaveChangesAsync();
         }
     }
 }
