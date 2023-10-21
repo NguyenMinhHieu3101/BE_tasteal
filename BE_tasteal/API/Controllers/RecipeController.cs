@@ -8,7 +8,7 @@ namespace BE_tasteal.API.Controllers
 {
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class RecipeController : Controller
     {
         private readonly IRecipeBusiness<RecipeDto, RecipeEntity> _recipeBusiness;
@@ -18,6 +18,7 @@ namespace BE_tasteal.API.Controllers
             _recipeBusiness = recipeBusiness;
         }
         [HttpPost]
+        [Route("Add")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(RecipeEntity))]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
@@ -40,6 +41,23 @@ namespace BE_tasteal.API.Controllers
             catch (Exception ex)
             {
                 return NotFound(ex.ToString());
+            }
+        }
+        [HttpPost]
+        [Route("AddFromExcel")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(List<IngredientEntity>))]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> AddRecipeExcel(IFormFile file)
+        {
+            try
+            {
+                var recipes = _recipeBusiness.AddFromExelAsync(file);
+                return Ok(recipes);
+            }
+            catch (Exception ex)
+            {
+                return UnprocessableEntity(ex);
             }
         }
     }

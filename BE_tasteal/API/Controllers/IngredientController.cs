@@ -6,7 +6,7 @@ namespace BE_tasteal.API.Controllers
 {
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class IngredientController : Controller
     {
         private readonly IIngredientBusiness _ingredientBusiness;

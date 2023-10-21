@@ -43,6 +43,17 @@ namespace BE_tasteal.Business
             throw new NotImplementedException();
         }
 
+        public Task<List<SanPhamEntity>?> AddFromExelAsync(IFormFile file)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<List<RecipeEntity>> IRecipeBusiness<SanPhamDto, SanPhamEntity>.AddFromExelAsync(IFormFile file)
+        {
+            throw new NotImplementedException();
+        }
+
+
         #endregion
     }
 }

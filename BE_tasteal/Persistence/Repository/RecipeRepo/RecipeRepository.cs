@@ -70,20 +70,20 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
             {
                 var nutritionOfIngre = ingre.nutrition_info;
 
-                newNutri.calories += nutritionOfIngre.calories;
-                newNutri.fat += nutritionOfIngre.fat;
-                newNutri.saturated_fat += nutritionOfIngre.saturated_fat;
-                newNutri.trans_fat += nutritionOfIngre.trans_fat;
-                newNutri.cholesterol += nutritionOfIngre.cholesterol;
-                newNutri.carbohydrates += nutritionOfIngre.carbohydrates;
-                newNutri.fiber += nutritionOfIngre.fiber;
-                newNutri.sugars += nutritionOfIngre.sugars;
-                newNutri.protein += nutritionOfIngre.protein;
-                newNutri.sodium += nutritionOfIngre.sodium;
-                newNutri.vitaminD += nutritionOfIngre.vitaminD;
-                newNutri.calcium += nutritionOfIngre.calcium;
-                newNutri.iron += nutritionOfIngre.iron;
-                newNutri.potassium += nutritionOfIngre.potassium;
+                newNutri.calories += nutritionOfIngre.calories * ingre.amount / 100;
+                newNutri.fat += nutritionOfIngre.fat * ingre.amount / 100;
+                newNutri.saturated_fat += nutritionOfIngre.saturated_fat * ingre.amount / 100;
+                newNutri.trans_fat += nutritionOfIngre.trans_fat * ingre.amount / 100;
+                newNutri.cholesterol += nutritionOfIngre.cholesterol * ingre.amount / 100;
+                newNutri.carbohydrates += nutritionOfIngre.carbohydrates * ingre.amount / 100;
+                newNutri.fiber += nutritionOfIngre.fiber * ingre.amount / 100;
+                newNutri.sugars += nutritionOfIngre.sugars * ingre.amount / 100;
+                newNutri.protein += nutritionOfIngre.protein * ingre.amount / 100;
+                newNutri.sodium += nutritionOfIngre.sodium * ingre.amount / 100;
+                newNutri.vitaminD += nutritionOfIngre.vitaminD * ingre.amount / 100;
+                newNutri.calcium += nutritionOfIngre.calcium * ingre.amount / 100;
+                newNutri.iron += nutritionOfIngre.iron * ingre.amount / 100;
+                newNutri.potassium += nutritionOfIngre.potassium * ingre.amount / 100;
             }
 
 
