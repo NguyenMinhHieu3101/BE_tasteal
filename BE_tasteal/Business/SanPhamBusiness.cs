@@ -53,6 +53,11 @@ namespace BE_tasteal.Business
             throw new NotImplementedException();
         }
 
+        public List<RecipeEntity> GetRecipeEntities()
+        {
+            throw new NotImplementedException();
+        }
+
 
         #endregion
     }

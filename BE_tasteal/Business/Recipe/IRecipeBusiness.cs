@@ -9,5 +9,6 @@ namespace BE_tasteal.Business.Recipe
         Task<U?> Add(T entity);
         Task<List<RecipeEntity>> AddFromExelAsync(IFormFile file);
         Task<List<U>?> Search(RecipeSearchDto option);
+        List<RecipeEntity> GetRecipeEntities();
     }
 }

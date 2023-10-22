@@ -3,6 +3,7 @@ using BE_tasteal.Business.Recipe;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace BE_tasteal.API.Controllers
 {
@@ -52,12 +53,27 @@ namespace BE_tasteal.API.Controllers
         {
             try
             {
-                var recipes = _recipeBusiness.AddFromExelAsync(file);
-                return Ok(recipes);
+                var recipes = await _recipeBusiness.AddFromExelAsync(file);
+                return Ok(JsonConvert.SerializeObject(recipes));
             }
             catch (Exception ex)
             {
                 return UnprocessableEntity(ex);
+            }
+        }
+        [HttpGet]
+        [Route("GetRecipe")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RecipeEntity>))]
+        public IActionResult GetRecipe()
+        {
+            try
+            {
+                var recipe = _recipeBusiness.GetRecipeEntities();
+                return Ok(recipe);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
             }
         }
     }
