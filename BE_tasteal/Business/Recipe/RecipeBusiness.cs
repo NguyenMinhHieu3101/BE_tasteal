@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
-using BE_tasteal.Persistence.Interface.IngredientRepo;
-using BE_tasteal.Persistence.Interface.RecipeRepo;
+using BE_tasteal.Persistence.Repository.IngredientRepo;
+using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System.Text.RegularExpressions;
