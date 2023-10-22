@@ -22,8 +22,8 @@ namespace BE_tasteal.Entity
                 .ForMember(source => source.is_private, destination => destination.MapFrom(src => src.is_private))
                 .ForMember(source => source.image, destination => destination.MapFrom(src => src.image))
                 .ForMember(source => source.author, destination => destination.MapFrom(src => src.author))
-                .ForMember(destination => destination.ingredients, destination => destination.Ignore());
-
+                .ForMember(destination => destination.ingredients, destination => destination.Ignore())
+                .ForMember(destination => destination.direction, destination => destination.Ignore());
 
             // CreateMap<Recipe_DirectionEntity, Recipe_DirectionEntity>();
 

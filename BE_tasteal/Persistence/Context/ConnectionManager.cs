@@ -17,7 +17,7 @@ namespace BE_tasteal.Persistence.Context
         {
             if (_connection == null)
             {
-                string connectionString = _configuration.GetConnectionString("DefaultString");
+                string connectionString = _configuration.GetConnectionString("DefaultConnection");
                 _connection = new MySqlConnection(connectionString);
             }
 

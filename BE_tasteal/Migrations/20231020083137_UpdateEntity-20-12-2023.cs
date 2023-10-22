@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BE_tasteal.Migrations
 {
     /// <inheritdoc />
-    public partial class updateEntity19102023 : Migration
+    public partial class UpdateEntity20122023 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -212,7 +212,8 @@ namespace BE_tasteal.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     author = table.Column<int>(type: "int", nullable: true),
                     nutrition_info_id = table.Column<int>(type: "int", nullable: true),
-                    createAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    createdAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    updatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {

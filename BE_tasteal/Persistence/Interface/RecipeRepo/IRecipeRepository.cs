@@ -9,5 +9,6 @@ namespace BE_tasteal.Persistence.Interface.RecipeRepo
         Task InsertRecipeIngredient(RecipeEntity recipe, List<IngredientEntity> ingredients);
         Task InsertDirection(RecipeEntity recipe, List<RecipeDirectionDto> direction);
         Task UpdateNutrition(RecipeEntity recipe, List<IngredientEntity> ingredients);
+        List<RecipeEntity> GetRecipesWithIngredientsAndNutrition();
     }
 }

@@ -57,5 +57,24 @@ namespace BE_tasteal.Persistence.Context
             base.OnModelCreating(modelBuilder);
         }
         #endregion
+
+        #region db save change
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entities = ChangeTracker.Entries()
+           .Where(x => x.Entity is RecipeEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
+
+            foreach (var entityEntry in entities)
+            {
+                ((RecipeEntity)entityEntry.Entity).createdAt = DateTime.Now;
+                if (entityEntry.State == EntityState.Modified)
+                {
+                    ((RecipeEntity)entityEntry.Entity).updatedAt = DateTime.Now;
+                }
+            }
+
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+        #endregion
     }
 }

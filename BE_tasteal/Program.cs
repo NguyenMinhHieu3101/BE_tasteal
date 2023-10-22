@@ -47,7 +47,7 @@ try
         services.ConfigureOptions<ConfigureSwaggerOptions>();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         //add service repository
-        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
         services.AddScoped<ConnectionManager>();
         services.AddScoped<DbContext, MyDbContext>();
@@ -74,7 +74,7 @@ try
             //var dbPass = Environment.GetEnvironmentVariable("DB_ROOT_PASSWORD");
             //var connectionString = $"Server={dbHost};Port=3306;Database={dbName};Uid=root;Pwd={dbPass};";
             option.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-        });
+        }, ServiceLifetime.Scoped);
 
         services.Configure<IISServerOptions>(option =>
         {

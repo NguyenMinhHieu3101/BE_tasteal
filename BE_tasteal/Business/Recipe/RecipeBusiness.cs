@@ -3,6 +3,8 @@ using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Interface.IngredientRepo;
 using BE_tasteal.Persistence.Interface.RecipeRepo;
+using Newtonsoft.Json;
+using OfficeOpenXml;
 using System.Text.RegularExpressions;
 
 namespace BE_tasteal.Business.Recipe
@@ -52,40 +54,148 @@ namespace BE_tasteal.Business.Recipe
                     };
                     await _ingredientRepo.InsertIngredient(newIngre, true);
                 }
-                listEngredient.Add(await _ingredientRepo.GetIngredientByName(ingredient.name));
+                var ingreItem = await _ingredientRepo.GetIngredientByName(ingredient.name);
+                ingreItem.amount = ingredient.amount;
+                listEngredient.Add(ingreItem);
             }
-
+            Console.WriteLine(JsonConvert.SerializeObject(listEngredient));
             //create recipe
             var newRecipe = await _recipeResposity.InsertAsync(newRecipeEntity);
 
             ////update recipe_ingredient with ingredient and nutri
-            //await _recipeResposity.InsertRecipeIngredient(newRecipe, listEngredient);
+            await _recipeResposity.InsertRecipeIngredient(newRecipe, listEngredient);
+            newRecipe.ingredients = listEngredient;
 
             ////add direction 
-            //await _recipeResposity.InsertDirection(newRecipe, entity.direction);
+            await _recipeResposity.InsertDirection(newRecipe, entity.direction);
 
             ////update nutrition for recipe
-            //await _recipeResposity.UpdateNutrition(newRecipe, listEngredient);
+            await _recipeResposity.UpdateNutrition(newRecipe, listEngredient);
 
-            //_logger.LogInformation($"Added new recipe ", entity);
-            return new RecipeEntity();
+            return newRecipe;
         }
-
         public Task<List<RecipeEntity?>> GetAll()
         {
             throw new NotImplementedException();
         }
-
         public async Task<List<RecipeEntity>> Search(RecipeSearchDto option)
         {
             return await _recipeSearchRepo.Search(option);
         }
-
-        public Task<List<RecipeEntity>?> Search()
+        public async Task<List<RecipeEntity>> AddFromExelAsync(IFormFile file)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                //parse
+                List<RecipeDto> listRecipeDto = ParseRecipeFromExcel(file);
 
+                List<RecipeEntity> listRecipe = new List<RecipeEntity>();
+                #region Add
+                foreach (var item in listRecipeDto)
+                {
+                    await Add(item);
+                }
+                #endregion
+                return listRecipe;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return new List<RecipeEntity>();
+            }
+        }
+        static List<RecipeDto> ParseRecipeFromExcel(IFormFile file)
+        {
+            #region parse excel -> list recipe
+            List<RecipeDto> listRecipeDto = new List<RecipeDto>();
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            {
+                var package = new ExcelPackage(file.OpenReadStream());
+                var worksheet = package.Workbook.Worksheets[0];
+                var rowCount = worksheet.Dimension.Rows;
+
+                for (int row = 3; row <= rowCount + 1; row++)
+                {
+                    #region validate each row. if fail -> continue
+
+                    //rating
+                    float temp;
+                    if (worksheet.Cells[row, 2].Value?.ToString() == null) continue;
+
+                    //time
+                    if (worksheet.Cells[row, 4].Value?.ToString() == null) continue;
+                    if (worksheet.Cells[row, 5].Value?.ToString() == null) continue;
+                    if (!IsValidTimeFormat(worksheet.Cells[row, 4].Value?.ToString())) continue;
+                    if (!IsValidTimeFormat(worksheet.Cells[row, 5].Value?.ToString())) continue;
+
+                    //serving size > 0
+                    if (worksheet.Cells[row, 6].Value?.ToString() == null) continue;
+                    if (int.Parse(worksheet.Cells[row, 6].Value?.ToString()) <= 0) continue;
+
+                    //private
+                    bool prv = false;
+                    Boolean.TryParse(worksheet.Cells[row, 9].Value?.ToString(), out prv);
+
+                    //
+                    #endregion
+
+
+                    #region new recipe
+                    RecipeDto entity = new RecipeDto();
+
+
+                    entity.name = worksheet.Cells[row, 1].Value?.ToString();
+                    entity.rating = float.Parse(worksheet.Cells[row, 2].Value.ToString());
+                    entity.image = worksheet.Cells[row, 3].Value?.ToString();
+                    entity.totalTime = worksheet.Cells[row, 4].Value.ToString();
+                    entity.active_time = worksheet.Cells[row, 5].Value.ToString();
+                    entity.serving_size = int.Parse(worksheet.Cells[row, 6].Value?.ToString());
+                    entity.introduction = worksheet.Cells[row, 7].Value?.ToString();
+                    entity.author_note = worksheet.Cells[row, 8].Value.ToString();
+                    entity.is_private = prv;// parsed in validate
+                    entity.ingredients = ParseIngredients(worksheet.Cells[row, 10].Value.ToString());
+                    entity.direction = ParseDirection(worksheet.Cells[row, 12].Value.ToString());
+                    entity.author = 1;
+                    #endregion
+
+                    listRecipeDto.Add(entity);
+                }
+                return listRecipeDto;
+            }
+            #endregion
+        }
+        public List<RecipeEntity> GetRecipeEntities()
+        {
+            var list = _recipeResposity.GetRecipesWithIngredientsAndNutrition();
+            return list;
+        }
+        static List<Recipe_IngredientDto> ParseIngredients(string input)
+        {
+            string[] rawIngredients = input.Split('|', StringSplitOptions.RemoveEmptyEntries);
+            List<Recipe_IngredientDto> ingredients = new List<Recipe_IngredientDto>();
+
+            foreach (var rawIngredient in rawIngredients)
+            {
+                // Sử dụng biểu thức chính quy để tìm tên và lượng từ chuỗi
+                Match match = Regex.Match(rawIngredient.Trim(), @"([^\d]+)\s*(\d+)(g|ml)");
+
+                if (match.Success)
+                {
+                    string name = match.Groups[1].Value.Trim();
+                    decimal amount = decimal.Parse(match.Groups[2].Value);
+                    bool isLiquid = match.Groups[3].Value == "g";
+
+                    ingredients.Add(new Recipe_IngredientDto
+                    {
+                        name = name,
+                        amount = amount,
+                        isLiquid = isLiquid
+                    });
+                }
+            }
+
+            return ingredients;
+        }
         static bool IsValidTimeFormat(string input)
         {
             Regex regex = new Regex(@"^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$");
@@ -96,22 +206,19 @@ namespace BE_tasteal.Business.Recipe
                 int hours = match.Groups[1].Success ? int.Parse(match.Groups[1].Value) : 0;
                 int minutes = match.Groups[2].Success ? int.Parse(match.Groups[2].Value) : 0;
                 int seconds = match.Groups[3].Success ? int.Parse(match.Groups[3].Value) : 0;
-
-
                 return true;
             }
 
             return false;
         }
-
-        static List<(string Description, string ImageLink)> ParseInputString(string input)
+        static List<RecipeDirectionDto> ParseDirection(string input)
         {
-            List<(string Description, string ImageLink)> parsedData = new List<(string, string)>();
+            List<RecipeDirectionDto> parsedData = new List<RecipeDirectionDto>();
             string[] nodes = input.Split('|');
 
-            foreach (var node in nodes)
+            for (int i = 0; i < nodes.Length; i++)
             {
-                string[] parts = node.Trim().Split(' ');
+                string[] parts = nodes[i].Trim().Split(' ');
 
                 string description = "";
                 string imageLink = null;
@@ -137,7 +244,12 @@ namespace BE_tasteal.Business.Recipe
                     description = string.Join(" ", parts, 0, Array.IndexOf(parts, imageLink)).Trim();
                 }
 
-                parsedData.Add((description, imageLink));
+                parsedData.Add(new RecipeDirectionDto
+                {
+                    step = i,
+                    direction = description,
+                    image = imageLink,
+                });
             }
 
             return parsedData;

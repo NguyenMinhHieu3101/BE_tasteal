@@ -3,12 +3,13 @@ using BE_tasteal.Business.Recipe;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace BE_tasteal.API.Controllers
 {
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class RecipeController : Controller
     {
         private readonly IRecipeBusiness<RecipeDto, RecipeEntity> _recipeBusiness;
@@ -18,6 +19,7 @@ namespace BE_tasteal.API.Controllers
             _recipeBusiness = recipeBusiness;
         }
         [HttpPost]
+        [Route("Add")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(RecipeEntity))]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
@@ -40,6 +42,38 @@ namespace BE_tasteal.API.Controllers
             catch (Exception ex)
             {
                 return NotFound(ex.ToString());
+            }
+        }
+        [HttpPost]
+        [Route("AddFromExcel")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(List<IngredientEntity>))]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        public async Task<IActionResult> AddRecipeExcel(IFormFile file)
+        {
+            try
+            {
+                var recipes = await _recipeBusiness.AddFromExelAsync(file);
+                return Ok(JsonConvert.SerializeObject(recipes));
+            }
+            catch (Exception ex)
+            {
+                return UnprocessableEntity(ex);
+            }
+        }
+        [HttpGet]
+        [Route("GetRecipe")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RecipeEntity>))]
+        public IActionResult GetRecipe()
+        {
+            try
+            {
+                var recipe = _recipeBusiness.GetRecipeEntities();
+                return Ok(recipe);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
             }
         }
     }

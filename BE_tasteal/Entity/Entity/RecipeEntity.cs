@@ -26,12 +26,15 @@ namespace BE_tasteal.Entity.Entity
         public string? image { get; set; }
         public int? author { get; set; }
         public int? nutrition_info_id { get; set; }
+        public DateTime? createdAt { get; set; }
+        public DateTime? updatedAt { get; set; }
         [ForeignKey("author")]
         public AccountEntity? account { get; set; }
         [ForeignKey("nutrition_info_id")]
         public Nutrition_InfoEntity? nutrition_info { get; set; }
-
         [NotMapped]
         public List<IngredientEntity>? ingredients { get; set; }
+        [NotMapped]
+        public List<Recipe_DirectionEntity>? direction { get; set; }
     }
 }
