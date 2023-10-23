@@ -1,5 +1,4 @@
 ﻿using BE_tasteal.Persistence.Context;
-using BE_tasteal.Persistence.Interface.GenericRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace BE_tasteal.Persistence.Repository.GenericRepository

@@ -1,7 +1,6 @@
 ﻿using BE_tasteal.Business;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
-using BE_tasteal.Persistence.Interface.IngredientRepo;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Microsoft.EntityFrameworkCore;
 

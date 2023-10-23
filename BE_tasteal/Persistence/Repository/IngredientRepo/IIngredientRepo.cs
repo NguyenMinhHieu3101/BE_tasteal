@@ -1,7 +1,7 @@
 ﻿using BE_tasteal.Entity.Entity;
-using BE_tasteal.Persistence.Interface.GenericRepository;
+using BE_tasteal.Persistence.Repository.GenericRepository;
 
-namespace BE_tasteal.Persistence.Interface.IngredientRepo
+namespace BE_tasteal.Persistence.Repository.IngredientRepo
 {
     public interface IIngredientRepo : IGenericRepository<IngredientEntity>
     {

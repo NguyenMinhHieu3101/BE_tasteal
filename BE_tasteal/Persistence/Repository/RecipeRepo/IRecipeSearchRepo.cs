@@ -1,8 +1,8 @@
 ﻿using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
-using BE_tasteal.Persistence.Interface.GenericRepository;
+using BE_tasteal.Persistence.Repository.GenericRepository;
 
-namespace BE_tasteal.Persistence.Interface.RecipeRepo
+namespace BE_tasteal.Persistence.Repository.RecipeRepo
 {
     public interface IRecipeSearchRepo : IGenericRepository<RecipeEntity>
     {

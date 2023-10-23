@@ -1,10 +1,9 @@
 ﻿using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
-using BE_tasteal.Persistence.Interface;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
 
-namespace BE_tasteal.Persistence.Repository
+namespace BE_tasteal.Persistence.Repository.SamPhamTemplate
 {
     public class SanPhamResposity : GenericRepository<SanPhamEntity>, ISanPhamResposity
     {

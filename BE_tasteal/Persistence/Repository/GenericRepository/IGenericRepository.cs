@@ -1,4 +1,4 @@
-﻿namespace BE_tasteal.Persistence.Interface.GenericRepository
+﻿namespace BE_tasteal.Persistence.Repository.GenericRepository
 {
     public interface IGenericRepository<T> where T : class
     {

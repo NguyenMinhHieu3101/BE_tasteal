@@ -271,7 +271,6 @@ namespace BE_tasteal.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("image")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("name")

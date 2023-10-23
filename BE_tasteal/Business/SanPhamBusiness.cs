@@ -2,7 +2,7 @@
 using BE_tasteal.Business.Recipe;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
-using BE_tasteal.Persistence.Interface;
+using BE_tasteal.Persistence.Repository.SamPhamTemplate;
 
 namespace BE_tasteal.Business
 {

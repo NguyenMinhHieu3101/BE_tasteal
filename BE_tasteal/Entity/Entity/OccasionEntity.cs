@@ -13,8 +13,7 @@ namespace BE_tasteal.Entity.Entity
         [Column(TypeName = "text")]
         public string description { get; set; }
         [Column(TypeName = "text")]
-        public string image { get; set; }
+        public string? image { get; set; }
         public DateTime start_at { get; set; }
-
     }
 }

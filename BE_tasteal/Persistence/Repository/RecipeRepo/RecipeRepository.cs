@@ -1,7 +1,6 @@
 ﻿using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
-using BE_tasteal.Persistence.Interface.RecipeRepo;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
 
@@ -143,6 +142,44 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                      splitOn: "IngredientId,NutritionId"
                     );
                 return recipeDictionary.Values.ToList();
+            }
+        }
+
+        public IEnumerable<RecipeEntity> RecipeByTime(PageFilter filter)
+        {
+            string sortOrder = filter.isDescend ? "DESC" : "ASC";
+            int pageSize = filter.pageSize;
+            int page = filter.page;
+            int offset = (page - 1) * pageSize;
+
+            string sqlQuery = $@"
+                        SELECT *
+                        FROM recipe
+                        ORDER BY create_at {sortOrder}
+                        LIMIT @PageSize OFFSET @Offset";
+            using (var connection = _connection.GetConnection())
+            {
+                var recipes = connection.Query<RecipeEntity>(sqlQuery, new { Offset = offset, PageSize = pageSize });
+                return recipes;
+            }
+        }
+
+        public IEnumerable<RecipeEntity> RecipeByRating(PageFilter filter)
+        {
+            string sortOrder = filter.isDescend ? "DESC" : "ASC";
+            int pageSize = filter.pageSize;
+            int page = filter.page;
+            int offset = (page - 1) * pageSize;
+
+            string sqlQuery = $@"
+                        SELECT *
+                        FROM recipe
+                        ORDER BY rating {sortOrder}
+                        LIMIT @PageSize OFFSET @Offset";
+            using (var connection = _connection.GetConnection())
+            {
+                var recipes = connection.Query<RecipeEntity>(sqlQuery, new { Offset = offset, PageSize = pageSize });
+                return recipes;
             }
         }
     }
