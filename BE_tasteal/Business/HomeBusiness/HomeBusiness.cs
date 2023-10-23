@@ -1,4 +1,6 @@
-﻿using BE_tasteal.Entity.Entity;
+﻿using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.DTO.Response;
+using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Repository.AuthorRepo;
 using BE_tasteal.Persistence.Repository.OccasionRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
@@ -10,18 +12,21 @@ namespace BE_tasteal.Business.HomeBusiness
         private readonly IRecipeRepository _recipeRepository;
         private readonly IAuthorRepo _authorRepo;
         private readonly IOccasionRepo _occasionRepo;
+        private readonly ILogger<IHomeBusiness> _logger;
         public HomeBusiness(
             IRecipeRepository recipeRepository,
             IAuthorRepo authorRepo,
-            IOccasionRepo occasionRepo)
+            IOccasionRepo occasionRepo,
+            ILogger<IHomeBusiness> logger)
         {
             _recipeRepository = recipeRepository;
             _authorRepo = authorRepo;
             _occasionRepo = occasionRepo;
+            _logger = logger;
         }
-        public Task<List<AccountEntity>> GetAuthor()
+        public IEnumerable<AuthorRes> GetAuthor(PageFilter filter)
         {
-            throw new NotImplementedException();
+            return _authorRepo.AuthorMostRecipe(filter);
         }
 
         public IEnumerable<OccasionEntity> GetAllOccasion()
@@ -29,14 +34,14 @@ namespace BE_tasteal.Business.HomeBusiness
             return _occasionRepo.GetAll();
         }
 
-        public Task<List<RecipeEntity>> GetRecipeByRating()
+        public IEnumerable<RecipeEntity> GetRecipeByRating(PageFilter filter)
         {
-            throw new NotImplementedException();
+            return _recipeRepository.RecipeByRating(filter);
         }
 
-        public Task<List<RecipeEntity>> GetRecipeByTime()
+        public IEnumerable<RecipeEntity> GetRecipeByTime(PageFilter filter)
         {
-            throw new NotImplementedException();
+            return _recipeRepository.RecipeByTime(filter);
         }
     }
 }

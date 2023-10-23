@@ -145,14 +145,42 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
             }
         }
 
-        public Task<List<RecipeEntity>> RecipeByTime(PageFilter filter)
+        public IEnumerable<RecipeEntity> RecipeByTime(PageFilter filter)
         {
-            throw new NotImplementedException();
+            string sortOrder = filter.isDescend ? "DESC" : "ASC";
+            int pageSize = filter.pageSize;
+            int page = filter.page;
+            int offset = (page - 1) * pageSize;
+
+            string sqlQuery = $@"
+                        SELECT *
+                        FROM recipe
+                        ORDER BY create_at {sortOrder}
+                        LIMIT @PageSize OFFSET @Offset";
+            using (var connection = _connection.GetConnection())
+            {
+                var recipes = connection.Query<RecipeEntity>(sqlQuery, new { Offset = offset, PageSize = pageSize });
+                return recipes;
+            }
         }
 
-        public Task<List<RecipeEntity>> RecipeByRating(PageFilter filter)
+        public IEnumerable<RecipeEntity> RecipeByRating(PageFilter filter)
         {
-            throw new NotImplementedException();
+            string sortOrder = filter.isDescend ? "DESC" : "ASC";
+            int pageSize = filter.pageSize;
+            int page = filter.page;
+            int offset = (page - 1) * pageSize;
+
+            string sqlQuery = $@"
+                        SELECT *
+                        FROM recipe
+                        ORDER BY rating {sortOrder}
+                        LIMIT @PageSize OFFSET @Offset";
+            using (var connection = _connection.GetConnection())
+            {
+                var recipes = connection.Query<RecipeEntity>(sqlQuery, new { Offset = offset, PageSize = pageSize });
+                return recipes;
+            }
         }
     }
 }

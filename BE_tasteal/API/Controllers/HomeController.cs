@@ -11,13 +11,11 @@ namespace BE_tasteal.API.Controllers
     [ApiVersion("2.0")]
     public class HomeController : Controller
     {
-        private readonly ILogger _logger;
         private readonly IHomeBusiness _homeBusiness;
 
-        public HomeController(IHomeBusiness homeBusiness, ILogger logger)
+        public HomeController(IHomeBusiness homeBusiness)
         {
             _homeBusiness = homeBusiness;
-            _logger = logger;
         }
         [HttpPost]
         [Route("getoccasion")]
@@ -32,7 +30,6 @@ namespace BE_tasteal.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 return BadRequest();
             }
         }
@@ -41,16 +38,16 @@ namespace BE_tasteal.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OccasionEntity))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> RecipeByDateTime(PageFilter filter)
+        public IActionResult RecipeByDateTime(PageFilter filter)
         {
             try
             {
-                var occasions = await _homeBusiness.GetRecipeByTime();
+                var occasions = _homeBusiness.GetRecipeByTime(filter);
                 return Ok(occasions);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                Console.WriteLine(ex.ToString());
                 return BadRequest();
             }
         }
@@ -59,16 +56,16 @@ namespace BE_tasteal.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OccasionEntity))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> RecipeByRating(PageFilter filter)
+        public IActionResult RecipeByRating(PageFilter filter)
         {
             try
             {
-                var occasions = await _homeBusiness.GetRecipeByRating();
-                return Ok(occasions);
+                var recipes = _homeBusiness.GetRecipeByRating(filter);
+                return Ok(recipes);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+
                 return BadRequest();
             }
         }
@@ -77,16 +74,16 @@ namespace BE_tasteal.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OccasionEntity))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> GetAuthor(PageFilter filter)
+        public IActionResult GetAuthor(PageFilter filter)
         {
             try
             {
-                var occasions = await _homeBusiness.GetAuthor();
+                var occasions = _homeBusiness.GetAuthor(filter);
                 return Ok(occasions);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+
                 return BadRequest();
             }
         }

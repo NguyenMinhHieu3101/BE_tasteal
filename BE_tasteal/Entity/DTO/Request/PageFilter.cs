@@ -3,7 +3,7 @@
     public class PageFilter
     {
         public int pageSize { get; set; }
-        public int offSet { get; set; }
+        public int page { get; set; }
         public bool isDescend { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         Task InsertDirection(RecipeEntity recipe, List<RecipeDirectionDto> direction);
         Task UpdateNutrition(RecipeEntity recipe, List<IngredientEntity> ingredients);
         List<RecipeEntity> GetRecipesWithIngredientsAndNutrition();
-        Task<List<RecipeEntity>> RecipeByTime(PageFilter filter);
-        Task<List<RecipeEntity>> RecipeByRating(PageFilter filter);
+        IEnumerable<RecipeEntity> RecipeByRating(PageFilter filter);
+        IEnumerable<RecipeEntity> RecipeByTime(PageFilter filter);
     }
 }

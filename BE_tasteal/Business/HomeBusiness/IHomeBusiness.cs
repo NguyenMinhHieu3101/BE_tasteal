@@ -1,12 +1,14 @@
-﻿using BE_tasteal.Entity.Entity;
+﻿using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.DTO.Response;
+using BE_tasteal.Entity.Entity;
 
 namespace BE_tasteal.Business.HomeBusiness
 {
     public interface IHomeBusiness
     {
         IEnumerable<OccasionEntity> GetAllOccasion();
-        Task<List<RecipeEntity>> GetRecipeByTime();
-        Task<List<RecipeEntity>> GetRecipeByRating();
-        Task<List<AccountEntity>> GetAuthor();
+        IEnumerable<RecipeEntity> GetRecipeByTime(PageFilter filter);
+        IEnumerable<RecipeEntity> GetRecipeByRating(PageFilter filter);
+        IEnumerable<AuthorRes> GetAuthor(PageFilter filter);
     }
 }
