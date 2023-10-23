@@ -7,8 +7,10 @@ using BE_tasteal.Business.Recipe;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
+using BE_tasteal.Persistence.Repository.AuthorRepo;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using BE_tasteal.Persistence.Repository.IngredientRepo;
+using BE_tasteal.Persistence.Repository.OccasionRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using BE_tasteal.Persistence.Repository.SamPhamTemplate;
 using Microsoft.AspNetCore.Mvc;
@@ -60,6 +62,8 @@ try
         services.AddScoped<IRecipeRepository, RecipeRepository>();
         services.AddScoped<IRecipeSearchRepo, RecipeSearchRepo>();
         services.AddScoped<IIngredientRepo, IngredientRepo>();
+        services.AddScoped<IOccasionRepo, OccasionRepo>();
+        services.AddScoped<IAuthorRepo, AuthorRepo>();
 
         services.AddDbContext<MyDbContext>(option =>
         {

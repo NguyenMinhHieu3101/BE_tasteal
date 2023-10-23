@@ -1,4 +1,4 @@
-﻿namespace BE_tasteal.Entity.DTO
+﻿namespace BE_tasteal.Entity.DTO.Request
 {
     public class PageFilter
     {

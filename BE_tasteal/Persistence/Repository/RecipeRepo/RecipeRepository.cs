@@ -144,5 +144,15 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 return recipeDictionary.Values.ToList();
             }
         }
+
+        public Task<List<RecipeEntity>> RecipeByTime(PageFilter filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<RecipeEntity>> RecipeByRating(PageFilter filter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

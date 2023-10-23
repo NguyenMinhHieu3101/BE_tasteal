@@ -1,6 +1,6 @@
 ﻿using BE_tasteal.API.AppSettings;
 using BE_tasteal.Business.HomeBusiness;
-using BE_tasteal.Entity.DTO;
+using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,11 +23,11 @@ namespace BE_tasteal.API.Controllers
         [Route("getoccasion")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OccasionEntity))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetOccasion()
+        public IActionResult GetOccasion()
         {
             try
             {
-                var occasions = await _homeBusiness.GetAllOccasion();
+                var occasions = _homeBusiness.GetAllOccasion();
                 return Ok(occasions);
             }
             catch (Exception ex)

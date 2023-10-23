@@ -2,7 +2,7 @@
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 
-namespace BE_tasteal.Persistence.Interface.RecipeRepo
+namespace BE_tasteal.Persistence.Repository.RecipeRepo
 {
     public interface IRecipeRepository : IGenericRepository<RecipeEntity>
     {
@@ -10,5 +10,7 @@ namespace BE_tasteal.Persistence.Interface.RecipeRepo
         Task InsertDirection(RecipeEntity recipe, List<RecipeDirectionDto> direction);
         Task UpdateNutrition(RecipeEntity recipe, List<IngredientEntity> ingredients);
         List<RecipeEntity> GetRecipesWithIngredientsAndNutrition();
+        Task<List<RecipeEntity>> RecipeByTime(PageFilter filter);
+        Task<List<RecipeEntity>> RecipeByRating(PageFilter filter);
     }
 }

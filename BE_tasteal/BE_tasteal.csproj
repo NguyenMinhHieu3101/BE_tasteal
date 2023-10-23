@@ -34,8 +34,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Persistence\Interface\OccasionRepo\" />
-    <Folder Include="Persistence\Repository\OccasionRepo\" />
   </ItemGroup>
 
 </Project>

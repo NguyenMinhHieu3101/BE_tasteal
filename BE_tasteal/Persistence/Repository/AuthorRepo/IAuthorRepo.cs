@@ -1,6 +1,9 @@
-﻿namespace BE_tasteal.Persistence.Repository.AuthorRepo
+﻿using BE_tasteal.Entity.Entity;
+using BE_tasteal.Persistence.Repository.GenericRepository;
+
+namespace BE_tasteal.Persistence.Repository.AuthorRepo
 {
-    public interface IAuthorRepo
+    public interface IAuthorRepo : IGenericRepository<AccountEntity>
     {
     }
 }

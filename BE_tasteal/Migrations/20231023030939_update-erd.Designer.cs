@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BE_tasteal.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231020083137_UpdateEntity-20-12-2023")]
-    partial class UpdateEntity20122023
+    [Migration("20231023030939_update-erd")]
+    partial class updateerd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -274,7 +274,6 @@ namespace BE_tasteal.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("image")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("name")

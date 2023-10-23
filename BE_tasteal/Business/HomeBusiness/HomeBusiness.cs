@@ -1,22 +1,32 @@
 ﻿using BE_tasteal.Entity.Entity;
+using BE_tasteal.Persistence.Repository.AuthorRepo;
+using BE_tasteal.Persistence.Repository.OccasionRepo;
+using BE_tasteal.Persistence.Repository.RecipeRepo;
 
 namespace BE_tasteal.Business.HomeBusiness
 {
     public class HomeBusiness : IHomeBusiness
     {
-
-        public HomeBusiness()
+        private readonly IRecipeRepository _recipeRepository;
+        private readonly IAuthorRepo _authorRepo;
+        private readonly IOccasionRepo _occasionRepo;
+        public HomeBusiness(
+            IRecipeRepository recipeRepository,
+            IAuthorRepo authorRepo,
+            IOccasionRepo occasionRepo)
         {
-
+            _recipeRepository = recipeRepository;
+            _authorRepo = authorRepo;
+            _occasionRepo = occasionRepo;
         }
         public Task<List<AccountEntity>> GetAuthor()
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<OccasionEntity>> GetAllOccasion()
+        public IEnumerable<OccasionEntity> GetAllOccasion()
         {
-            throw new NotImplementedException();
+            return _occasionRepo.GetAll();
         }
 
         public Task<List<RecipeEntity>> GetRecipeByRating()
