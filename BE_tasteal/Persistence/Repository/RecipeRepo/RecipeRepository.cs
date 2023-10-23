@@ -155,7 +155,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
             string sqlQuery = $@"
                         SELECT *
                         FROM recipe
-                        ORDER BY create_at {sortOrder}
+                        ORDER BY createdAt {sortOrder}
                         LIMIT @PageSize OFFSET @Offset";
             using (var connection = _connection.GetConnection())
             {
