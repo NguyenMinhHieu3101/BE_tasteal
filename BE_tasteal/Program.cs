@@ -79,10 +79,10 @@ try
         }, ServiceLifetime.Scoped);
 
         //cors
-        services.AddCors(p => p.AddPolicy("MyCors", build=>
+        services.AddCors(p => p.AddPolicy("MyCors", build =>
         {
             build.WithOrigins("*").AllowAnyHeader().AllowAnyHeader();
-        }))
+        }));
 
         services.Configure<IISServerOptions>(option =>
         {
