@@ -23,24 +23,25 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 string query = @"
                 SELECT DISTINCT *
                 FROM recipe AS r
-                INNER JOIN Nutrition_Info AS n_i ON r.recipe_id = n_i.recipe_id
-                INNER JOIN Ingredient AS i ON n_i.nutrition_info_id = i.nutrition_info_id
+                INNER JOIN Nutrition_Info AS n_i ON r.nutrition_info_id = n_i.id
+                INNER JOIN Ingredient AS i ON n_i.id = i.nutrition_info_id
                 INNER JOIN Account AS a ON a.id = r.author
-                INNER JOIN Recipe_Occasion AS r_o ON r.recipe_id = r_o.recipe_id
+                INNER JOIN Recipe_Occasion AS r_o ON r.id= r_o.recipe_id
                 WHERE 
-                (@IngredientID IS NULL OR i.ingredient_id IN @IngredientID) AND
-                (@ExceptIngredientID IS NULL OR i.ingredient_id NOT IN @ExceptIngredientID) AND
+                (@IngredientID IS NULL OR i.id IN @IngredientID) AND
+                (@ExceptIngredientID IS NULL OR i.id NOT IN @ExceptIngredientID) AND
                 (@TotalTime IS NULL OR r.totalTime <= @TotalTime) AND
                 (@ActiveTime IS NULL OR r.active_time <= @ActiveTime) AND
-                (@OccasionID IS NULL OR r_o.occasion_id = @OccasionID) AND
-                (@Calories IS NULL OR n_i.calories <= @Calories) AND
+                (@OccasionID IS NULL OR r_o.occasion_id IN @OccasionID) AND
+                
+		        (@KeyWords IS NULL OR REGEXP_LIKE(r.introduction, @KeyWordsFormat))
                 ((@TextSearch IS NULL) OR
                 (r.name LIKE '%' + @TextSearch + '%' OR
                 r.introduction LIKE '%' + @TextSearch + '%' OR
                 a.username LIKE '%' + @TextSearch + '%' OR 
-                i.name LIKE '%' + @TextSearch + '%'))"
-                ;
-
+                i.name LIKE '%' + @TextSearch + '%'))";
+                //
+                //(@Calories IS NULL OR n_i.calories <= @Calories) AND
                 var result = connection.Query<RecipeEntity>(query, new
                 {
                     data.IngredientID,
