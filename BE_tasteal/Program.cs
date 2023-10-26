@@ -78,11 +78,11 @@ try
             option.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         }, ServiceLifetime.Scoped);
 
-        //cors
-        services.AddCors(p => p.AddPolicy("MyCors", build =>
-        {
-            build.WithOrigins("*").AllowAnyHeader().AllowAnyHeader();
-        }));
+        ////cors
+        //services.AddCors(p => p.AddPolicy("MyCors", build =>
+        //{
+        //    build.WithOrigins("*").AllowAnyHeader().AllowAnyHeader();
+        //}));
 
         services.Configure<IISServerOptions>(option =>
         {
@@ -162,7 +162,7 @@ try
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-        app.UseCors("MyCors");
+        //app.UseCors("MyCors");
 
         app.UseHttpsRedirection();
 
