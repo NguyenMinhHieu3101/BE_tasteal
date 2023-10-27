@@ -33,7 +33,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 (@TotalTime IS NULL OR r.totalTime <= @TotalTime) AND
                 (@ActiveTime IS NULL OR r.active_time <= @ActiveTime) AND
                 (@OccasionID IS NULL OR r_o.occasion_id IN @OccasionID) AND
-                
+                (@Calories IS NULL OR n_i.calories <= @Calories) AND
 		        (@KeyWords IS NULL OR REGEXP_LIKE(r.introduction, @KeyWordsFormat))
                 ((@TextSearch IS NULL) OR
                 (r.name LIKE '%' + @TextSearch + '%' OR
