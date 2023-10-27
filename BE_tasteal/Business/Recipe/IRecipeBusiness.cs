@@ -1,4 +1,5 @@
 ﻿using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
 
 namespace BE_tasteal.Business.Recipe
@@ -9,6 +10,7 @@ namespace BE_tasteal.Business.Recipe
         Task<U?> Add(T entity);
         Task<List<RecipeEntity>> AddFromExelAsync(IFormFile file);
         Task<List<U>?> Search(RecipeSearchDto option);
-        List<RecipeEntity> GetRecipeEntities();
+        List<RecipeEntity> GetAllRecipe();
+        Task<RecipeResponse> RecipeDetail(int id);
     }
 }

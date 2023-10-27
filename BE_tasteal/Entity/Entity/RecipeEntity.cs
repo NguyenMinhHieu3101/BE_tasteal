@@ -24,7 +24,7 @@ namespace BE_tasteal.Entity.Entity
         public bool is_private { get; set; }
         [Column(TypeName = "text")]
         public string? image { get; set; }
-        public int? author { get; set; }
+        public int author { get; set; }
         public int? nutrition_info_id { get; set; }
         public DateTime? createdAt { get; set; }
         public DateTime? updatedAt { get; set; }

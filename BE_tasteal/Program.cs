@@ -8,8 +8,11 @@ using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.AuthorRepo;
+using BE_tasteal.Persistence.Repository.CommentRepo;
+using BE_tasteal.Persistence.Repository.Direction;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using BE_tasteal.Persistence.Repository.IngredientRepo;
+using BE_tasteal.Persistence.Repository.NutritionRepo;
 using BE_tasteal.Persistence.Repository.OccasionRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using BE_tasteal.Persistence.Repository.SamPhamTemplate;
@@ -64,6 +67,9 @@ try
         services.AddScoped<IIngredientRepo, IngredientRepo>();
         services.AddScoped<IOccasionRepo, OccasionRepo>();
         services.AddScoped<IAuthorRepo, AuthorRepo>();
+        services.AddScoped<INutritionRepo, NutritionRepo>();
+        services.AddScoped<IDirectionRepo,  DirectionRepo>();
+        services.AddScoped<ICommentRepo, CommentRepo>();
 
         services.AddDbContext<MyDbContext>(option =>
         {

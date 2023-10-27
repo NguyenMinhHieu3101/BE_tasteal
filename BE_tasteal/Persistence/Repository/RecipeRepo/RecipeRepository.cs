@@ -1,4 +1,5 @@
 ﻿using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
@@ -98,7 +99,6 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         }
         public List<RecipeEntity> GetRecipesWithIngredientsAndNutrition()
         {
-            Console.WriteLine("asdasdasda");
             string sql = @"
                                   
                 SELECT  r.id, r.name, r.rating, r.totalTime, r.active_time, r.serving_size, 
@@ -144,7 +144,6 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 return recipeDictionary.Values.ToList();
             }
         }
-
         public IEnumerable<RecipeEntity> RecipeByTime(PageFilter filter)
         {
             string sortOrder = filter.isDescend ? "DESC" : "ASC";
@@ -163,7 +162,6 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 return recipes;
             }
         }
-
         public IEnumerable<RecipeEntity> RecipeByRating(PageFilter filter)
         {
             string sortOrder = filter.isDescend ? "DESC" : "ASC";
@@ -180,6 +178,24 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
             {
                 var recipes = connection.Query<RecipeEntity>(sqlQuery, new { Offset = offset, PageSize = pageSize });
                 return recipes;
+            }
+        }
+        public IEnumerable<RelatedRecipeRes> GetRelatedRecipeByAuthor(int id)
+        {
+            using (var connection = _connection.GetConnection())
+            {
+                string sql = @"
+                select recipe.id, recipe.name, recipe.image, recipe.totalTime, recipe.rating,  count(recipe.id)  as ingredientAmoun  from recipe, account , recipe_ingredient
+                where recipe.author = account.id
+                and recipe.id = recipe_ingredient.recipe_id
+                and account.id = @Id
+                group by recipe.id
+                limit 16
+                ";
+
+                var result = connection.Query<RelatedRecipeRes>(sql, new { Id = id });
+
+                return result;
             }
         }
     }

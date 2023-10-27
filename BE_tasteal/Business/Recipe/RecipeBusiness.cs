@@ -1,7 +1,12 @@
 ﻿using AutoMapper;
 using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
+using BE_tasteal.Persistence.Repository.AuthorRepo;
+using BE_tasteal.Persistence.Repository.CommentRepo;
+using BE_tasteal.Persistence.Repository.Direction;
 using BE_tasteal.Persistence.Repository.IngredientRepo;
+using BE_tasteal.Persistence.Repository.NutritionRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Newtonsoft.Json;
 using OfficeOpenXml;
@@ -16,17 +21,29 @@ namespace BE_tasteal.Business.Recipe
         private readonly IRecipeRepository _recipeResposity;
         private readonly IRecipeSearchRepo _recipeSearchRepo;
         private readonly IIngredientRepo _ingredientRepo;
+        private readonly IAuthorRepo _authorRepo;
+        private readonly INutritionRepo _nutritionRepo;
+        private readonly IDirectionRepo _directionRepo;
+        private readonly ICommentRepo _commentRepo;
         public RecipeBusiness(IMapper mapper,
            ILogger<SanPhamBusiness> logger,
            IRecipeRepository recipeResposity,
            IRecipeSearchRepo recipeSearchRepo,
-           IIngredientRepo ingredientRepo)
+           IIngredientRepo ingredientRepo,
+           IAuthorRepo authorRepo,
+           INutritionRepo nutritionRepo,
+           IDirectionRepo directionRepo,
+           ICommentRepo commentRepo)
         {
             _mapper = mapper;
             _logger = logger;
             _recipeResposity = recipeResposity;
             _recipeSearchRepo = recipeSearchRepo;
             _ingredientRepo = ingredientRepo;
+            _authorRepo = authorRepo;
+            _nutritionRepo = nutritionRepo;
+            _directionRepo = directionRepo;
+            _commentRepo = commentRepo;
         }
         public async Task<RecipeEntity?> Add(RecipeDto entity)
         {
@@ -164,7 +181,7 @@ namespace BE_tasteal.Business.Recipe
             }
             #endregion
         }
-        public List<RecipeEntity> GetRecipeEntities()
+        public List<RecipeEntity> GetAllRecipe()
         {
             var list = _recipeResposity.GetRecipesWithIngredientsAndNutrition();
             return list;
@@ -246,13 +263,72 @@ namespace BE_tasteal.Business.Recipe
 
                 parsedData.Add(new RecipeDirectionDto
                 {
-                    step = i,
+                    step = i + 1,
                     direction = description,
                     image = imageLink,
                 });
             }
 
             return parsedData;
+        }
+        public async Task<RecipeResponse> RecipeDetail(int id)
+        {
+            var recipeEntity = await _recipeResposity.FindByIdAsync(id);
+            if (recipeEntity != null)
+            {
+                RecipeResponse recipeRes = new RecipeResponse();
+                //bind
+                recipeRes.name = recipeEntity.name;
+                recipeRes.rating = recipeEntity.rating;
+                recipeRes.totalTime = recipeEntity.totalTime;
+                recipeRes.serving_size = recipeEntity.serving_size;
+                recipeRes.introduction = recipeEntity.introduction;
+                recipeRes.author_note = recipeEntity.author_note;
+                recipeRes.image = recipeEntity.image;
+                recipeRes.createAt = recipeEntity.createdAt;
+
+                //find author
+                var authorEntity = await _authorRepo.FindByIdAsync(recipeEntity.author);
+                recipeRes.author = new AuthorRes();
+                recipeRes.author.name = authorEntity.name;
+                recipeRes.author.avatar = authorEntity.avatar;
+                recipeRes.author.username = authorEntity.username;
+                recipeRes.author.introduction = authorEntity.introduction;
+
+                //find ingredient
+                var ingredientRes = _ingredientRepo.GetIngredientsByRecipeId(recipeEntity.id);
+                recipeRes.ingredients = ingredientRes;
+
+                //find nutrtion
+                var nutritionEntity = await _nutritionRepo.FindByIdAsync(recipeEntity.nutrition_info_id);
+
+
+                recipeRes.nutrition_info = nutritionEntity;
+
+
+                //find direction
+                var direction = _directionRepo.GetDirectionByRecipeId(recipeEntity.id);
+                _logger.LogInformation(JsonConvert.SerializeObject(direction));
+                recipeRes.directions = direction;
+
+                
+
+                //find comment
+                var comment = _commentRepo.GetCommentByRecipeId(recipeEntity.id);
+                recipeRes.comments = comment;
+
+                //find Related Recipe
+                var relatedRecipes = _recipeResposity.GetRelatedRecipeByAuthor(recipeEntity.author);
+                foreach(var related in relatedRecipes)
+                {
+                    related.author = recipeRes.author;
+                }
+                recipeRes.relatedRecipes = relatedRecipes;
+
+                return recipeRes;
+            }
+            else
+                return null;
         }
     }
 }

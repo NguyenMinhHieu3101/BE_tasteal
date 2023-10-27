@@ -15,16 +15,20 @@ namespace BE_tasteal.Persistence.Context
 
         public IDbConnection GetConnection()
         {
-            if (_connection == null)
-            {
-                string connectionString = _configuration.GetConnectionString("DefaultConnection");
-                _connection = new MySqlConnection(connectionString);
-            }
+            //if (_connection == null)
+            //{
+            //    string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            //    _connection = new MySqlConnection(connectionString);
+            //}
 
-            if (_connection.State != ConnectionState.Open)
-            {
-                _connection.Open();
-            }
+            //if (_connection.State != ConnectionState.Open)
+            //{
+            //    _connection.Open();
+            //}
+
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            _connection = new MySqlConnection(connectionString);
+            _connection.Open();
 
             return _connection;
         }

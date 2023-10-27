@@ -62,18 +62,35 @@ namespace BE_tasteal.API.Controllers
             }
         }
         [HttpGet]
-        [Route("GetRecipe")]
+        [Route("GetAllRecipe")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RecipeEntity>))]
-        public IActionResult GetRecipe()
+        public IActionResult GetAllRecipe()
         {
             try
             {
-                var recipe = _recipeBusiness.GetRecipeEntities();
+                var recipe = _recipeBusiness.GetAllRecipe();
                 return Ok(recipe);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.ToString());
+            }
+        }
+        [HttpPost]
+        [Route("GetRecipe")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RecipeEntity>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetRecipe(int id)
+        {
+            try
+            {
+                var recipes = await _recipeBusiness.RecipeDetail(id);
+                return Ok(recipes);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest();
             }
         }
     }

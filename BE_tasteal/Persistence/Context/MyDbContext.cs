@@ -23,7 +23,6 @@ namespace BE_tasteal.Persistence.Context
         public DbSet<AccountEntity> accountEntities { get; set; }
         public DbSet<Pantry_ItemEntity> pantry_ItemEntities { get; set; }
         public DbSet<Cart_ItemEntity> cart_ItemEntities { get; set; }
-        public DbSet<Recipe_ImageEntity> recipe_ImageEntities { get; set; }
         public DbSet<CookBook_RecipeEntity> cookBook_RecipeEntities { get; set; }
         public DbSet<CookBookEntity> cookBookEntities { get; set; }
         public DbSet<RatingEntity> ratingEntities { get; set; }

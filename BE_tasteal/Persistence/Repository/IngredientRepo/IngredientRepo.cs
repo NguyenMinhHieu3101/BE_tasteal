@@ -1,7 +1,9 @@
 ﻿using BE_tasteal.Business;
+using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace BE_tasteal.Persistence.Repository.IngredientRepo
@@ -58,7 +60,6 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
             _logger.LogInformation("Add new ingredient type: " + entity.Entity);
             return entity.Entity;
         }
-
         public async Task<Nutrition_InfoEntity> InsertNutrition(Nutrition_InfoEntity nutri)
         {
             _context.Attach(nutri);
@@ -68,11 +69,11 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
             _logger.LogInformation("Add new nutrition info: " + entityEntry.Entity);
             return entityEntry.Entity;
         }
-
         public async Task<List<IngredientEntity>> GetAllIngredient()
         {
             var ingredientsWithType = await _context.ingredient
                 .Include(i => i.ingredient_type)
+                .Include(i => i.nutrition_info)
                 .ToListAsync();
             return ingredientsWithType;
         }
@@ -115,5 +116,18 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
             entityEntry.Entity.amount = ingredient.amount;
             return entityEntry.Entity;
         }
+        public IEnumerable<IngredientRes> GetIngredientsByRecipeId(int recipeId)
+        {
+            using (var connection = _connection.GetConnection())
+            {
+                string sql = @"SELECT i.name, i.image, ri.amount, i.isLiquid 
+                      FROM Ingredient i
+                      INNER JOIN Recipe_Ingredient ri ON i.id = ri.ingredient_id
+                      WHERE ri.recipe_id = @RecipeId";
+
+                var result = connection.Query<IngredientRes>(sql, new { RecipeId = recipeId });
+                return result;
+            }    
+        }    
     }
 }

@@ -1,4 +1,5 @@
-﻿using BE_tasteal.Entity.Entity;
+﻿using BE_tasteal.Entity.DTO.Response;
+using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 
 namespace BE_tasteal.Persistence.Repository.IngredientRepo
@@ -12,5 +13,6 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
         Task<List<IngredientEntity>> GetAllIngredient();
         Task<IngredientEntity> GetIngredientByName(string name);
         Task<IngredientEntity> InsertIngredient(IngredientEntity ingredient, bool flag = false);
+        IEnumerable<IngredientRes> GetIngredientsByRecipeId(int recipeId);
     }
 }

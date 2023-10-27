@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BE_tasteal.Business.Recipe;
 using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Repository.SamPhamTemplate;
 
@@ -53,7 +54,12 @@ namespace BE_tasteal.Business
             throw new NotImplementedException();
         }
 
-        public List<RecipeEntity> GetRecipeEntities()
+        public List<RecipeEntity> GetAllRecipe()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<RecipeResponse> RecipeDetail(int id)
         {
             throw new NotImplementedException();
         }
