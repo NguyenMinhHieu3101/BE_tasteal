@@ -58,7 +58,7 @@ namespace BE_tasteal.API.Controllers
             }
             catch (Exception ex)
             {
-                return UnprocessableEntity(ex);
+                return UnprocessableEntity(ex.ToString());
             }
         }
         [HttpGet]
@@ -89,8 +89,7 @@ namespace BE_tasteal.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return BadRequest();
+                return BadRequest(ex.ToString());
             }
         }
     }
