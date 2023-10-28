@@ -4,6 +4,7 @@ using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace BE_tasteal.Persistence.Repository.RecipeRepo
 {
@@ -146,39 +147,52 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         }
         public IEnumerable<RecipeEntity> RecipeByTime(PageFilter filter)
         {
-            string sortOrder = filter.isDescend ? "DESC" : "ASC";
             int pageSize = filter.pageSize;
             int page = filter.page;
             int offset = (page - 1) * pageSize;
 
-            string sqlQuery = $@"
-                        SELECT *
-                        FROM recipe
-                        ORDER BY createdAt {sortOrder}
-                        LIMIT @PageSize OFFSET @Offset";
-            using (var connection = _connection.GetConnection())
+            IQueryable<RecipeEntity> query = _context.recipe
+                                               .Include(r => r.account)
+                                               .Include(r => r.nutrition_info);
+            if (filter.isDescend)
             {
-                var recipes = connection.Query<RecipeEntity>(sqlQuery, new { Offset = offset, PageSize = pageSize });
-                return recipes;
+                query = query.OrderByDescending(r => r.createdAt);
             }
+            else
+            {
+                query = query.OrderBy(r => r.createdAt);
+            }
+
+            var recipes = query.Skip((page - 1) * pageSize)
+                           .Take(pageSize)
+                           .AsEnumerable();
+
+            return recipes;
         }
         public IEnumerable<RecipeEntity> RecipeByRating(PageFilter filter)
         {
-            string sortOrder = filter.isDescend ? "DESC" : "ASC";
             int pageSize = filter.pageSize;
             int page = filter.page;
             int offset = (page - 1) * pageSize;
 
-            string sqlQuery = $@"
-                        SELECT *
-                        FROM recipe
-                        ORDER BY rating {sortOrder}
-                        LIMIT @PageSize OFFSET @Offset";
-            using (var connection = _connection.GetConnection())
+
+            IQueryable<RecipeEntity> query = _context.recipe
+                                               .Include(r => r.account)
+                                               .Include(r => r.nutrition_info);
+            if (filter.isDescend)
             {
-                var recipes = connection.Query<RecipeEntity>(sqlQuery, new { Offset = offset, PageSize = pageSize });
-                return recipes;
+                query = query.OrderByDescending(r => r.rating);
             }
+            else
+            {
+                query = query.OrderBy(r => r.rating);
+            }
+
+            var recipes = query.Skip((page - 1) * pageSize)
+                           .Take(pageSize)
+                           .AsEnumerable();
+
+            return recipes;
         }
         public IEnumerable<RelatedRecipeRes> GetRelatedRecipeByAuthor(int id)
         {

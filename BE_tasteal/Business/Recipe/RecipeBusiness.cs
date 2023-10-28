@@ -290,6 +290,7 @@ namespace BE_tasteal.Business.Recipe
                 //find author
                 var authorEntity = await _authorRepo.FindByIdAsync(recipeEntity.author);
                 recipeRes.author = new AuthorRes();
+                recipeRes.author.id = authorEntity.id;
                 recipeRes.author.name = authorEntity.name;
                 recipeRes.author.avatar = authorEntity.avatar;
                 recipeRes.author.username = authorEntity.username;
