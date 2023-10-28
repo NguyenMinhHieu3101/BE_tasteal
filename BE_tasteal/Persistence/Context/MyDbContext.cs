@@ -8,12 +8,6 @@ namespace BE_tasteal.Persistence.Context
         public MyDbContext(DbContextOptions options) : base(options) { }
 
         #region DB Set
-        //template 
-        public DbSet<SanPhamEntity> sanPhams { get; set; }
-        public DbSet<LoaiSanPhamEntity> loaiSanPhams { get; set; }
-        //end template
-
-
         public DbSet<Recipe_IngredientEntity> recipe_Ingredient { get; set; }
         public DbSet<IngredientEntity> ingredient { get; set; }
         public DbSet<Ingredient_TypeEntity> ingredient_Type { get; set; }
@@ -23,6 +17,7 @@ namespace BE_tasteal.Persistence.Context
         public DbSet<AccountEntity> accountEntities { get; set; }
         public DbSet<Pantry_ItemEntity> pantry_ItemEntities { get; set; }
         public DbSet<Cart_ItemEntity> cart_ItemEntities { get; set; }
+        public DbSet<CartEntity> cart { get; set; }
         public DbSet<CookBook_RecipeEntity> cookBook_RecipeEntities { get; set; }
         public DbSet<CookBookEntity> cookBookEntities { get; set; }
         public DbSet<RatingEntity> ratingEntities { get; set; }
@@ -51,6 +46,9 @@ namespace BE_tasteal.Persistence.Context
 
             modelBuilder.Entity<Recipe_OccasionEntity>().HasKey(p =>
                new { p.recipe_id, p.occasion_id });
+
+            modelBuilder.Entity<Cart_ItemEntity>().HasKey(p =>
+                new { p.ingredient_id, p.cartId });
             #endregion
 
             base.OnModelCreating(modelBuilder);

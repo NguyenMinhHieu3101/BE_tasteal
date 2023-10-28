@@ -1,6 +1,7 @@
 using BE_tasteal.API.AppSettings;
 using BE_tasteal.API.Middleware;
 using BE_tasteal.Business;
+using BE_tasteal.Business.Cart;
 using BE_tasteal.Business.HomeBusiness;
 using BE_tasteal.Business.Ingredient;
 using BE_tasteal.Business.Recipe;
@@ -15,7 +16,6 @@ using BE_tasteal.Persistence.Repository.IngredientRepo;
 using BE_tasteal.Persistence.Repository.NutritionRepo;
 using BE_tasteal.Persistence.Repository.OccasionRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
-using BE_tasteal.Persistence.Repository.SamPhamTemplate;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -55,13 +55,12 @@ try
         services.AddScoped<DbContext, MyDbContext>();
 
         //business
-        services.AddScoped<IRecipeBusiness<SanPhamDto, SanPhamEntity>, SanPhamBusiness>();
         services.AddScoped<IRecipeBusiness<RecipeDto, RecipeEntity>, RecipeBusiness>();
         services.AddScoped<IIngredientBusiness, IngredientBusiness>();
         services.AddScoped<IHomeBusiness, HomeBusiness>();
+        services.AddScoped<ICartBusiness, CartBusiness>();
 
         //repo
-        services.AddScoped<ISanPhamResposity, SanPhamResposity>();
         services.AddScoped<IRecipeRepository, RecipeRepository>();
         services.AddScoped<IRecipeSearchRepo, RecipeSearchRepo>();
         services.AddScoped<IIngredientRepo, IngredientRepo>();

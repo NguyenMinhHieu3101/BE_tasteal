@@ -10,9 +10,9 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
 {
     public class IngredientRepo : GenericRepository<IngredientEntity>, IIngredientRepo
     {
-        private readonly ILogger<SanPhamBusiness> _logger;
+        private readonly ILogger<IngredientEntity> _logger;
         public IngredientRepo(MyDbContext context,
-          ConnectionManager connectionManager, ILogger<SanPhamBusiness> logger) : base(context, connectionManager)
+          ConnectionManager connectionManager, ILogger<IngredientEntity> logger) : base(context, connectionManager)
         {
             _logger = logger;
         }

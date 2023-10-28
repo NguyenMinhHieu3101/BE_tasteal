@@ -8,13 +8,11 @@ namespace BE_tasteal.Business.Ingredient
     public class IngredientBusiness : IIngredientBusiness
     {
         private readonly IMapper _mapper;
-        private readonly ILogger<SanPhamBusiness> _logger;
         private readonly IIngredientRepo _ingredientRepo;
 
-        public IngredientBusiness(IMapper mapper, ILogger<SanPhamBusiness> logger, IIngredientRepo ingredientRepo)
+        public IngredientBusiness(IMapper mapper, IIngredientRepo ingredientRepo)
         {
             _mapper = mapper;
-            _logger = logger;
             _ingredientRepo = ingredientRepo;
         }
         public async Task<List<IngredientEntity>> AddFromExelAsync(IFormFile file)

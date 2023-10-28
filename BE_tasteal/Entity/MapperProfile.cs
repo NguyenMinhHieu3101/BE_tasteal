@@ -26,19 +26,6 @@ namespace BE_tasteal.Entity
                 .ForMember(destination => destination.direction, destination => destination.Ignore());
 
             // CreateMap<Recipe_DirectionEntity, Recipe_DirectionEntity>();
-
-
-
-            CreateMap<SanPhamDto, SanPhamEntity>()
-                .ForMember(destination => destination.MaSanPham, destination => destination.Ignore())
-                .ForMember(source => source.MaLoaiSanPham, destination => destination.MapFrom(src => src.MaLoaiSanPham))
-                .ForMember(source => source.TenSanPham, destination => destination.MapFrom(src => src.TenSanPham));
-
-            CreateMap<LoaiSanPhamDto, LoaiSanPhamEntity>()
-                .ForMember(destination => destination.MaLoaiSanPham, destination => destination.Ignore())
-                .ForMember(source => source.TenLoaiSanPham, destination => destination.MapFrom(src => src.TenLoaiSanPham))
-                .ForMember(source => source.MoTa, destination => destination.MapFrom(src => src.MoTa))
-                .ForMember(source => source.TrangThai, destination => destination.MapFrom(src => src.TrangThai));
             #endregion
         }
 

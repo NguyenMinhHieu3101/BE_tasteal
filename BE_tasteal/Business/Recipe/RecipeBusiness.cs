@@ -17,7 +17,6 @@ namespace BE_tasteal.Business.Recipe
     public class RecipeBusiness : IRecipeBusiness<RecipeDto, RecipeEntity>
     {
         private readonly IMapper _mapper;
-        private readonly ILogger<SanPhamBusiness> _logger;
         private readonly IRecipeRepository _recipeResposity;
         private readonly IRecipeSearchRepo _recipeSearchRepo;
         private readonly IIngredientRepo _ingredientRepo;
@@ -25,15 +24,16 @@ namespace BE_tasteal.Business.Recipe
         private readonly INutritionRepo _nutritionRepo;
         private readonly IDirectionRepo _directionRepo;
         private readonly ICommentRepo _commentRepo;
+        private readonly ILogger<RecipeEntity> _logger;
         public RecipeBusiness(IMapper mapper,
-           ILogger<SanPhamBusiness> logger,
            IRecipeRepository recipeResposity,
            IRecipeSearchRepo recipeSearchRepo,
            IIngredientRepo ingredientRepo,
            IAuthorRepo authorRepo,
            INutritionRepo nutritionRepo,
            IDirectionRepo directionRepo,
-           ICommentRepo commentRepo)
+           ICommentRepo commentRepo,
+            ILogger<RecipeEntity> logger)
         {
             _mapper = mapper;
             _logger = logger;
