@@ -35,7 +35,17 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
 
             if (cart != null)
             {
-                cart.serving_size = servingSize;
+                var cartItem = _context.cart_ItemEntities
+                    .Where(c => c.cartId == cart.id)
+                    .Include(c => c.ingredient)
+                    .ToList();
+
+                foreach(var item in cartItem)
+                {
+                    var amountIngre = _context.recipe_Ingredient.FirstOrDefault(c => c.ingredient_id == item.ingredient_id && c.recipe_id == cart.recipeId);
+
+
+                }
             }
             return false;
         }

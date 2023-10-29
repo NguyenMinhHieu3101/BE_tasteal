@@ -30,5 +30,22 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        [Route("servingsize")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdateServingSize(int CardId, int servingSize)
+        {
+            try
+            {
+                //var allCart = await _cartBusiness
+                return Ok(_cartBusiness.UpdateServingSize(CardId, servingSize));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
