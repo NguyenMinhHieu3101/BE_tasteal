@@ -22,16 +22,17 @@ namespace BE_tasteal.API.Controllers
         {
             try
             {
-                //var allCart = await _cartBusiness
-                throw new NotImplementedException();
+                if (accountId < 1)
+                    return BadRequest("Invalid accountId. It must be greater than 0.");
+                var allCart = _cartBusiness.GetCartByAccountId(accountId);
+                return Ok(allCart);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpPost]
+        [HttpPut]
         [Route("servingsize")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -39,8 +40,52 @@ namespace BE_tasteal.API.Controllers
         {
             try
             {
-                //var allCart = await _cartBusiness
                 return Ok(_cartBusiness.UpdateServingSize(CardId, servingSize));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost]
+        [Route("cartitem")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult getCartItemByCartId(List<int> cartIds)
+        {
+            try
+            {
+                return Ok(_cartBusiness.GetItemByCartId(cartIds));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete]
+        [Route("cart")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult DeleteCart(int cartId)
+        {
+            try
+            {
+                return Ok(_cartBusiness.DeleteCart(cartId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete]
+        [Route("allcart")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult DeleleCartByAccountId(int accountId)
+        {
+            try
+            {
+                return Ok(_cartBusiness.DeleleCartByAccountId(accountId));
             }
             catch (Exception ex)
             {

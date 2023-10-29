@@ -6,7 +6,7 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
 {
     public interface ICartRepo: IGenericRepository<CartEntity>
     {
-        IEnumerable<CartEntity> GetCartById(int accountId);
+        IEnumerable<CartEntity> GetCartByAccountId(int accountId);
         public IEnumerable<Cart_ItemEntity> GetItemByCartId(List<int> cartIds);
         bool UpdateServingSize(int CardId, int servingSize);
         bool DeleteCart(int cardId);

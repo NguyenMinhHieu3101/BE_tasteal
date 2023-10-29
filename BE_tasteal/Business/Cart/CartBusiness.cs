@@ -12,14 +12,29 @@ namespace BE_tasteal.Business.Cart
             _cartRepo = cartRepo;
         }
 
-        public IEnumerable<CartEntity> GetCartById(int accountId)
+        public IEnumerable<CartEntity> GetCartByAccountId(int accountId)
         {
-            throw new NotImplementedException();
+            return _cartRepo.GetCartByAccountId(accountId);
         }
-
+        public IEnumerable<Cart_ItemEntity> GetItemByCartId(List<int> cartIds)
+        {
+            return _cartRepo.GetItemByCartId(cartIds);
+        }
         public bool UpdateServingSize(int CardId, int servingSize)
         {
             return _cartRepo.UpdateServingSize(CardId, servingSize);
+        }
+        public bool DeleteCart(int cartId)
+        {
+            return (_cartRepo.DeleteCart(cartId));
+        }
+        public bool DeleleCartByAccountId(int accountId)
+        {
+            return _cartRepo.DeleleCartByAccountId(accountId);
+        }
+        public bool UpdateBoughtItem(int cartItemId, bool isBought)
+        {
+            return _cartRepo.UpdateBoughtItem(cartItemId, isBought);    
         }
     }
 }
