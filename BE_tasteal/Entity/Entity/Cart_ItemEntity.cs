@@ -11,8 +11,8 @@ namespace BE_tasteal.Entity.Entity
         public int amount { get; set; }
         public bool isBought { get; set; }
         [ForeignKey("cartId")]
-        public CartEntity Cart { get; set; }
+        public CartEntity cart { get; set; }
         [ForeignKey("ingredient_id")]
-        public IngredientEntity Ingredient { get; set; }
+        public IngredientEntity ingredient { get; set; }
     }
 }

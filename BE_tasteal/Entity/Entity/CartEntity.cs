@@ -11,7 +11,7 @@ namespace BE_tasteal.Entity.Entity
         public int id { get; set; }
         public int accountId { get; set; }
         public int recipeId { get; set; }
-        public bool isBought { get; set; }
+        public int serving_size { get; set; }
         [ForeignKey("accountId")]
         public AccountEntity account { get; set; }
         [ForeignKey("recipeId")]
