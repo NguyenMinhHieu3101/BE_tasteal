@@ -11,6 +11,7 @@ namespace BE_tasteal.Entity.Entity
         public int plan_id { get; set; }
         public int recipe_id { get; set; }
         public int serving_size { get; set; }
+        public int order {  get; set; }
         [ForeignKey("plan_id")]
         public PlanEntity plan { get; set; }
         [ForeignKey("recipe_id")]

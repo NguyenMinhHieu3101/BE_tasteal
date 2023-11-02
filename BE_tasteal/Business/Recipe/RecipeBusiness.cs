@@ -75,7 +75,6 @@ namespace BE_tasteal.Business.Recipe
                 ingreItem.amount = ingredient.amount;
                 listEngredient.Add(ingreItem);
             }
-            Console.WriteLine(JsonConvert.SerializeObject(listEngredient));
             //create recipe
             var newRecipe = await _recipeResposity.InsertAsync(newRecipeEntity);
 
@@ -117,7 +116,7 @@ namespace BE_tasteal.Business.Recipe
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                Console.WriteLine(ex.ToString());
                 return new List<RecipeEntity>();
             }
         }
@@ -128,30 +127,29 @@ namespace BE_tasteal.Business.Recipe
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             {
                 var package = new ExcelPackage(file.OpenReadStream());
-                var worksheet = package.Workbook.Worksheets[0];
+                var worksheet = package.Workbook.Worksheets[1];
                 var rowCount = worksheet.Dimension.Rows;
-
-                for (int row = 3; row <= rowCount + 1; row++)
+                for (int row = 50; row <= rowCount + 1; row++)
                 {
                     #region validate each row. if fail -> continue
 
                     //rating
                     float temp;
-                    if (worksheet.Cells[row, 2].Value?.ToString() == null) continue;
+                    if (worksheet.Cells[row, 4].Value?.ToString() == null) continue;
 
                     //time
-                    if (worksheet.Cells[row, 4].Value?.ToString() == null) continue;
-                    if (worksheet.Cells[row, 5].Value?.ToString() == null) continue;
-                    if (!IsValidTimeFormat(worksheet.Cells[row, 4].Value?.ToString())) continue;
-                    if (!IsValidTimeFormat(worksheet.Cells[row, 5].Value?.ToString())) continue;
+                    if (worksheet.Cells[row, 6].Value?.ToString() == null) continue;
+                    //if (worksheet.Cells[row, 7].Value?.ToString() == null) continue;
+                    if (!IsValidTimeFormat(worksheet.Cells[row, 6].Value?.ToString())) continue;
+                    //if (!IsValidTimeFormat(worksheet.Cells[row, 7].Value?.ToString())) continue;
 
                     //serving size > 0
-                    if (worksheet.Cells[row, 6].Value?.ToString() == null) continue;
-                    if (int.Parse(worksheet.Cells[row, 6].Value?.ToString()) <= 0) continue;
+                    if (worksheet.Cells[row, 8].Value?.ToString() == null) continue;
+                    if (int.Parse(worksheet.Cells[row, 8].Value?.ToString()) <= 0) continue;
 
                     //private
                     bool prv = false;
-                    Boolean.TryParse(worksheet.Cells[row, 9].Value?.ToString(), out prv);
+                    Boolean.TryParse(worksheet.Cells[row, 11].Value?.ToString(), out prv);
 
                     //
                     #endregion
@@ -161,18 +159,18 @@ namespace BE_tasteal.Business.Recipe
                     RecipeDto entity = new RecipeDto();
 
 
-                    entity.name = worksheet.Cells[row, 1].Value?.ToString();
-                    entity.rating = float.Parse(worksheet.Cells[row, 2].Value.ToString());
-                    entity.image = worksheet.Cells[row, 3].Value?.ToString();
-                    entity.totalTime = worksheet.Cells[row, 4].Value.ToString();
-                    entity.active_time = worksheet.Cells[row, 5].Value.ToString();
-                    entity.serving_size = int.Parse(worksheet.Cells[row, 6].Value?.ToString());
-                    entity.introduction = worksheet.Cells[row, 7].Value?.ToString();
-                    entity.author_note = worksheet.Cells[row, 8].Value.ToString();
+                    entity.name = worksheet.Cells[row, 3].Value?.ToString();
+                    entity.rating = float.Parse(worksheet.Cells[row, 4].Value.ToString());
+                    entity.image = worksheet.Cells[row, 5].Value?.ToString();
+                    entity.totalTime = worksheet.Cells[row, 6].Value.ToString();
+                    entity.active_time = worksheet.Cells[row, 7].Value?.ToString();
+                    entity.serving_size = int.Parse(worksheet.Cells[row, 8].Value?.ToString());
+                    entity.introduction = worksheet.Cells[row, 9].Value?.ToString();
+                    entity.author_note = worksheet.Cells[row, 10].Value?.ToString();
                     entity.is_private = prv;// parsed in validate
-                    entity.ingredients = ParseIngredients(worksheet.Cells[row, 10].Value.ToString());
-                    entity.direction = ParseDirection(worksheet.Cells[row, 12].Value.ToString());
-                    entity.author = 1;
+                    entity.ingredients = ParseIngredients(worksheet.Cells[row, 12].Value.ToString());
+                    entity.direction = ParseDirection(worksheet.Cells[row, 14].Value.ToString());
+                    entity.author = "13b865f7-d6a6-4204-a349-7f379b232f0c";
                     #endregion
 
                     listRecipeDto.Add(entity);
@@ -231,41 +229,20 @@ namespace BE_tasteal.Business.Recipe
         static List<RecipeDirectionDto> ParseDirection(string input)
         {
             List<RecipeDirectionDto> parsedData = new List<RecipeDirectionDto>();
-            string[] nodes = input.Split('|');
+            string[] items = input.Split('|');
 
-            for (int i = 0; i < nodes.Length; i++)
+            for (int i = 0; i < items.Length; i++)
             {
-                string[] parts = nodes[i].Trim().Split(' ');
-
-                string description = "";
-                string imageLink = null;
-
-                // Tìm liên kết hình ảnh nếu có
-                foreach (var part in parts)
-                {
-                    if (Uri.IsWellFormedUriString(part, UriKind.Absolute))
-                    {
-                        imageLink = part;
-                        break;
-                    }
-                }
-
-                // Nếu không tìm thấy liên kết hình ảnh, toàn bộ node là mô tả (Description)
-                if (imageLink == null)
-                {
-                    description = string.Join(" ", parts).Trim();
-                }
-                else
-                {
-                    // Nếu có liên kết hình ảnh, các phần khác của node trước liên kết đó là mô tả (Description)
-                    description = string.Join(" ", parts, 0, Array.IndexOf(parts, imageLink)).Trim();
-                }
+                items[i] = items[i].Trim();
+                int textEndIndex = items[i].LastIndexOf("Huong-Dan/");
+                string text = items[i].Substring(0, textEndIndex).Trim();
+                string path = items[i].Substring(textEndIndex).Trim();
 
                 parsedData.Add(new RecipeDirectionDto
                 {
                     step = i + 1,
-                    direction = description,
-                    image = imageLink,
+                    direction = text,
+                    image = path,
                 });
             }
 
@@ -308,7 +285,6 @@ namespace BE_tasteal.Business.Recipe
 
                 //find direction
                 var direction = _directionRepo.GetDirectionByRecipeId(recipeEntity.id);
-                _logger.LogInformation(JsonConvert.SerializeObject(direction));
                 recipeRes.directions = direction;
 
                 

@@ -23,7 +23,7 @@ namespace BE_tasteal.Persistence.Repository.AuthorRepo
             int offset = (page - 1) * pageSize;
 
             string sqlQuery = @"
-                    SELECT a.id, a.username, a.name, a.avatar, a.introduction, COUNT(r.id) as RecipeCount
+                    SELECT a.id, a.name, a.avatar, a.introduction, COUNT(r.id) as RecipeCount
                     FROM account a, recipe r
 		            where a.id = r.author
                     GROUP BY a.id
