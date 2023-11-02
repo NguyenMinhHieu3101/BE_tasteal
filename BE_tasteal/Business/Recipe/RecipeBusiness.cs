@@ -51,8 +51,8 @@ namespace BE_tasteal.Business.Recipe
             if (newRecipeEntity.is_private == null)
                 newRecipeEntity.is_private = false;
 
-            if (newRecipeEntity.author == null || newRecipeEntity.author == 0)
-                newRecipeEntity.author = 1;
+            if (newRecipeEntity.author == null || newRecipeEntity.author == "0")
+                newRecipeEntity.author = "1";
 
             var ingredients = entity.ingredients;
             //create list ingre
@@ -290,10 +290,9 @@ namespace BE_tasteal.Business.Recipe
                 //find author
                 var authorEntity = await _authorRepo.FindByIdAsync(recipeEntity.author);
                 recipeRes.author = new AuthorRes();
-                recipeRes.author.id = authorEntity.id;
+                recipeRes.author.uid = authorEntity.uid;
                 recipeRes.author.name = authorEntity.name;
                 recipeRes.author.avatar = authorEntity.avatar;
-                recipeRes.author.username = authorEntity.username;
                 recipeRes.author.introduction = authorEntity.introduction;
 
                 //find ingredient

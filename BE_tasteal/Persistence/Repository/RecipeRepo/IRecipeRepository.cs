@@ -13,6 +13,6 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         List<RecipeEntity> GetRecipesWithIngredientsAndNutrition();
         IEnumerable<RecipeEntity> RecipeByRating(PageFilter filter);
         IEnumerable<RecipeEntity> RecipeByTime(PageFilter filter);
-        IEnumerable<RelatedRecipeRes> GetRelatedRecipeByAuthor(int id);
+        IEnumerable<RelatedRecipeRes> GetRelatedRecipeByAuthor(string id);
     }
 }

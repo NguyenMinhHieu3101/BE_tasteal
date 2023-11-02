@@ -18,12 +18,10 @@ namespace BE_tasteal.API.Controllers
         [Route("allcart")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult AllCart(int accountId)
+        public IActionResult AllCart(string accountId)
         {
             try
             {
-                if (accountId < 1)
-                    return BadRequest("Invalid accountId. It must be greater than 0.");
                 var allCart = _cartBusiness.GetCartByAccountId(accountId);
                 return Ok(allCart);
             }
@@ -81,7 +79,7 @@ namespace BE_tasteal.API.Controllers
         [Route("allcart")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult DeleleCartByAccountId(int accountId)
+        public IActionResult DeleleCartByAccountId(string accountId)
         {
             try
             {

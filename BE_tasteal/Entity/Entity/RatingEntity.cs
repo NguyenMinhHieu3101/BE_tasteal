@@ -6,7 +6,7 @@ namespace BE_tasteal.Entity.Entity
     public class RatingEntity
     {
         public int recipe_id { get; set; }
-        public int account_id { get; set; }
+        public string account_id { get; set; }
         public int rating { get; set; }
         [ForeignKey("account_id")]
         public AccountEntity? account { get; set; }

@@ -12,7 +12,7 @@ namespace BE_tasteal.Business.Cart
             _cartRepo = cartRepo;
         }
 
-        public IEnumerable<CartEntity> GetCartByAccountId(int accountId)
+        public IEnumerable<CartEntity> GetCartByAccountId(string accountId)
         {
             return _cartRepo.GetCartByAccountId(accountId);
         }
@@ -28,7 +28,7 @@ namespace BE_tasteal.Business.Cart
         {
             return (_cartRepo.DeleteCart(cartId));
         }
-        public bool DeleleCartByAccountId(int accountId)
+        public bool DeleleCartByAccountId(string accountId)
         {
             return _cartRepo.DeleleCartByAccountId(accountId);
         }

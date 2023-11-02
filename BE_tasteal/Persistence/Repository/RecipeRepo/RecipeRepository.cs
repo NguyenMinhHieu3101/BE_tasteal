@@ -194,15 +194,15 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
 
             return recipes;
         }
-        public IEnumerable<RelatedRecipeRes> GetRelatedRecipeByAuthor(int id)
+        public IEnumerable<RelatedRecipeRes> GetRelatedRecipeByAuthor(string id)
         {
             using (var connection = _connection.GetConnection())
             {
                 string sql = @"
                 select recipe.id, recipe.name, recipe.image, recipe.totalTime, recipe.rating,  count(recipe.id)  as ingredientAmoun  from recipe, account , recipe_ingredient
-                where recipe.author = account.id
+                where recipe.author = account.uid
                 and recipe.id = recipe_ingredient.recipe_id
-                and account.id = @Id
+                and account.uid = @Id
                 group by recipe.id
                 limit 16
                 ";

@@ -21,9 +21,9 @@ namespace BE_tasteal.Migrations
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.AccountEntity", b =>
                 {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("uid")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("avatar")
                         .HasColumnType("longtext");
@@ -34,17 +34,7 @@ namespace BE_tasteal.Migrations
                     b.Property<string>("name")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("password")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("username")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("id");
+                    b.HasKey("uid");
 
                     b.ToTable("Account");
                 });
@@ -55,8 +45,9 @@ namespace BE_tasteal.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("accountId")
-                        .HasColumnType("int");
+                    b.Property<string>("accountId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("recipeId")
                         .HasColumnType("int");
@@ -100,8 +91,9 @@ namespace BE_tasteal.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("account_id")
-                        .HasColumnType("int");
+                    b.Property<string>("account_id")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("comment")
                         .HasColumnType("text");
@@ -129,8 +121,8 @@ namespace BE_tasteal.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int?>("owner")
-                        .HasColumnType("int");
+                    b.Property<string>("owner")
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("id");
 
@@ -289,8 +281,8 @@ namespace BE_tasteal.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int?>("account_id")
-                        .HasColumnType("int");
+                    b.Property<string>("account_id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("amount")
                         .HasColumnType("int");
@@ -313,11 +305,32 @@ namespace BE_tasteal.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("account_id")
-                        .HasColumnType("int");
+                    b.Property<string>("account_id")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("date")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("note")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("account_id");
+
+                    b.ToTable("Plan");
+                });
+
+            modelBuilder.Entity("BE_tasteal.Entity.Entity.Plan_ItemEntity", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("plan_id")
+                        .HasColumnType("int");
 
                     b.Property<int>("recipe_id")
                         .HasColumnType("int");
@@ -327,11 +340,11 @@ namespace BE_tasteal.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("account_id");
+                    b.HasIndex("plan_id");
 
                     b.HasIndex("recipe_id");
 
-                    b.ToTable("Plan");
+                    b.ToTable("plan_ItemEntities");
                 });
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.RatingEntity", b =>
@@ -339,8 +352,8 @@ namespace BE_tasteal.Migrations
                     b.Property<int>("recipe_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("account_id")
-                        .HasColumnType("int");
+                    b.Property<string>("account_id")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("rating")
                         .HasColumnType("int");
@@ -361,8 +374,9 @@ namespace BE_tasteal.Migrations
                     b.Property<TimeSpan?>("active_time")
                         .HasColumnType("time(6)");
 
-                    b.Property<int>("author")
-                        .HasColumnType("int");
+                    b.Property<string>("author")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("author_note")
                         .HasMaxLength(255)
@@ -592,15 +606,26 @@ namespace BE_tasteal.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BE_tasteal.Entity.Entity.RecipeEntity", "RecipeEntity")
+                    b.Navigation("AccountEntity");
+                });
+
+            modelBuilder.Entity("BE_tasteal.Entity.Entity.Plan_ItemEntity", b =>
+                {
+                    b.HasOne("BE_tasteal.Entity.Entity.PlanEntity", "plan")
+                        .WithMany()
+                        .HasForeignKey("plan_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BE_tasteal.Entity.Entity.RecipeEntity", "recipe")
                         .WithMany()
                         .HasForeignKey("recipe_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AccountEntity");
+                    b.Navigation("plan");
 
-                    b.Navigation("RecipeEntity");
+                    b.Navigation("recipe");
                 });
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.RatingEntity", b =>

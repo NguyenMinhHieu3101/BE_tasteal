@@ -10,7 +10,7 @@ namespace BE_tasteal.Entity.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         public int recipe_id { get; set; }
-        public int account_id { get; set; }
+        public string account_id { get; set; }
         [Column(TypeName = "text")]
         public string? comment { get; set; }
         [ForeignKey("recipe_id")]

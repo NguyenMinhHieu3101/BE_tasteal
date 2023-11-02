@@ -20,7 +20,7 @@ namespace BE_tasteal.Persistence.Repository.CommentRepo
             {
                 string sql = @"
                 Select account.username , account.name , comment.comment  from comment, account
-                where comment.account_id = account.id
+                where comment.account_id = account.uid
                 and comment.recipe_id = @Id
                 ";
 

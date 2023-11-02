@@ -26,6 +26,7 @@ namespace BE_tasteal.Persistence.Context
         public DbSet<Recipe_OccasionEntity> recipe_OccasionEntities { get; set; }
         public DbSet<OccasionEntity> occasionEntities { get; set; }
 
+        public DbSet<Plan_ItemEntity> plan_ItemEntities { get; set; }
         #endregion
 
         #region model creating

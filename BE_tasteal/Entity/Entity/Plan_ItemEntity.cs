@@ -1,0 +1,19 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace BE_tasteal.Entity.Entity
+{
+    public class Plan_ItemEntity
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int id { get; set; }
+        public int plan_id { get; set; }
+        public int recipe_id { get; set; }
+        public int serving_size { get; set; }
+        [ForeignKey("plan_id")]
+        public PlanEntity plan { get; set; }
+        [ForeignKey("recipe_id")]
+        public RecipeEntity recipe { get; set; }
+    }
+}

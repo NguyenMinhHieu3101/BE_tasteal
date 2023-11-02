@@ -13,7 +13,7 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         {
 
         }
-        public IEnumerable<CartEntity> GetCartByAccountId(int accountId)
+        public IEnumerable<CartEntity> GetCartByAccountId(string accountId)
         {
             var result = _context.cart.Where(u => u.accountId == accountId)
                 .Include(c => c.account)
@@ -84,7 +84,7 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
                 return false;
             }
         }
-        public bool DeleleCartByAccountId(int accountId)
+        public bool DeleleCartByAccountId(string accountId)
         {
             try
             {

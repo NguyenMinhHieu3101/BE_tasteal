@@ -12,7 +12,7 @@ namespace BE_tasteal.Entity.Entity
         [Required]
         [MaxLength(255)]
         public required string name { get; set; }
-        public int? owner { get; set; }
+        public string? owner { get; set; }
         [ForeignKey("owner")]
         public AccountEntity? account { get; set; }
     }
