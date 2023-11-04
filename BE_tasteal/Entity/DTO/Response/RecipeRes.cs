@@ -2,11 +2,11 @@
 
 namespace BE_tasteal.Entity.DTO.Response
 {
-    public class RecipeResponse
+    public class RecipeRes
     {
         public string? name { get; set; }
         public float rating { get; set; }
-        public TimeSpan? totalTime { get; set; }
+        public DateTime? totalTime { get; set; }
         public int serving_size { get; set; }
         public string? introduction { get; set; }
         public string? author_note { get; set; }

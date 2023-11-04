@@ -14,6 +14,7 @@ namespace BE_tasteal.Entity.Entity
         public string description { get; set; }
         [Column(TypeName = "text")]
         public string? image { get; set; }
-        public DateTime start_at { get; set; }
+        public int start_at { get; set; }
+        public int end_at { get; set; }
     }
 }

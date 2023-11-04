@@ -248,12 +248,12 @@ namespace BE_tasteal.Business.Recipe
 
             return parsedData;
         }
-        public async Task<RecipeResponse> RecipeDetail(int id)
+        public async Task<RecipeRes> RecipeDetail(int id)
         {
             var recipeEntity = await _recipeResposity.FindByIdAsync(id);
             if (recipeEntity != null)
             {
-                RecipeResponse recipeRes = new RecipeResponse();
+                RecipeRes recipeRes = new RecipeRes();
                 //bind
                 recipeRes.name = recipeEntity.name;
                 recipeRes.rating = recipeEntity.rating;
