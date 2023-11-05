@@ -12,7 +12,6 @@ namespace BE_tasteal.Entity.Entity
         public decimal? amount { get; set; }
         [MaxLength(255)]
         public string? note { get; set; }
-        public bool is_required { get; set; }
         [ForeignKey("recipe_id")]
         public RecipeEntity? recipe { get; set; }
         [ForeignKey("ingredient_id")]

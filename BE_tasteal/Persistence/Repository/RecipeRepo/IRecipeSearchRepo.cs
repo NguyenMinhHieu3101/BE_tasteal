@@ -6,6 +6,6 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
 {
     public interface IRecipeSearchRepo : IGenericRepository<RecipeEntity>
     {
-        Task<List<RecipeEntity>> Search(RecipeSearchDto data);
+        Task<List<RecipeEntity>> Search(RecipeSearchReq data);
     }
 }

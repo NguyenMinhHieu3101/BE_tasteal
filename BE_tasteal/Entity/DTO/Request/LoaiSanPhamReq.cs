@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BE_tasteal.Entity.DTO.Request
 {
-    public class LoaiSanPhamDto
+    public class LoaiSanPhamReq
     {
         [Required]
         public string TenLoaiSanPham { get; set; }

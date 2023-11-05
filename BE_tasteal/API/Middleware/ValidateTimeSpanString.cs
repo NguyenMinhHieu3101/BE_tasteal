@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace BE_tasteal.API.Middleware
@@ -12,7 +13,7 @@ namespace BE_tasteal.API.Middleware
                 string stringValue = value.ToString();
 
                 // Gọi hàm bool để kiểm tra chuỗi
-                if (IsStringValid(stringValue))
+                if (IsDateTimeFormatValid(stringValue))
                 {
                     return ValidationResult.Success;
                 }
@@ -25,21 +26,10 @@ namespace BE_tasteal.API.Middleware
             return ValidationResult.Success;
         }
 
-        public bool IsStringValid(string input)
+        static bool IsDateTimeFormatValid(string input)
         {
-            Regex regex = new Regex(@"^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$");
-            Match match = regex.Match(input);
-
-            if (match.Success)
-            {
-                int hours = match.Groups[1].Success ? int.Parse(match.Groups[1].Value) : 0;
-                int minutes = match.Groups[2].Success ? int.Parse(match.Groups[2].Value) : 0;
-                int seconds = match.Groups[3].Success ? int.Parse(match.Groups[3].Value) : 0;
-
-                return true;
-            }
-
-            return false;
+            DateTime dateTime;
+            return DateTime.TryParseExact(input, "yyyy-MM-ddTHH:mm:ss.fffZ", null, DateTimeStyles.AssumeUniversal, out dateTime);
         }
     }
 }

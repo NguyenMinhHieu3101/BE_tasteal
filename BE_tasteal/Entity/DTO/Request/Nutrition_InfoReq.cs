@@ -1,6 +1,6 @@
 ﻿namespace BE_tasteal.Entity.DTO.Request
 {
-    public class Nutrition_InfoDto
+    public class Nutrition_InfoReq
     {
         public int calories { get; set; }
         public int fat { get; set; }

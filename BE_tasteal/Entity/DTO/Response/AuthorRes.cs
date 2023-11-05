@@ -6,5 +6,6 @@
         public string? name { get; set; }
         public string? avatar { get; set; }
         public string? introduction { get; set; }
+        public int? RecipeCount { get; set; }
     }
 }

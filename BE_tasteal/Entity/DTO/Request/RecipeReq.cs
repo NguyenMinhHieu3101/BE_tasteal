@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BE_tasteal.Entity.DTO.Request
 {
-    public class RecipeDto
+    public class RecipeReq
     {
         [Required]
         public string name { get; set; }
         [DefaultValue(0)]
         [Required]
-        [Range(0.0, 5.0, ErrorMessage = "Giá trị phải nằm trong khoảng từ 1 đến 5")]
+        [Range(0.0, 5.0, ErrorMessage = "rating in range(0,5)")]
         public float rating { get; set; }
         public string? image { get; set; }
         [ValidateTimeSpanString(ErrorMessage = "string format invalid")]
@@ -26,7 +26,7 @@ namespace BE_tasteal.Entity.DTO.Request
         public string? author_note { get; set; }
         public bool? is_private { get; set; }
         public string? author { get; set; }
-        public List<Recipe_IngredientDto>? ingredients { get; set; }
-        public List<RecipeDirectionDto>? direction { get; set; }
+        public List<Recipe_IngredientReq>? ingredients { get; set; }
+        public List<RecipeDirectionReq>? direction { get; set; }
     }
 }

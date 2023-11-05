@@ -19,7 +19,7 @@ namespace BE_tasteal.Entity.Entity
         public int? nutrition_info_id { get; set; }
         public int? type_id { get; set; }
         [DefaultValue(false)]
-        public bool isLiquid { get; set; }
+        public bool? isLiquid { get; set; }
         [Column(TypeName = "decimal(10, 2)")]
         [DefaultValue(1)]
         public decimal? ratio { get; set; }

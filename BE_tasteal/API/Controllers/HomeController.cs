@@ -17,7 +17,7 @@ namespace BE_tasteal.API.Controllers
         {
             _homeBusiness = homeBusiness;
         }
-        [HttpPost]
+        [HttpGet]
         [Route("getoccasion")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OccasionEntity))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

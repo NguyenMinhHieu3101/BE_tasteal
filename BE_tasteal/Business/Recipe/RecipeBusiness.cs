@@ -11,10 +11,12 @@ using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System.Text.RegularExpressions;
+using System;
+using System.Text.RegularExpressions;
 
 namespace BE_tasteal.Business.Recipe
 {
-    public class RecipeBusiness : IRecipeBusiness<RecipeDto, RecipeEntity>
+    public class RecipeBusiness : IRecipeBusiness<RecipeReq, RecipeEntity>
     {
         private readonly IMapper _mapper;
         private readonly IRecipeRepository _recipeResposity;
@@ -45,14 +47,14 @@ namespace BE_tasteal.Business.Recipe
             _directionRepo = directionRepo;
             _commentRepo = commentRepo;
         }
-        public async Task<RecipeEntity?> Add(RecipeDto entity)
+        public async Task<RecipeEntity?> Add(RecipeReq entity)
         {
             var newRecipeEntity = _mapper.Map<RecipeEntity>(entity);
             if (newRecipeEntity.is_private == null)
                 newRecipeEntity.is_private = false;
 
             if (newRecipeEntity.author == null || newRecipeEntity.author == "0")
-                newRecipeEntity.author = "1";
+                newRecipeEntity.author = "13b865f7-d6a6-4204-a349-7f379b232f0c";
 
             var ingredients = entity.ingredients;
             //create list ingre
@@ -94,7 +96,7 @@ namespace BE_tasteal.Business.Recipe
         {
             throw new NotImplementedException();
         }
-        public async Task<List<RecipeEntity>> Search(RecipeSearchDto option)
+        public async Task<List<RecipeEntity>> Search(RecipeSearchReq option)
         {
             return await _recipeSearchRepo.Search(option);
         }
@@ -103,7 +105,7 @@ namespace BE_tasteal.Business.Recipe
             try
             {
                 //parse
-                List<RecipeDto> listRecipeDto = ParseRecipeFromExcel(file);
+                List<RecipeReq> listRecipeDto = ParseRecipeFromExcel(file);
 
                 List<RecipeEntity> listRecipe = new List<RecipeEntity>();
                 #region Add
@@ -120,10 +122,10 @@ namespace BE_tasteal.Business.Recipe
                 return new List<RecipeEntity>();
             }
         }
-        static List<RecipeDto> ParseRecipeFromExcel(IFormFile file)
+        static List<RecipeReq> ParseRecipeFromExcel(IFormFile file)
         {
             #region parse excel -> list recipe
-            List<RecipeDto> listRecipeDto = new List<RecipeDto>();
+            List<RecipeReq> listRecipeDto = new List<RecipeReq>();
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             {
                 var package = new ExcelPackage(file.OpenReadStream());
@@ -156,7 +158,7 @@ namespace BE_tasteal.Business.Recipe
 
 
                     #region new recipe
-                    RecipeDto entity = new RecipeDto();
+                    RecipeReq entity = new RecipeReq();
 
 
                     entity.name = worksheet.Cells[row, 3].Value?.ToString();
@@ -179,15 +181,10 @@ namespace BE_tasteal.Business.Recipe
             }
             #endregion
         }
-        public List<RecipeEntity> GetAllRecipe()
-        {
-            var list = _recipeResposity.GetRecipesWithIngredientsAndNutrition();
-            return list;
-        }
-        static List<Recipe_IngredientDto> ParseIngredients(string input)
+        static List<Recipe_IngredientReq> ParseIngredients(string input)
         {
             string[] rawIngredients = input.Split('|', StringSplitOptions.RemoveEmptyEntries);
-            List<Recipe_IngredientDto> ingredients = new List<Recipe_IngredientDto>();
+            List<Recipe_IngredientReq> ingredients = new List<Recipe_IngredientReq>();
 
             foreach (var rawIngredient in rawIngredients)
             {
@@ -200,7 +197,7 @@ namespace BE_tasteal.Business.Recipe
                     decimal amount = decimal.Parse(match.Groups[2].Value);
                     bool isLiquid = match.Groups[3].Value == "g";
 
-                    ingredients.Add(new Recipe_IngredientDto
+                    ingredients.Add(new Recipe_IngredientReq
                     {
                         name = name,
                         amount = amount,
@@ -226,9 +223,9 @@ namespace BE_tasteal.Business.Recipe
 
             return false;
         }
-        static List<RecipeDirectionDto> ParseDirection(string input)
+        static List<RecipeDirectionReq> ParseDirection(string input)
         {
-            List<RecipeDirectionDto> parsedData = new List<RecipeDirectionDto>();
+            List<RecipeDirectionReq> parsedData = new List<RecipeDirectionReq>();
             string[] items = input.Split('|');
 
             for (int i = 0; i < items.Length; i++)
@@ -238,7 +235,7 @@ namespace BE_tasteal.Business.Recipe
                 string text = items[i].Substring(0, textEndIndex).Trim();
                 string path = items[i].Substring(textEndIndex).Trim();
 
-                parsedData.Add(new RecipeDirectionDto
+                parsedData.Add(new RecipeDirectionReq
                 {
                     step = i + 1,
                     direction = text,
@@ -257,7 +254,7 @@ namespace BE_tasteal.Business.Recipe
                 //bind
                 recipeRes.name = recipeEntity.name;
                 recipeRes.rating = recipeEntity.rating;
-                recipeRes.totalTime = recipeEntity.totalTime;
+                recipeRes.totalTime = recipeEntity.totalTime.ToString("s") + "Z";
                 recipeRes.serving_size = recipeEntity.serving_size;
                 recipeRes.introduction = recipeEntity.introduction;
                 recipeRes.author_note = recipeEntity.author_note;
@@ -305,6 +302,20 @@ namespace BE_tasteal.Business.Recipe
             }
             else
                 return null;
+        }
+
+        public async Task<List<RecipeRes>> GetAllRecipe(PageReq page)
+        {
+            var test = await RecipeDetail(2);
+            //List<int> recipeIds = _recipeResposity.GetAllRecipeId(page);
+            List<RecipeRes> result = new List<RecipeRes>();
+            
+            //foreach (var recipdId in recipeIds)
+            //{
+            //    var recipe = await RecipeDetail(1);
+            //    result.Add(recipe);
+            //}
+            return result;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         }
 
         #region get data by dapper
-        public async Task<List<RecipeEntity>> Search(RecipeSearchDto data)
+        public async Task<List<RecipeEntity>> Search(RecipeSearchReq data)
         {
             using (var connection = _connection.GetConnection())
             {

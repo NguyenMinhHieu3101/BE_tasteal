@@ -8,11 +8,12 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
     public interface IRecipeRepository : IGenericRepository<RecipeEntity>
     {
         Task InsertRecipeIngredient(RecipeEntity recipe, List<IngredientEntity> ingredients);
-        Task InsertDirection(RecipeEntity recipe, List<RecipeDirectionDto> direction);
+        Task InsertDirection(RecipeEntity recipe, List<RecipeDirectionReq> direction);
         Task UpdateNutrition(RecipeEntity recipe, List<IngredientEntity> ingredients);
         List<RecipeEntity> GetRecipesWithIngredientsAndNutrition();
         IEnumerable<RecipeEntity> RecipeByRating(PageFilter filter);
         IEnumerable<RecipeEntity> RecipeByTime(PageFilter filter);
         IEnumerable<RelatedRecipeRes> GetRelatedRecipeByAuthor(string id);
+        List<int> GetAllRecipeId(PageReq req);
     }
 }

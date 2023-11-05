@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Text.RegularExpressions;
 
 namespace BE_tasteal.Entity
@@ -9,13 +11,14 @@ namespace BE_tasteal.Entity
     {
         public MapperProfile()
         {
+            string format = "yyyy-MM-ddTHH:mm:ss.fffZ";
             #region Request DTO to Entity
-            CreateMap<RecipeDto, RecipeEntity>()
+            CreateMap<RecipeReq, RecipeEntity>()
                 .ForMember(destination => destination.id, destination => destination.Ignore())
                 .ForMember(source => source.name, destination => destination.MapFrom(src => src.name))
                 .ForMember(source => source.rating, destination => destination.MapFrom(src => src.rating))
-                .ForMember(source => source.totalTime, destination => destination.MapFrom(src => ParseTimeSpan(src.totalTime)))
-                .ForMember(source => source.active_time, destination => destination.MapFrom(src => ParseTimeSpan(src.active_time)))
+                .ForMember(source => source.totalTime, destination => destination.MapFrom(src => DateTime.ParseExact(src.active_time, format, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeUniversal)))
+                .ForMember(source => source.active_time, destination => destination.MapFrom(src => DateTime.ParseExact(src.active_time, format, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeUniversal)))
                 .ForMember(source => source.serving_size, destination => destination.MapFrom(src => src.serving_size))
                 .ForMember(source => source.introduction, destination => destination.MapFrom(src => src.introduction))
                 .ForMember(source => source.author_note, destination => destination.MapFrom(src => src.author_note))

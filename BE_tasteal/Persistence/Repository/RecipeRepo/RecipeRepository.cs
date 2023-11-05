@@ -32,7 +32,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
 
             }
         }
-        public async Task InsertDirection(RecipeEntity recipe, List<RecipeDirectionDto> directions)
+        public async Task InsertDirection(RecipeEntity recipe, List<RecipeDirectionReq> directions)
         {
             List<Recipe_DirectionEntity> listAdded = new List<Recipe_DirectionEntity>();
             foreach (var direction in directions)
@@ -209,6 +209,26 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
 
                 var result = connection.Query<RelatedRecipeRes>(sql, new { Id = id });
 
+                return result;
+            }
+        }
+        public List<int> GetAllRecipeId(PageReq req)
+        {
+            using (var connection = _connection.GetConnection())
+            {
+                int pageSize = req.pageSize;
+                int page = req.page;
+                int offset = (page - 1) * pageSize;
+
+                string sql = @"
+                select id from recipe
+                LIMIT @offset, @pageSize
+                ";
+                var result = connection.Query<int>(sql, new
+                {
+                    offset = offset,
+                    pageSize = pageSize
+                }).ToList();
                 return result;
             }
         }

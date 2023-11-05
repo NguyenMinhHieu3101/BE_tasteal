@@ -12,9 +12,9 @@ namespace BE_tasteal.API.Controllers
     [ApiVersion("2.0")]
     public class RecipeController : Controller
     {
-        private readonly IRecipeBusiness<RecipeDto, RecipeEntity> _recipeBusiness;
+        private readonly IRecipeBusiness<RecipeReq, RecipeEntity> _recipeBusiness;
         public RecipeController(
-            IRecipeBusiness<RecipeDto, RecipeEntity> recipeBusiness)
+            IRecipeBusiness<RecipeReq, RecipeEntity> recipeBusiness)
         {
             _recipeBusiness = recipeBusiness;
         }
@@ -23,7 +23,7 @@ namespace BE_tasteal.API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(RecipeEntity))]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> AddRecipe([FromBody] RecipeDto _recipe)
+        public async Task<IActionResult> AddRecipe([FromBody] RecipeReq _recipe)
         {
             return Created(string.Empty, await _recipeBusiness.Add(_recipe));
         }
@@ -32,7 +32,7 @@ namespace BE_tasteal.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RecipeEntity))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> SearchRecipe([FromBody] RecipeSearchDto option)
+        public async Task<IActionResult> SearchRecipe([FromBody] RecipeSearchReq option)
         {
             try
             {
@@ -61,21 +61,21 @@ namespace BE_tasteal.API.Controllers
                 return UnprocessableEntity(ex.ToString());
             }
         }
-        [HttpGet]
-        [Route("GetAllRecipe")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RecipeEntity>))]
-        public IActionResult GetAllRecipe()
-        {
-            try
-            {
-                var recipe = _recipeBusiness.GetAllRecipe();
-                return Ok(recipe);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.ToString());
-            }
-        }
+        //[HttpPost]
+        //[Route("GetAllRecipe")]
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RecipeEntity>))]
+        //public IActionResult GetAllRecipe([FromBody] PageReq page)
+        //{
+        //    try
+        //    {
+        //        var recipe = _recipeBusiness.GetAllRecipe(page);
+        //        return Ok(recipe);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.ToString());
+        //    }
+        //}
         [HttpPost]
         [Route("GetRecipe")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RecipeEntity>))]

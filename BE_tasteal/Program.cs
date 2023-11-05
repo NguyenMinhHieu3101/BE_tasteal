@@ -56,7 +56,7 @@ try
         services.AddScoped<DbContext, MyDbContext>();
 
         //business
-        services.AddScoped<IRecipeBusiness<RecipeDto, RecipeEntity>, RecipeBusiness>();
+        services.AddScoped<IRecipeBusiness<RecipeReq, RecipeEntity>, RecipeBusiness>();
         services.AddScoped<IIngredientBusiness, IngredientBusiness>();
         services.AddScoped<IHomeBusiness, HomeBusiness>();
         services.AddScoped<ICartBusiness, CartBusiness>();

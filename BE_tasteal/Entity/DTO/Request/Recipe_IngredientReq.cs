@@ -2,13 +2,12 @@
 
 namespace BE_tasteal.Entity.DTO.Request
 {
-    public class Recipe_IngredientDto
+    public class Recipe_IngredientReq
     {
         [Required]
         public string name { get; set; }
         [Required]
         public decimal amount { get; set; }
-        [Required]
-        public bool isLiquid { get; set; }
+        public bool? isLiquid { get; set; }
     }
 }
