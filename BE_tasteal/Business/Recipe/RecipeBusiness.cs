@@ -85,7 +85,7 @@ namespace BE_tasteal.Business.Recipe
             newRecipe.ingredients = listEngredient;
 
             ////add direction 
-            await _recipeResposity.InsertDirection(newRecipe, entity.direction);
+            await _recipeResposity.InsertDirection(newRecipe, entity.directions);
 
             ////update nutrition for recipe
             await _recipeResposity.UpdateNutrition(newRecipe, listEngredient);
@@ -171,7 +171,7 @@ namespace BE_tasteal.Business.Recipe
                     entity.author_note = worksheet.Cells[row, 10].Value?.ToString();
                     entity.is_private = prv;// parsed in validate
                     entity.ingredients = ParseIngredients(worksheet.Cells[row, 12].Value.ToString());
-                    entity.direction = ParseDirection(worksheet.Cells[row, 14].Value.ToString());
+                    entity.directions = ParseDirection(worksheet.Cells[row, 14].Value.ToString());
                     entity.author = "13b865f7-d6a6-4204-a349-7f379b232f0c";
                     #endregion
 

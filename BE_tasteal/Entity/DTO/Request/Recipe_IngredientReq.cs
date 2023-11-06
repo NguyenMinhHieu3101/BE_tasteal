@@ -4,6 +4,7 @@ namespace BE_tasteal.Entity.DTO.Request
 {
     public class Recipe_IngredientReq
     {
+        public int id { get; set; }
         [Required]
         public string name { get; set; }
         [Required]

@@ -27,6 +27,6 @@ namespace BE_tasteal.Entity.DTO.Request
         public bool? is_private { get; set; }
         public string? author { get; set; }
         public List<Recipe_IngredientReq>? ingredients { get; set; }
-        public List<RecipeDirectionReq>? direction { get; set; }
+        public List<RecipeDirectionReq>? directions { get; set; }
     }
 }
