@@ -53,7 +53,7 @@ namespace BE_tasteal.Business.Recipe
             if (newRecipeEntity.is_private == null)
                 newRecipeEntity.is_private = false;
 
-            if (newRecipeEntity.author == null || newRecipeEntity.author == "0")
+            if (newRecipeEntity.author == null || newRecipeEntity.author == "uid")
                 newRecipeEntity.author = "13b865f7-d6a6-4204-a349-7f379b232f0c";
 
             var ingredients = entity.ingredients;
