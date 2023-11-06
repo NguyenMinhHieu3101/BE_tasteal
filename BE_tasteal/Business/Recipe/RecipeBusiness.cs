@@ -61,21 +61,30 @@ namespace BE_tasteal.Business.Recipe
             List<IngredientEntity> listEngredient = new List<IngredientEntity>();
             foreach (var ingredient in ingredients)
             {
-                if (!_ingredientRepo.IngredientValid(ingredient.name))
+                if(ingredient.id == null)
                 {
-                    IngredientEntity newIngre = new IngredientEntity
+                    if (!_ingredientRepo.IngredientValid(ingredient.name))
                     {
-                        name = ingredient.name,
-                        isLiquid = ingredient.isLiquid,
-                        ratio = 1,
-                        amount = ingredient.amount,
+                        IngredientEntity newIngre = new IngredientEntity
+                        {
+                            name = ingredient.name,
+                            isLiquid = ingredient.isLiquid,
+                            ratio = 1,
+                            amount = ingredient.amount,
 
-                    };
-                    await _ingredientRepo.InsertIngredient(newIngre, true);
+                        };
+                        await _ingredientRepo.InsertIngredient(newIngre, true);
+                    }
+                    var ingreItem = await _ingredientRepo.GetIngredientByName(ingredient.name);
+                    ingreItem.amount = ingredient.amount;
+                    listEngredient.Add(ingreItem);
                 }
-                var ingreItem = await _ingredientRepo.GetIngredientByName(ingredient.name);
-                ingreItem.amount = ingredient.amount;
-                listEngredient.Add(ingreItem);
+                else
+                {
+                    var ingreItem = await _ingredientRepo.GetIngredientById(ingredient.id ?? 1);
+                    ingreItem.amount = ingredient.amount;
+                    listEngredient.Add(ingreItem);
+                }
             }
             //create recipe
             var newRecipe = await _recipeResposity.InsertAsync(newRecipeEntity);
@@ -159,7 +168,6 @@ namespace BE_tasteal.Business.Recipe
 
                     #region new recipe
                     RecipeReq entity = new RecipeReq();
-
 
                     entity.name = worksheet.Cells[row, 3].Value?.ToString();
                     entity.rating = float.Parse(worksheet.Cells[row, 4].Value.ToString());

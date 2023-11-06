@@ -12,6 +12,7 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
         Task<Nutrition_InfoEntity> InsertNutrition(Nutrition_InfoEntity nutrition);
         Task<List<IngredientEntity>> GetAllIngredient();
         Task<IngredientEntity> GetIngredientByName(string name);
+        Task<IngredientEntity> GetIngredientById(int id);
         Task<IngredientEntity> InsertIngredient(IngredientEntity ingredient, bool flag = false);
         IEnumerable<IngredientRes> GetIngredientsByRecipeId(int recipeId);
     }

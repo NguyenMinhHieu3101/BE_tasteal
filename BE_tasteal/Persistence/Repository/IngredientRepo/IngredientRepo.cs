@@ -42,6 +42,12 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
                 .Include(e => e.nutrition_info)
                 .FirstOrDefaultAsync(e => e.name == name);
         }
+        public async Task<IngredientEntity> GetIngredientById(int id)
+        {
+            return await _context.ingredient
+                .Include(e => e.nutrition_info)
+                .FirstOrDefaultAsync(e => e.id == id);
+        }
         public async Task<Ingredient_TypeEntity> GetIngredientType(string name)
         {
             var type = _context.ingredient_Type.FirstOrDefault(e => e.name == name);
