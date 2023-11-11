@@ -3,6 +3,7 @@ using System;
 using BE_tasteal.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BE_tasteal.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231111151812_erd-meeting-6-11-2023")]
+    partial class erdmeeting6112023
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,16 +35,16 @@ namespace BE_tasteal.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("link")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("name")
                         .HasColumnType("longtext");
 
                     b.Property<string>("quote")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("slogan")
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     b.HasKey("uid");
 

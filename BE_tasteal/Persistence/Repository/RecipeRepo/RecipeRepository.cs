@@ -24,7 +24,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 {
                     recipe_id = recipe.id,
                     ingredient_id = ingredient.id,
-                    amount = ingredient.amount
+                    //amount = ingredient.amount
                 };
                 _context.Attach(newRecipeIngre);
                 await _context.Set<Recipe_IngredientEntity>().AddAsync(newRecipeIngre);
