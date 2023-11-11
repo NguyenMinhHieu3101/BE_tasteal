@@ -31,17 +31,8 @@ namespace BE_tasteal.Migrations
                     b.Property<string>("introduction")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("link")
-                        .HasColumnType("text");
-
                     b.Property<string>("name")
                         .HasColumnType("longtext");
-
-                    b.Property<string>("quote")
-                        .HasColumnType("text");
-
-                    b.Property<string>("slogan")
-                        .HasColumnType("text");
 
                     b.HasKey("uid");
 
@@ -311,34 +302,6 @@ namespace BE_tasteal.Migrations
                     b.ToTable("Pantry_Item");
                 });
 
-            modelBuilder.Entity("BE_tasteal.Entity.Entity.PersonalCartItem", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("account_id")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int>("amount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ingredient_id")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("is_bought")
-                        .HasColumnType("tinyint(1)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("account_id");
-
-                    b.HasIndex("ingredient_id");
-
-                    b.ToTable("personalCartItems");
-                });
-
             modelBuilder.Entity("BE_tasteal.Entity.Entity.PlanEntity", b =>
                 {
                     b.Property<int>("id")
@@ -494,7 +457,7 @@ namespace BE_tasteal.Migrations
                     b.Property<int>("ingredient_id")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("amount_per_serving")
+                    b.Property<decimal?>("amount")
                         .HasColumnType("decimal(10, 2)");
 
                     b.Property<string>("note")
@@ -636,25 +599,6 @@ namespace BE_tasteal.Migrations
                     b.Navigation("IngredientEntity");
 
                     b.Navigation("account");
-                });
-
-            modelBuilder.Entity("BE_tasteal.Entity.Entity.PersonalCartItem", b =>
-                {
-                    b.HasOne("BE_tasteal.Entity.Entity.AccountEntity", "account")
-                        .WithMany()
-                        .HasForeignKey("account_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BE_tasteal.Entity.Entity.IngredientEntity", "ingredient")
-                        .WithMany()
-                        .HasForeignKey("ingredient_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("account");
-
-                    b.Navigation("ingredient");
                 });
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.PlanEntity", b =>
