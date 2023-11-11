@@ -1,22 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BE_tasteal.Entity.Entity
+namespace BE_tasteal.Entity.DTO.Request
 {
-    [Table("Account")]
-    public class AccountEntity
+    public class AccountReq
     {
-        [Key]
-        [MaxLength(255)]
+        [Required]
         public string uid { get; set; }
         public string? name { get; set; }
         public string? avatar { get; set; }
         public string? introduction { get; set; }
-        [Column(TypeName = "text")]
         public string? link { get; set; }
-        [Column(TypeName = "text")]
         public string? slogan { get; set; }
-        [Column(TypeName = "text")]
         public string? quote { get; set; }
     }
 }

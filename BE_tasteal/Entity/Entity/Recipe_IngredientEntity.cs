@@ -9,7 +9,7 @@ namespace BE_tasteal.Entity.Entity
         public int recipe_id { get; set; }
         public int ingredient_id { get; set; }
         [Column(TypeName = "decimal(10, 2)")]
-        public decimal? amount { get; set; }
+        public decimal? amount_per_serving { get; set; }
         [MaxLength(255)]
         public string? note { get; set; }
         [ForeignKey("recipe_id")]

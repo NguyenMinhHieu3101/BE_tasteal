@@ -5,6 +5,7 @@ using BE_tasteal.Business.Cart;
 using BE_tasteal.Business.HomeBusiness;
 using BE_tasteal.Business.Ingredient;
 using BE_tasteal.Business.Recipe;
+using BE_tasteal.Business.User;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
@@ -60,6 +61,7 @@ try
         services.AddScoped<IIngredientBusiness, IngredientBusiness>();
         services.AddScoped<IHomeBusiness, HomeBusiness>();
         services.AddScoped<ICartBusiness, CartBusiness>();
+        services.AddScoped<IUserBusiness, UserBusiness>();
 
         //repo
         services.AddScoped<IRecipeRepository, RecipeRepository>();
