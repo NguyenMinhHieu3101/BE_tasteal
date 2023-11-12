@@ -4,7 +4,8 @@
     {
         public string name { get; set; }
         public string? image { get; set; }
-        public int amount { get; set; }
+        public decimal? amount { get; set; }
+        public decimal amount_per_serving { get; set; }
         public bool isLiquid { get; set; }
     }
 }

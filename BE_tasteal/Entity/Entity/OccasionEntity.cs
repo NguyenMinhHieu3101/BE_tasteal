@@ -9,12 +9,13 @@ namespace BE_tasteal.Entity.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
+        [Column(TypeName = "text")]
         public string name { get; set; }
         [Column(TypeName = "text")]
         public string description { get; set; }
         [Column(TypeName = "text")]
         public string? image { get; set; }
-        public int start_at { get; set; }
-        public int end_at { get; set; }
+        public DateTime start_at { get; set; }
+        public DateTime end_at { get; set; }
     }
 }

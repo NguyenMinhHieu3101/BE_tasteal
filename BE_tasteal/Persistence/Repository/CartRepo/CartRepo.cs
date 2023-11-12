@@ -1,6 +1,8 @@
-﻿using BE_tasteal.Entity.Entity;
+﻿using BE_tasteal.Entity.DTO.Response;
+using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
@@ -34,25 +36,56 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         {
             try
             {
-                var cart = _context.cart.FirstOrDefault(c => c.id == CardId);
-
-                if (cart != null)
+                using (var connection = _connection.GetConnection())
                 {
-                    var cartItem = _context.cart_ItemEntities
-                        .Where(c => c.cartId == cart.id)
-                        .Include(c => c.ingredient)
-                        .ToList();
+                    string sqlcart = @"
+                    select * from cart
+                    where id = @CARTID
+                    ";
+                    var cart = connection.QueryFirst<CartEntity>(sqlcart, new { CARTID = CardId });
 
-                    foreach (var item in cartItem)
+                    string sqlCartItem = @"
+                    select * from cart_item
+                    where cartId = @CARTID
+                    ";
+                    var cartItem = connection.Query<Cart_ItemEntity>(sqlCartItem, new { CARTID = CardId }).ToList();
+
+                    foreach(var item in cartItem)
                     {
-                        item.amount = item.amount * servingSize / cart.serving_size;
+                        string sqlingredient = @"
+                        select * from recipe_ingredient
+                        where recipe_id = @RECIPEID
+                        and ingredient_id = @INGREDIENTID
+                        ";
+                        var itemIngredient = connection.QueryFirst<Recipe_IngredientEntity>(sqlingredient, 
+                            new { RECIPEID = cart.recipeId, INGREDIENTID = item.ingredient_id});
+
+                        string updateCartItem = @"
+                        update cart_item
+                        set amount = @AMOUNT
+                        where cartId = @CARTID
+                        and ingredient_id = @INGREDIENTID
+                        ";
+                        connection.Execute(updateCartItem, new
+                        {
+                            AMOUNT = itemIngredient.amount_per_serving * servingSize,
+                            CARTID = cart.id,
+                            INGREDIENTID = item.ingredient_id
+                        });
                     }
+
+                    string updateCart = @"
+                        update cart
+                        set serving_size = @SIZE
+                        where cartId = @CARTID
+                        ";
+                    var updateItem = connection.Execute(updateCart, new
+                    {
+                        SIZE = servingSize
+                    });
+
+                    return true;
                 }
-
-                cart.serving_size = servingSize;
-
-                _context.SaveChanges();
-                return true;
             }
             catch (Exception ex)
             {

@@ -269,18 +269,18 @@ namespace BE_tasteal.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("end_at")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("end_at")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("image")
                         .HasColumnType("text");
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
-                    b.Property<int>("start_at")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("start_at")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("id");
 
@@ -510,17 +510,23 @@ namespace BE_tasteal.Migrations
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.Recipe_OccasionEntity", b =>
                 {
-                    b.Property<int>("recipe_id")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("occasion_id")
                         .HasColumnType("int");
 
-                    b.HasKey("recipe_id", "occasion_id");
+                    b.Property<int>("recipe_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("occasion_id");
 
-                    b.ToTable("recipe_OccasionEntities");
+                    b.HasIndex("recipe_id");
+
+                    b.ToTable("Recipe_Occasion");
                 });
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.CartEntity", b =>

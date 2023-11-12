@@ -45,9 +45,6 @@ namespace BE_tasteal.Persistence.Context
             modelBuilder.Entity<RatingEntity>().HasKey(p =>
                new { p.recipe_id, p.account_id });
 
-            modelBuilder.Entity<Recipe_OccasionEntity>().HasKey(p =>
-               new { p.recipe_id, p.occasion_id });
-
             modelBuilder.Entity<Cart_ItemEntity>().HasKey(p =>
                 new { p.ingredient_id, p.cartId });
             #endregion

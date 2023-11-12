@@ -13,8 +13,6 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         {
 
         }
-
-        #region get data by dapper
         public async Task<List<RecipeEntity>> Search(RecipeSearchReq data)
         {
             using (var connection = _connection.GetConnection())
@@ -32,31 +30,30 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 (@ExceptIngredientID IS NULL OR i.id NOT IN @ExceptIngredientID) AND
                 (@TotalTime IS NULL OR r.totalTime <= @TotalTime) AND
                 (@ActiveTime IS NULL OR r.active_time <= @ActiveTime) AND
-                (@OccasionID IS NULL OR r_o.occasion_id IN @OccasionID) AND
-                (@Calories IS NULL OR n_i.calories <= @Calories) AND
-		        (@KeyWords IS NULL OR REGEXP_LIKE(r.introduction, @KeyWordsFormat))
+                (@OccasionID IS NULL OR r_o.occasion_id IN @OccasionID) AND           
+		        (@KeyWords IS NULL OR REGEXP_LIKE(r.introduction, @KeyWordsFormat)) AND
                 ((@TextSearch IS NULL) OR
                 (r.name LIKE '%' + @TextSearch + '%' OR
                 r.introduction LIKE '%' + @TextSearch + '%' OR
                 a.username LIKE '%' + @TextSearch + '%' OR 
                 i.name LIKE '%' + @TextSearch + '%'))";
-                //
+                //(@Calories IS NULL OR n_i.calories <= @Calories) AND
                 //(@Calories IS NULL OR n_i.calories <= @Calories) AND
                 var result = connection.Query<RecipeEntity>(query, new
                 {
-                    data.IngredientID,
-                    data.ExceptIngredientID,
-                    data.TotalTime,
-                    data.ActiveTime,
-                    data.OccasionID,
-                    data.Calories,
-                    data.TextSearch
+                    IngredientID = data.IngredientID,
+                    ExceptIngredientID = data.ExceptIngredientID,
+                    TotalTime = data.TotalTime,
+                    ActiveTime = data.ActiveTime,
+                    OccasionID = data.OccasionID,
+                    TextSearch = data.TextSearch,
+                    KeyWords = data.KeyWords,
+                    KeyWordsFormat = data.KeyWordsFormat,
                 });
 
                 return result.ToList();
             }
 
         }
-        #endregion
     }
 }

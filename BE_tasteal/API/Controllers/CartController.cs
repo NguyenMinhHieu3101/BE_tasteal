@@ -90,5 +90,20 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut]
+        [Route("cartitemstatus")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult updateCartItemStatus(int CartItemId, bool isBought)
+        {
+            try
+            {
+                return Ok(_cartBusiness.UpdateBoughtItem(CartItemId, isBought));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

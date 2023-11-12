@@ -24,6 +24,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 {
                     recipe_id = recipe.id,
                     ingredient_id = ingredient.id,
+                    amount_per_serving = ingredient.amount / recipe.serving_size,
                     //amount = ingredient.amount
                 };
                 _context.Attach(newRecipeIngre);
@@ -108,7 +109,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                         i.id AS IngredientId, i.name AS IngredientName, i.image AS IngredientImage, 
                         i.nutrition_info_id AS IngredientNutritionInfoId, i.type_id AS IngredientTypeId, 
                         i.isLiquid AS IsLiquid, i.ratio AS Ratio, 
-                        ri.amount AS IngredientAmount, ri.note AS IngredientNote, 
+                        ri.amount_per_serving AS IngredientAmount, ri.note AS IngredientNote, 
                         ni.id AS NutritionId, ni.calories AS Calories
                 FROM recipe r
                 LEFT JOIN recipe_ingredient ri ON r.id = ri.recipe_id

@@ -115,12 +115,12 @@ namespace BE_tasteal.Business.Recipe
             {
                 //parse
                 List<RecipeReq> listRecipeDto = ParseRecipeFromExcel(file);
-
+ 
                 List<RecipeEntity> listRecipe = new List<RecipeEntity>();
                 #region Add
                 foreach (var item in listRecipeDto)
                 {
-                    await Add(item);
+                    var recipe = await Add(item);  
                 }
                 #endregion
                 return listRecipe;
@@ -138,9 +138,9 @@ namespace BE_tasteal.Business.Recipe
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             {
                 var package = new ExcelPackage(file.OpenReadStream());
-                var worksheet = package.Workbook.Worksheets[1];
+                var worksheet = package.Workbook.Worksheets[0];
                 var rowCount = worksheet.Dimension.Rows;
-                for (int row = 50; row <= rowCount + 1; row++)
+                for (int row = 3; row <= 90; row++)
                 {
                     #region validate each row. if fail -> continue
 
@@ -182,9 +182,11 @@ namespace BE_tasteal.Business.Recipe
                     entity.directions = ParseDirection(worksheet.Cells[row, 14].Value.ToString());
                     entity.author = "13b865f7-d6a6-4204-a349-7f379b232f0c";
                     #endregion
+                   
 
                     listRecipeDto.Add(entity);
                 }
+
                 return listRecipeDto;
             }
             #endregion
@@ -197,7 +199,7 @@ namespace BE_tasteal.Business.Recipe
             foreach (var rawIngredient in rawIngredients)
             {
                 // Sử dụng biểu thức chính quy để tìm tên và lượng từ chuỗi
-                Match match = Regex.Match(rawIngredient.Trim(), @"([^\d]+)\s*(\d+)(g|ml)");
+                Match match = Regex.Match(rawIngredient.Trim(), @"([^\d]+)\s*(\d+(\.\d+)?)\s*(g|ml)");
 
                 if (match.Success)
                 {

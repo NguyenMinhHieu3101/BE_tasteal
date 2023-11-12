@@ -126,12 +126,22 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
         {
             using (var connection = _connection.GetConnection())
             {
-                string sql = @"SELECT i.name, i.image, ri.amount, i.isLiquid 
+                string sqlrecipe = @"SELECT * from recipe where id =@RECIPE";
+                var recipe = connection.QueryFirst<RecipeEntity>(sqlrecipe, new
+                {
+                    RECIPE = recipeId
+                });
+
+                string sql = @"SELECT i.name, i.image, ri.amount_per_serving, i.isLiquid 
                       FROM Ingredient i
                       INNER JOIN Recipe_Ingredient ri ON i.id = ri.ingredient_id
                       WHERE ri.recipe_id = @RecipeId";
 
                 var result = connection.Query<IngredientRes>(sql, new { RecipeId = recipeId });
+                foreach (var item in result)
+                {
+                    item.amount = item.amount_per_serving * recipe.serving_size;
+                }
                 return result;
             }    
         }    
