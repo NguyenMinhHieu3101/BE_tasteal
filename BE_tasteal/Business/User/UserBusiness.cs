@@ -38,5 +38,9 @@ namespace BE_tasteal.Business.User
 
             return await _authorRepo.updateUser(accountEntity);
         }
+        public async Task<IEnumerable<AccountEntity>> getAllUser()
+        {
+            return await _authorRepo.getAllUser();
+        }
     }
 }

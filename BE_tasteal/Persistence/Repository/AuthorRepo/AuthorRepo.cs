@@ -98,5 +98,17 @@ namespace BE_tasteal.Persistence.Repository.AuthorRepo
                 return updatedAccount;
             }
         }
+        public async Task<IEnumerable<AccountEntity>> getAllUser()
+        {
+            using (var connection = _connection.GetConnection())
+            {
+
+                var insertQuery = "Select * from account";
+
+                var accounts = await connection.QueryAsync<AccountEntity>(insertQuery);
+
+                return accounts;
+            }
+        }
     }
 }

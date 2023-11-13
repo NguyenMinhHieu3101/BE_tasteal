@@ -33,7 +33,7 @@ namespace BE_tasteal.API.Controllers
                 return UnprocessableEntity();
             }
         }
-        [HttpPost]
+        [HttpPut]
         [Route("updateuser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -47,6 +47,22 @@ namespace BE_tasteal.API.Controllers
             catch (Exception ex)
             {
                 return BadRequest("update fail");
+            }
+        }
+        [HttpGet]
+        [Route("allusers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> getAllUsers()
+        {
+            try
+            {
+                var account = await _userBusiness.getAllUser();
+                return Ok(account);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
             }
         }
     }

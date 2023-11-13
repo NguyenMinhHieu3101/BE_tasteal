@@ -7,5 +7,6 @@ namespace BE_tasteal.Business.User
     {
         Task<AccountEntity> signup(AccountReq req);
         Task<AccountEntity> udpateAccount(AccountReq req);
+        Task<IEnumerable<AccountEntity>> getAllUser();
     }
 }
