@@ -15,5 +15,6 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         IEnumerable<RecipeEntity> RecipeByTime(PageFilter filter);
         IEnumerable<RelatedRecipeRes> GetRelatedRecipeByAuthor(string id);
         List<int> GetAllRecipeId(PageReq req);
+        Task<List<KeyWordRes>> GetKeyWords();
     }
 }

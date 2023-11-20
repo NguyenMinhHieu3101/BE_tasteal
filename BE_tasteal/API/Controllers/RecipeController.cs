@@ -92,5 +92,19 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.ToString());
             }
         }
+        [HttpGet]
+        [Route("keywords")]
+        public async Task<IActionResult> GetKeyWord()
+        {
+            try
+            {
+                var recipes = await _recipeBusiness.GetKeyWords();
+                return Ok(recipes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
     }
 }

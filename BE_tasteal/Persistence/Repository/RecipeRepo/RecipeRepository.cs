@@ -5,6 +5,7 @@ using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Printing;
 
 namespace BE_tasteal.Persistence.Repository.RecipeRepo
 {
@@ -231,6 +232,30 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                     pageSize = pageSize
                 }).ToList();
                 return result;
+            }
+        }
+        public async Task<List<KeyWordRes>> GetKeyWords()
+        {
+            using (var connection = _connection.GetConnection())
+            {
+                string sql = @"
+                SELECT keyword, COUNT(*) AS frequency
+                FROM (
+                    SELECT  word AS keyword
+                    FROM (
+                        SELECT  id, name, TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(introduction, ' ', n.digit + 1), ' ', -1)) AS word
+                        FROM recipe
+                        JOIN (
+                            SELECT 0 AS digit UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3
+                        ) n ON LENGTH(REPLACE(introduction, ' ', '')) <= LENGTH(introduction) - n.digit
+                    ) words
+                    WHERE LENGTH(word) > 0
+                ) keyword_counts
+                GROUP BY keyword
+                ORDER BY frequency DESC;
+                ";
+                var result = await connection.QueryAsync<KeyWordRes>(sql);
+                return result.ToList();
             }
         }
     }

@@ -12,5 +12,6 @@ namespace BE_tasteal.Business.Recipe
         Task<List<U>?> Search(RecipeSearchReq option);
         Task<List<RecipeRes>> GetAllRecipe(PageReq page);
         Task<RecipeRes> RecipeDetail(int id);
+        Task<List<KeyWordRes>> GetKeyWords();
     }
 }

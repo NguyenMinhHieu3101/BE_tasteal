@@ -327,5 +327,9 @@ namespace BE_tasteal.Business.Recipe
             //}
             return result;
         }
+        public async Task<List<KeyWordRes>> GetKeyWords()
+        {
+            return await _recipeResposity.GetKeyWords();
+        }
     }
 }
