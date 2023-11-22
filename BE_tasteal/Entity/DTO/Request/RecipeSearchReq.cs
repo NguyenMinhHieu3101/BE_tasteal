@@ -10,6 +10,5 @@ namespace BE_tasteal.Entity.DTO.Request
         public int? ActiveTime { get; set; }
         public CaloriesReq? Calories { get; set; }
         public string? TextSearch { get; set; }
-        public IEnumerable<string>? KeyWordsFormat { get; set; }
     }
 }

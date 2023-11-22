@@ -1,10 +1,16 @@
 using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
+using BE_tasteal.Utils;
 using Dapper;
+using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using System.Data.Common;
+using System.Globalization;
+using System.Text;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BE_tasteal.Persistence.Repository.RecipeRepo
@@ -21,26 +27,62 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
             using (var connection = _connection.GetConnection())
             {
                 string sql = @"SELECT r.*
-                   FROM Recipe r
-                        JOIN Recipe_Ingredient ri ON r.id = ri.recipe_id
-                        JOIN Ingredient i ON ri.ingredient_id = i.id
-                        LEFT JOIN Recipe_Occasion ro ON r.id = ro.recipe_id
-                   WHERE (@IngredientID IS NULL OR i.id IN @IngredientID)
-                     AND (@ExceptIngredientID IS NULL OR i.id NOT IN @ExceptIngredientID)
-                    
-                   GROUP BY r.id"
+                    FROM Recipe r
+                    JOIN Recipe_Ingredient ri ON r.id = ri.recipe_id
+                    JOIN Ingredient i ON ri.ingredient_id = i.id
+                   "
                 ;
-                var result = await connection.QueryAsync<RecipeEntity>(sql, new
+
+                var conditions = new List<string>();
+                var parameters = new DynamicParameters();
+
+                if (input.IngredientID?.Any() == true)
                 {
-                    IngredientID = input.IngredientID,
-                    ExceptIngredientID = input.ExceptIngredientID,
-                    MinCalories = input.Calories?.min,
-                    MaxCalories = input.Calories?.max
-                });
+                    conditions.Add("i.id IN @IngredientIds");
+                    parameters.Add("IngredientIds", input.IngredientID);
+                }
+
+                if (input.ExceptIngredientID?.Any() == true)
+                {
+                    conditions.Add("i.id NOT IN @ExceptIngredientIds");
+                    parameters.Add("ExceptIngredientIds", input.ExceptIngredientID);
+                }
+
+                if (input.OccasionID?.Any() == true)
+                {
+                    
+                    conditions.Add("ro.occasion_id IN @OccasionIds");
+                    parameters.Add("OccasionIds", input.OccasionID);
+                }
+
+                if(input.KeyWords?.Any() == true)
+                {
+                    string keywordSql = "  ";
+                    List<string> keywordCondition = new List<string>();
+                    foreach (var pattern in input.KeyWords)
+                    {
+                        keywordCondition.Add($"LOWER(introduction) REGEXP LOWER(@Pattern)");
+                        parameters.Add("Pattern", pattern);
+                    }
+                    keywordSql += " ( " + string.Join(" OR ", keywordCondition) + " ) ";
+                    conditions.Add(keywordSql);
+                }
+                
+
+                if (conditions.Any())
+                {
+                    sql += " WHERE " + string.Join(" AND ", conditions) + " GROUP BY r.id ";
+                }
+
+
+
+                var result = await connection.QueryAsync<RecipeEntity>(sql, parameters);
+               
                 return result.ToList();
             }
 
         }
+       
     }
 }
 
@@ -79,3 +121,5 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
 //});
 
 //return result.ToList();
+
+

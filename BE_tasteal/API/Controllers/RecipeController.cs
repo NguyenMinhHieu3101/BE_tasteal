@@ -41,6 +41,7 @@ namespace BE_tasteal.API.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return NotFound(ex.ToString());
             }
         }
