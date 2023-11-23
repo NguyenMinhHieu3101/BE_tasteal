@@ -258,5 +258,19 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 return result.ToList();
             }
         }
+        public async Task<int> DeleteRecipeAsync(int id)
+        {
+            using(var connection = _connection.GetConnection())
+            {
+                string query = @"delete from recipe
+                where id = @RECIPEID";
+
+                var result = await connection.ExecuteAsync(query, new
+                {
+                    RECIPEID = id
+                });
+                return result;
+            }
+        }
     }
 }

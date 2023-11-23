@@ -107,5 +107,19 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.ToString());
             }
         }
+        [HttpDelete]
+        [Route("recipe")]
+        public async Task<IActionResult> DeleteRecipe(int recipeId)
+        {
+            try
+            {
+                var recipes = await _recipeBusiness.DeleteRecipe(recipeId);
+                return Ok(recipes == 1 ? "success" :"fail");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
     }
 }

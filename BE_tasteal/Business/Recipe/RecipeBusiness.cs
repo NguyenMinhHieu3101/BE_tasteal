@@ -311,7 +311,7 @@ namespace BE_tasteal.Business.Recipe
                 return recipeRes;
             }
             else
-                return null;
+                return new RecipeRes();
         }
 
         public async Task<List<RecipeRes>> GetAllRecipe(PageReq page)
@@ -330,6 +330,10 @@ namespace BE_tasteal.Business.Recipe
         public async Task<List<KeyWordRes>> GetKeyWords()
         {
             return await _recipeResposity.GetKeyWords();
+        }
+        public async Task<int> DeleteRecipe(int id)
+        {
+            return await _recipeResposity.DeleteRecipeAsync(id);
         }
     }
 }

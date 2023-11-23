@@ -13,5 +13,6 @@ namespace BE_tasteal.Business.Recipe
         Task<List<RecipeRes>> GetAllRecipe(PageReq page);
         Task<RecipeRes> RecipeDetail(int id);
         Task<List<KeyWordRes>> GetKeyWords();
+        Task<int> DeleteRecipe(int id);
     }
 }
