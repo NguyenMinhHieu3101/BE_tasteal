@@ -30,6 +30,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                     FROM Recipe r
                     JOIN Recipe_Ingredient ri ON r.id = ri.recipe_id
                     JOIN Ingredient i ON ri.ingredient_id = i.id
+                    JOIN Nutrition_info ni on ni.id = r.nutrition_info_id 
                    "
                 ;
 
@@ -67,14 +68,26 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                     keywordSql += " ( " + string.Join(" OR ", keywordCondition) + " ) ";
                     conditions.Add(keywordSql);
                 }
+
+                if(input.TextSearch?.Any() == true)
+                {
+                    conditions.Add(@"( r.name LIKE '% @TextSearch %' )");
+                    parameters.Add("TextSearch", input.TextSearch);
+                }
+
+                if(input.Calories != null)
+                {
+                    
+                    conditions.Add(@"( ni.calories > @MIN and ni.calories < @MAX )");
+                    parameters.Add("MIN", input.Calories.min);
+                    parameters.Add("MAX", input.Calories.max);
+                }
                 
 
                 if (conditions.Any())
                 {
                     sql += " WHERE " + string.Join(" AND ", conditions) + " GROUP BY r.id ";
-                }
-
-
+                }   
 
                 var result = await connection.QueryAsync<RecipeEntity>(sql, parameters);
                
