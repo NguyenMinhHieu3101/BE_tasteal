@@ -172,7 +172,13 @@ namespace BE_tasteal.Business.Recipe
                     entity.name = worksheet.Cells[row, 3].Value?.ToString();
                     entity.rating = float.Parse(worksheet.Cells[row, 4].Value.ToString());
                     entity.image = worksheet.Cells[row, 5].Value?.ToString();
+
                     entity.totalTime = worksheet.Cells[row, 6].Value.ToString();
+                    TimeSpan duration = ParseDuration(entity.totalTime);
+                    DateTime currentTime = DateTime.UtcNow;
+                    DateTime newTime = currentTime.Add(duration);
+                    entity.totalTime = newTime.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+
                     entity.active_time = worksheet.Cells[row, 7].Value?.ToString();
                     entity.serving_size = int.Parse(worksheet.Cells[row, 8].Value?.ToString());
                     entity.introduction = worksheet.Cells[row, 9].Value?.ToString();
@@ -190,6 +196,17 @@ namespace BE_tasteal.Business.Recipe
                 return listRecipeDto;
             }
             #endregion
+        }
+        static TimeSpan ParseDuration(string input)
+        {
+            var regex = new Regex(@"(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?");
+            var match = regex.Match(input);
+
+            int hours = match.Groups[1].Success ? int.Parse(match.Groups[1].Value) : 0;
+            int minutes = match.Groups[2].Success ? int.Parse(match.Groups[2].Value) : 0;
+            int seconds = match.Groups[3].Success ? int.Parse(match.Groups[3].Value) : 0;
+
+            return new TimeSpan(hours, minutes, seconds);
         }
         static List<Recipe_IngredientReq> ParseIngredients(string input)
         {
@@ -314,17 +331,11 @@ namespace BE_tasteal.Business.Recipe
                 return new RecipeRes();
         }
 
-        public async Task<List<RecipeRes>> GetAllRecipe(PageReq page)
+        public async Task<List<RecipeEntity>> GetAllRecipe(PageReq page)
         {
             var test = await RecipeDetail(2);
-            //List<int> recipeIds = _recipeResposity.GetAllRecipeId(page);
-            List<RecipeRes> result = new List<RecipeRes>();
-            
-            //foreach (var recipdId in recipeIds)
-            //{
-            //    var recipe = await RecipeDetail(1);
-            //    result.Add(recipe);
-            //}
+
+            List<RecipeEntity> result = await _recipeResposity.GetAll(page);
             return result;
         }
         public async Task<List<KeyWordRes>> GetKeyWords()

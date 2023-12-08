@@ -62,21 +62,21 @@ namespace BE_tasteal.API.Controllers
                 return UnprocessableEntity(ex.ToString());
             }
         }
-        //[HttpPost]
-        //[Route("GetAllRecipe")]
-        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RecipeEntity>))]
-        //public IActionResult GetAllRecipe([FromBody] PageReq page)
-        //{
-        //    try
-        //    {
-        //        var recipe = _recipeBusiness.GetAllRecipe(page);
-        //        return Ok(recipe);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.ToString());
-        //    }
-        //}
+        [HttpPost]
+        [Route("getall")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RecipeEntity>))]
+        public async Task<IActionResult> GetAllRecipe([FromBody] PageReq page)
+        {
+            try
+            {
+                var recipe = await _recipeBusiness.GetAllRecipe(page);
+                return Ok(recipe);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
         [HttpPost]
         [Route("GetRecipe")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RecipeEntity>))]
@@ -121,5 +121,6 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.ToString());
             }
         }
+        
     }
 }

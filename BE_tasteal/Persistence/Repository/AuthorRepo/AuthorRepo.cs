@@ -41,11 +41,12 @@ namespace BE_tasteal.Persistence.Repository.AuthorRepo
             {
 
                 var insertQuery = "INSERT INTO Account (uid, name, avatar, introduction, link, slogan, quote) " +
-                                  "VALUES (@uid, @name, @avatar, @introduction, @link, @slogan, @quote)";
+                                  "VALUES (@uid, @name, @avatar, @introduction, @link, @slogan, @quote);" + 
+                                  " Insert into cookbook(name, owner) values ('Yêu thích', @uid) "
+                                  ;
 
                 connection.Execute(insertQuery, newAccount);
 
-                // Lấy thông tin mới từ cơ sở dữ liệu (chú ý rằng uid có thể được tạo tự động bởi cơ sở dữ liệu)
                 var createdAccount = connection.QuerySingleOrDefault<AccountEntity>("SELECT * FROM Account WHERE uid = @uid", new { newAccount.uid });
 
                 return createdAccount;

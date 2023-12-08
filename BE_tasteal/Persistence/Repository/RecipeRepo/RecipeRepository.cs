@@ -1,4 +1,5 @@
-﻿using BE_tasteal.Entity.DTO.Request;
+﻿using BE_tasteal.API.AppSettings;
+using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
@@ -212,6 +213,27 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 var result = connection.Query<RelatedRecipeRes>(sql, new { Id = id });
 
                 return result;
+            }
+        }
+        public async Task<List<RecipeEntity>> GetAll(PageReq req)
+        {
+            using (var connection = _connection.GetConnection())
+            {
+                int pageSize = req.pageSize;
+                int page = req.page;
+                int offset = (page - 1) * pageSize;
+
+                string sql = @"
+                select * from recipe
+                LIMIT @offset, @pageSize
+                ";
+
+                var result = await connection.QueryAsync<RecipeEntity>(sql, new
+                {
+                    offset = offset,
+                    pageSize = pageSize
+                });
+                return result.ToList();
             }
         }
         public List<int> GetAllRecipeId(PageReq req)

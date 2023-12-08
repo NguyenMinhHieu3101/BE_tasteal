@@ -9,9 +9,8 @@ namespace BE_tasteal.Entity.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        [Required]
         [MaxLength(255)]
-        public required string name { get; set; }
+        public string name { get; set; }
         public string? owner { get; set; }
         [ForeignKey("owner")]
         public AccountEntity? account { get; set; }
