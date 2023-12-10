@@ -14,6 +14,6 @@ namespace BE_tasteal.Entity.Entity
         [ForeignKey("cook_book_id")]
         public CookBookEntity? cook_book { get; set; }
         [ForeignKey("recipe_id")]
-        public RecipeEntity? RecipeEntity { get; set; }
+        public RecipeEntity? recipe { get; set; }
     }
 }

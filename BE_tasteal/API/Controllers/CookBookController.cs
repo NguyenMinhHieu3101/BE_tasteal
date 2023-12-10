@@ -32,6 +32,22 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet]
+        [Route("cookbook-recipe")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetCookbook_Recipe(int cookBookId)
+        {
+            try
+            {
+                var allCart = _cookBookRepo.GetCookBookRecipesWithRecipes(cookBookId);
+                return Ok(allCart);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpDelete]
         [Route("cookbook-recipe")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -55,14 +71,90 @@ namespace BE_tasteal.API.Controllers
             }
         }
         [HttpPut]
-        [Route("newRecipeCookBook")]
+        [Route("recipetonewcookbook")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> MoveRecipeToNewCookBook(NewRecipeCookBook id)
+        public async Task<IActionResult> MoveRecipeToNewCookBook(NewRecipeCookBookReq id)
         {
             try
             {
                 var allCart = await _cookBookRepo.MoveRecipeToNewCookBook(id);
+                if (allCart > 0)
+                    return Ok(true);
+                else
+                    return BadRequest(false);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(false);
+            }
+        }
+        [HttpPut]
+        [Route("namecookbook")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> RenameCookbookById(NewCookBookNameReq name)
+        {
+            try
+            {
+                var allCart = await _cookBookRepo.RenameCookBook(name);
+                if (allCart > 0)
+                    return Ok(true);
+                else
+                    return BadRequest(false);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(false);
+            }
+        }
+        [HttpDelete]
+        [Route("cookbook")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteCookBookById(int id)
+        {
+            try
+            {
+                var allCart = await _cookBookRepo.DeleteCookBook(id);
+                if (allCart > 0)
+                    return Ok(true);
+                else
+                    return BadRequest(false);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(false);
+            }
+        }
+        [HttpPost]
+        [Route("cookbook")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateNewCookBook(NewCookBookReq id)
+        {
+            try
+            {
+                var allCart = await _cookBookRepo.CreateNewCookBook(id);
+                if (allCart > 0)
+                    return Ok(true);
+                else
+                    return BadRequest(false);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(false);
+            }
+        }
+        [HttpPost]
+        [Route("recipetocookbook")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AddRecipeToCookBook(RecipeToCookBook id)
+        {
+            try
+            {
+                var allCart = await _cookBookRepo.AddRecipeToCookBook(id);
                 if (allCart > 0)
                     return Ok(true);
                 else

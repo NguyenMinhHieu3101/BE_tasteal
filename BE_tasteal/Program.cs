@@ -12,6 +12,7 @@ using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.AuthorRepo;
 using BE_tasteal.Persistence.Repository.CartRepo;
 using BE_tasteal.Persistence.Repository.CommentRepo;
+using BE_tasteal.Persistence.Repository.CookBookRepo;
 using BE_tasteal.Persistence.Repository.Direction;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using BE_tasteal.Persistence.Repository.IngredientRepo;
@@ -73,6 +74,7 @@ try
         services.AddScoped<IDirectionRepo,  DirectionRepo>();
         services.AddScoped<ICommentRepo, CommentRepo>();
         services.AddScoped<ICartRepo, CartRepo>();
+        services.AddScoped<CookBookRepo, CookBookRepo>();
 
         services.AddDbContext<MyDbContext>(option =>
         {
