@@ -105,7 +105,7 @@ namespace BE_tasteal.Business.Recipe
         {
             throw new NotImplementedException();
         }
-        public async Task<List<int>> Search(RecipeSearchReq option)
+        public async Task<List<RecipeEntity>> Search(RecipeSearchReq option)
         {
             return await _recipeSearchRepo.Search(option);
         }
