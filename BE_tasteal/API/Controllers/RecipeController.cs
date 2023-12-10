@@ -29,7 +29,7 @@ namespace BE_tasteal.API.Controllers
         }
         [HttpPost]
         [Route("Search")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RecipeEntity))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> SearchRecipe([FromBody] RecipeSearchReq option)
