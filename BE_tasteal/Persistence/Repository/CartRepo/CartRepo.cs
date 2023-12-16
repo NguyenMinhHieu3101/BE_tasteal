@@ -121,13 +121,15 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         {
             try
             {
-                // Lấy danh sách các Cart_Item cần xóa dựa trên accountId
                 var cartItemsToDelete = _context.cart_ItemEntities
                                             .Where(ci => ci.cart.accountId == accountId)
                                             .ToList();
-
-                // Xóa các Cart_Item
                 _context.cart_ItemEntities.RemoveRange(cartItemsToDelete);
+
+                var personalCartItems = _context.personalCartItems
+                                            .Where(ci => ci.account_id == accountId)
+                                            .ToList();
+                _context.personalCartItems.RemoveRange(personalCartItems);
 
                 // Lấy danh sách các Cart cần xóa dựa trên accountId
                 var cartsToDelete = _context.cart
