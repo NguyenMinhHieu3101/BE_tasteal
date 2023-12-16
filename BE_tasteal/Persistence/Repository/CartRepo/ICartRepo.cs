@@ -11,6 +11,6 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         bool UpdateServingSize(int CardId, int servingSize);
         bool DeleteCart(int cardId);
         bool DeleleCartByAccountId(string accountId);
-        bool UpdateBoughtItem(int cartItemId, bool isBought);
+        bool UpdateBoughtItem(int cartId, int IngredientId, bool isBought);
     }
 }

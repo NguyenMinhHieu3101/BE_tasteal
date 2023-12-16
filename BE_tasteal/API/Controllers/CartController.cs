@@ -94,11 +94,11 @@ namespace BE_tasteal.API.Controllers
         [Route("cartitemstatus")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult updateCartItemStatus(int CartItemId, bool isBought)
+        public IActionResult updateCartItemStatus(int cartID, int ingredientId, bool isBought)
         {
             try
             {
-                return Ok(_cartBusiness.UpdateBoughtItem(CartItemId, isBought));
+                return Ok(_cartBusiness.UpdateBoughtItem(cartID, ingredientId, isBought));
             }
             catch (Exception ex)
             {

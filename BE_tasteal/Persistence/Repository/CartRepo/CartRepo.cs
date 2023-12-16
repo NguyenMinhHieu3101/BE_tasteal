@@ -148,11 +148,14 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
                 return false;
             }
         }
-        public bool UpdateBoughtItem(int cartItemId, bool isBought)
+        public bool UpdateBoughtItem(int cartId, int IngredientId, bool isBought)
         {
             try
             {
-                var cartItem = _context.cart_ItemEntities.FirstOrDefault(ci => ci.cartId == cartItemId);
+                var cartItem = _context.cart_ItemEntities
+                    .FirstOrDefault(
+                        ci => ci.cartId == cartId 
+                        && ci.ingredient_id == IngredientId);
 
                 if (cartItem != null)
                 {                   

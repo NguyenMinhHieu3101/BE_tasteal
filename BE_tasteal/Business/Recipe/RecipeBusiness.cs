@@ -272,9 +272,13 @@ namespace BE_tasteal.Business.Recipe
 
             return parsedData;
         }
-        public async Task<RecipeRes> RecipeDetail(int id)
+        public async Task<RecipeRes?> RecipeDetail(int id)
         {
             var recipeEntity = await _recipeResposity.FindByIdAsync(id);
+            if(recipeEntity == null)
+            {
+                return null;
+            }
             if (recipeEntity != null)
             {
                 RecipeRes recipeRes = new RecipeRes();
@@ -330,7 +334,17 @@ namespace BE_tasteal.Business.Recipe
             else
                 return new RecipeRes();
         }
+        public async Task<List<RecipeRes>> GetRecipes(List<int> id)
+        {
+            List<RecipeRes> recipes = new List<RecipeRes>();
+            foreach(int idItem in id)
+            {
+                var recipe = await RecipeDetail(idItem);
+                recipes.Add(recipe);
+            }
 
+            return recipes;
+        }
         public async Task<List<RecipeEntity>> GetAllRecipe(PageReq page)
         {
             var test = await RecipeDetail(2);

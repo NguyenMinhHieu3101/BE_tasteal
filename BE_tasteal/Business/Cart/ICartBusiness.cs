@@ -9,6 +9,6 @@ namespace BE_tasteal.Business.Cart
         IEnumerable<Cart_ItemEntity> GetItemByCartId(List<int> cartIds);
         bool DeleteCart(int cartId);
         bool DeleleCartByAccountId(string accountId);
-        bool UpdateBoughtItem(int cartItemId, bool isBought);
+        bool UpdateBoughtItem(int cartItemId, int ingredientId, bool isBought);
     }
 }

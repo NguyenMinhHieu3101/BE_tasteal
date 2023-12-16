@@ -32,9 +32,9 @@ namespace BE_tasteal.Business.Cart
         {
             return _cartRepo.DeleleCartByAccountId(accountId);
         }
-        public bool UpdateBoughtItem(int cartItemId, bool isBought)
+        public bool UpdateBoughtItem(int cartId, int ingredientId, bool isBought)
         {
-            return _cartRepo.UpdateBoughtItem(cartItemId, isBought);    
+            return _cartRepo.UpdateBoughtItem(cartId, ingredientId, isBought);    
         }
     }
 }
