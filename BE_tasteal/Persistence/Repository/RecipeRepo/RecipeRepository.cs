@@ -5,6 +5,7 @@ using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing.Printing;
 
@@ -217,24 +218,16 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         }
         public async Task<List<RecipeEntity>> GetAll(PageReq req)
         {
-            using (var connection = _connection.GetConnection())
-            {
-                int pageSize = req.pageSize;
-                int page = req.page;
-                int offset = (page - 1) * pageSize;
+            int offset = (req.page - 1) * req.pageSize;
 
-                string sql = @"
-                select * from recipe
-                LIMIT @offset, @pageSize
-                ";
+            IEnumerable<RecipeEntity> recipes = await _context.recipe
+                .OrderBy(r => r.id)
+                .Include (r => r.account)
+                .Skip(offset)
+                .Take(req.pageSize)
+                .ToListAsync();
 
-                var result = await connection.QueryAsync<RecipeEntity>(sql, new
-                {
-                    offset = offset,
-                    pageSize = pageSize
-                });
-                return result.ToList();
-            }
+            return recipes.ToList();
         }
         public List<int> GetAllRecipeId(PageReq req)
         {

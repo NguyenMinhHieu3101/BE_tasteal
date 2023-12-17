@@ -49,7 +49,7 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest("update fail");
             }
         }
-        [HttpGet]
+        [HttpPost]
         [Route("allusers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

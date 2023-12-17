@@ -40,7 +40,7 @@ namespace BE_tasteal.Business.User
         }
         public async Task<IEnumerable<AccountEntity>> getAllUser(PageReq page)
         {
-            return await _accountRepo.getAllUser(PageReq page);
+            return await _accountRepo.getAllUser( page);
         }
         public async Task<AccountEntity> getUser(string userId)
         {

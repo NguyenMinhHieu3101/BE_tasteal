@@ -342,8 +342,6 @@ namespace BE_tasteal.Business.Recipe
         }
         public async Task<List<RecipeEntity>> GetAllRecipe(PageReq page)
         {
-            var test = await RecipeDetail(2);
-
             List<RecipeEntity> result = await _recipeResposity.GetAll(page);
             return result;
         }
