@@ -13,6 +13,7 @@ using OfficeOpenXml;
 using System.Text.RegularExpressions;
 using System;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace BE_tasteal.Business.Recipe
 {
@@ -352,6 +353,32 @@ namespace BE_tasteal.Business.Recipe
         public async Task<int> DeleteRecipe(int id)
         {
             return await _recipeResposity.DeleteRecipeAsync(id);
+        }
+
+        public List<RecipeEntity> getRecommendRecipesByIngredientIds(List<int> ingredientIds, PageReq _page)
+        {
+            var validIngredientIds = ingredientIds.Where(id => _context.ingredient.Any(ie => ie.id == id)).ToList();
+
+            int page = _page.page;
+            int pageSize = _page.pageSize;
+            var recipesWithIngredientsCount = _context.recipe_Ingredient
+                .Where(ri => ingredientIds.Contains(ri.ingredient_id))
+                .GroupBy(ri => ri.recipe_id)
+                .Select(g => new { RecipeId = g.Key, IngredientCount = g.Count() })
+                .OrderByDescending(x => x.IngredientCount)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var recipeIds = recipesWithIngredientsCount.Select(r => r.RecipeId).ToList();
+
+            var recipes = _context.recipe
+               .Include(r => r.ingredients)
+               .Where(r => recipeIds.Contains(r.id))
+               .OrderByDescending(r => recipeIds.IndexOf(r.id))
+               .ToList();
+
+            return recipes;
         }
     }
 }
