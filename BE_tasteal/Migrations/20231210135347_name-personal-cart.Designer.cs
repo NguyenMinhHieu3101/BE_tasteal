@@ -3,6 +3,7 @@ using System;
 using BE_tasteal.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BE_tasteal.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231210135347_name-personal-cart")]
+    partial class namepersonalcart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -317,7 +320,7 @@ namespace BE_tasteal.Migrations
                     b.ToTable("Pantry_Item");
                 });
 
-            modelBuilder.Entity("BE_tasteal.Entity.Entity.PersonalCartItemEntity", b =>
+            modelBuilder.Entity("BE_tasteal.Entity.Entity.PersonalCartItem", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -337,6 +340,7 @@ namespace BE_tasteal.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("name")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("id");
@@ -653,7 +657,7 @@ namespace BE_tasteal.Migrations
                     b.Navigation("account");
                 });
 
-            modelBuilder.Entity("BE_tasteal.Entity.Entity.PersonalCartItemEntity", b =>
+            modelBuilder.Entity("BE_tasteal.Entity.Entity.PersonalCartItem", b =>
                 {
                     b.HasOne("BE_tasteal.Entity.Entity.AccountEntity", "account")
                         .WithMany()

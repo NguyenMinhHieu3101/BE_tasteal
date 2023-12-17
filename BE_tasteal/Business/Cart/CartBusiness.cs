@@ -1,5 +1,7 @@
-﻿using BE_tasteal.Entity.Entity;
+﻿using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Repository.CartRepo;
+using Microsoft.EntityFrameworkCore;
 using System.Numerics;
 
 namespace BE_tasteal.Business.Cart
@@ -15,6 +17,10 @@ namespace BE_tasteal.Business.Cart
         public IEnumerable<CartEntity> GetCartByAccountId(string accountId)
         {
             return _cartRepo.GetCartByAccountId(accountId);
+        }
+        public IEnumerable<PersonalCartItemEntity> GetPersonalCartItemsWithIngredients(string accountId)
+        {
+            return _cartRepo.GetPersonalCartItemsWithIngredients(accountId);
         }
         public IEnumerable<Cart_ItemEntity> GetItemByCartId(List<int> cartIds)
         {
@@ -35,6 +41,16 @@ namespace BE_tasteal.Business.Cart
         public bool UpdateBoughtItem(int cartId, int ingredientId, bool isBought)
         {
             return _cartRepo.UpdateBoughtItem(cartId, ingredientId, isBought);    
+        }
+        public async Task<bool> PostPersonalCartItem(PersonalCartItemReq request)
+        {
+            var result = await _cartRepo.PostPersonalCartItem(request);
+            return result;
+        }
+        public async Task<bool> PutPersonalCartItem(PersonalCartItemUpdateReq request)
+        {
+            var result = await _cartRepo.PutPersonalCartItem(request);
+            return result;
         }
     }
 }

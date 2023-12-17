@@ -1,4 +1,5 @@
-﻿using BE_tasteal.Entity.Entity;
+﻿using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.Entity;
 
 namespace BE_tasteal.Business.Cart
 {
@@ -10,5 +11,8 @@ namespace BE_tasteal.Business.Cart
         bool DeleteCart(int cartId);
         bool DeleleCartByAccountId(string accountId);
         bool UpdateBoughtItem(int cartItemId, int ingredientId, bool isBought);
+        Task<bool> PostPersonalCartItem(PersonalCartItemReq request);
+        Task<bool> PutPersonalCartItem(PersonalCartItemUpdateReq request);
+        IEnumerable<PersonalCartItemEntity> GetPersonalCartItemsWithIngredients(string accountId);
     }
 }
