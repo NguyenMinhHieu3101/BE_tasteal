@@ -65,5 +65,19 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(e.ToString());
             }
         }
+        [HttpGet]
+        [Route("")]
+        public async Task<IActionResult> getUser(string accountId)
+        {
+            try
+            {
+                var account = await _userBusiness.getUser(accountId);
+                return Ok(account);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.ToString());
+            }
+        }
     }
 }

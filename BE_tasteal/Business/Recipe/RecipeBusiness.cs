@@ -22,7 +22,7 @@ namespace BE_tasteal.Business.Recipe
         private readonly IRecipeRepository _recipeResposity;
         private readonly IRecipeSearchRepo _recipeSearchRepo;
         private readonly IIngredientRepo _ingredientRepo;
-        private readonly IAuthorRepo _authorRepo;
+        private readonly IUserRepo _authorRepo;
         private readonly INutritionRepo _nutritionRepo;
         private readonly IDirectionRepo _directionRepo;
         private readonly ICommentRepo _commentRepo;
@@ -31,7 +31,7 @@ namespace BE_tasteal.Business.Recipe
            IRecipeRepository recipeResposity,
            IRecipeSearchRepo recipeSearchRepo,
            IIngredientRepo ingredientRepo,
-           IAuthorRepo authorRepo,
+           IUserRepo authorRepo,
            INutritionRepo nutritionRepo,
            IDirectionRepo directionRepo,
            ICommentRepo commentRepo,
