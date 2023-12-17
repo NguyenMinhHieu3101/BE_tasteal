@@ -86,6 +86,8 @@ namespace BE_tasteal.API.Controllers
             try
             {
                 var recipes = await _recipeBusiness.RecipeDetail(id);
+                if (recipes == null)
+                    return BadRequest("Recipe id invalid");
                 return Ok(recipes);
             }
             catch (Exception ex)

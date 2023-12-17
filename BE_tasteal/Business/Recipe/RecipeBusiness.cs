@@ -281,7 +281,7 @@ namespace BE_tasteal.Business.Recipe
                 //bind
                 recipeRes.name = recipeEntity.name;
                 recipeRes.rating = recipeEntity.rating;
-                recipeRes.totalTime = recipeEntity.totalTime.ToString("s") + "Z";
+                recipeRes.totalTime = recipeEntity.totalTime;
                 recipeRes.serving_size = recipeEntity.serving_size;
                 recipeRes.introduction = recipeEntity.introduction;
                 recipeRes.author_note = recipeEntity.author_note;
@@ -295,6 +295,9 @@ namespace BE_tasteal.Business.Recipe
                 recipeRes.author.name = authorEntity.name;
                 recipeRes.author.avatar = authorEntity.avatar;
                 recipeRes.author.introduction = authorEntity.introduction;
+                recipeRes.author.link = authorEntity.link;
+                recipeRes.author.slogan = authorEntity.slogan;
+                recipeRes.author.quote = authorEntity.quote;
 
                 //find ingredient
                 var ingredientRes = _ingredientRepo.GetIngredientsByRecipeId(recipeEntity.id);
