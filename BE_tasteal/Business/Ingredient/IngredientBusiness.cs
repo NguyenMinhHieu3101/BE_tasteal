@@ -21,7 +21,7 @@ namespace BE_tasteal.Business.Ingredient
             List<IngredientEntity> entities = new List<IngredientEntity>();
             using (var package = new ExcelPackage(file.OpenReadStream()))
             {
-                var worksheet = package.Workbook.Worksheets[0];
+                var worksheet = package.Workbook.Worksheets["ingredient"];
                 var rowCount = worksheet.Dimension.Rows;
 
                 for (int row = 3; row <= rowCount + 1; row++)
