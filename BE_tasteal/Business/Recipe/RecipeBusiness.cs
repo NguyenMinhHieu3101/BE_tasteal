@@ -353,5 +353,9 @@ namespace BE_tasteal.Business.Recipe
         {
             return await _recipeResposity.DeleteRecipeAsync(id);
         }
+        public List<RecipeEntity>? getRecipeByUserId(string id, PageReq page)
+        {
+            return  _recipeResposity.getRecipeByUserId(id, page);
+        }
     }
 }

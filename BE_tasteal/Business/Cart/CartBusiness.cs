@@ -1,5 +1,6 @@
 ﻿using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
+using BE_tasteal.Persistence.Repository.AuthorRepo;
 using BE_tasteal.Persistence.Repository.CartRepo;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;
@@ -9,13 +10,22 @@ namespace BE_tasteal.Business.Cart
     public class CartBusiness: ICartBusiness
     {
         private readonly ICartRepo _cartRepo;
-        public CartBusiness(ICartRepo cartRepo) 
+        private readonly IUserRepo _userRepo;
+        public CartBusiness(
+            ICartRepo cartRepo, 
+            IUserRepo userRepo) 
         {
             _cartRepo = cartRepo;
+            _userRepo = userRepo;
         }
 
-        public IEnumerable<CartEntity> GetCartByAccountId(string accountId)
+        public async Task<IEnumerable<CartEntity>?> GetCartByAccountId(string accountId)
         {
+            var isAccountValid = await _userRepo.FindByIdAsync(accountId);
+            if (isAccountValid == null)
+            {
+                return null;
+            }
             return _cartRepo.GetCartByAccountId(accountId);
         }
         public IEnumerable<PersonalCartItemEntity> GetPersonalCartItemsWithIngredients(string accountId)
@@ -51,6 +61,11 @@ namespace BE_tasteal.Business.Cart
         {
             var result = await _cartRepo.PutPersonalCartItem(request);
             return result;
+        }
+
+        Task<bool> ICartBusiness.UpdateServingSize(int CardId, int servingSize)
+        {
+            throw new NotImplementedException();
         }
     }
 }

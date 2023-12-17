@@ -118,19 +118,19 @@ namespace BE_tasteal.Persistence.Repository.AuthorRepo
                 return accounts;
             }
         }
-        public async Task<AccountEntity> getUser(string userId)
+        public async Task<AccountEntity?> getUser(string userId)
         {
-            return await _context.Set<AccountEntity>().FindAsync(userId);
-            //using (var connection = _connection.GetConnection())
-            //{
-            //    var query = "select * from account where uid = @UID";
+            //return await _context.Set<AccountEntity>().FindAsync(userId);
+            using (var connection = _connection.GetConnection())
+            {
+                var query = "select * from account where uid = @uid";
 
-            //    var result = await connection.QueryFirstAsync<AccountEntity>(query, new
-            //    {
-            //        UID = userId
-            //    });
-            //    return result;
-            //}
+                var result = await connection.QueryFirstOrDefaultAsync<AccountEntity>(query, new
+                {
+                    uid = userId
+                });
+                return result;
+            }
         }
     }
 }
