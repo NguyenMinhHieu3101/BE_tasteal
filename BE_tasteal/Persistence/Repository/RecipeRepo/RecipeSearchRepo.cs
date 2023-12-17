@@ -56,38 +56,54 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                     parameters.Add("OccasionIds", input.OccasionID);
                 }
 
-                if(input.KeyWords?.Any() == true)
+                if (input.TotalTime.HasValue)
+                {
+
+                    conditions.Add("r.totalTime <= @TotalTime");
+                    parameters.Add("TotalTime", input.TotalTime);
+                }
+
+                if (input.KeyWords?.Any() == true)
                 {
                     string keywordSql = "  ";
                     List<string> keywordCondition = new List<string>();
+
+                    int index = 0; // Initialize index for parameter names
+
                     foreach (var pattern in input.KeyWords)
                     {
-                        keywordCondition.Add($"LOWER(introduction) REGEXP LOWER(@Pattern)");
-                        parameters.Add("Pattern", pattern);
+                        string parameterName = $"Pattern{index}"; 
+                        keywordCondition.Add($"LOWER(introduction) REGEXP LOWER(@{parameterName})");
+                        keywordCondition.Add($"LOWER(r.name) REGEXP LOWER(@{parameterName})");
+                        parameters.Add(parameterName, pattern); 
+                        index++;
                     }
+
                     keywordSql += " ( " + string.Join(" OR ", keywordCondition) + " ) ";
                     conditions.Add(keywordSql);
                 }
 
-                if(input.TextSearch?.Any() == true)
-                {
-                    conditions.Add(@"( r.name LIKE '% @TextSearch %' )");
-                    parameters.Add("TextSearch", input.TextSearch);
-                }
 
-                if(input.Calories != null)
+                if (input.Calories != null)
                 {
                     
                     conditions.Add(@"( ni.calories > @MIN and ni.calories < @MAX )");
                     parameters.Add("MIN", input.Calories.min);
                     parameters.Add("MAX", input.Calories.max);
                 }
-                
 
                 if (conditions.Any())
                 {
                     sql += " WHERE " + string.Join(" AND ", conditions) + " GROUP BY r.id ";
-                }   
+                }
+
+                int pageSize = input.pageSize ?? 0;
+                int page = input.page ?? 0;
+                int offset = (page - 1) * pageSize;
+                sql += " LIMIT @offset, @pageSize";
+                parameters.Add("offset", offset);
+                parameters.Add("pageSize", pageSize);
+                Console.WriteLine(sql);
 
                 var result = await connection.QueryAsync<int>(sql, parameters);
                

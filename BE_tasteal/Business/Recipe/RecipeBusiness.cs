@@ -13,6 +13,7 @@ using OfficeOpenXml;
 using System.Text.RegularExpressions;
 using System;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace BE_tasteal.Business.Recipe
 {
@@ -22,7 +23,7 @@ namespace BE_tasteal.Business.Recipe
         private readonly IRecipeRepository _recipeResposity;
         private readonly IRecipeSearchRepo _recipeSearchRepo;
         private readonly IIngredientRepo _ingredientRepo;
-        private readonly IAuthorRepo _authorRepo;
+        private readonly IUserRepo _authorRepo;
         private readonly INutritionRepo _nutritionRepo;
         private readonly IDirectionRepo _directionRepo;
         private readonly ICommentRepo _commentRepo;
@@ -31,7 +32,7 @@ namespace BE_tasteal.Business.Recipe
            IRecipeRepository recipeResposity,
            IRecipeSearchRepo recipeSearchRepo,
            IIngredientRepo ingredientRepo,
-           IAuthorRepo authorRepo,
+           IUserRepo authorRepo,
            INutritionRepo nutritionRepo,
            IDirectionRepo directionRepo,
            ICommentRepo commentRepo,
@@ -54,7 +55,7 @@ namespace BE_tasteal.Business.Recipe
                 newRecipeEntity.is_private = false;
 
             if (newRecipeEntity.author == null || newRecipeEntity.author == "uid")
-                newRecipeEntity.author = "13b865f7-d6a6-4204-a349-7f379b232f0c";
+                newRecipeEntity.author = "Ah3AvtwmXrfuvGFo8sjSO2IOpCg1";
 
             var ingredients = entity.ingredients;
             //create list ingre
@@ -138,12 +139,12 @@ namespace BE_tasteal.Business.Recipe
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             {
                 var package = new ExcelPackage(file.OpenReadStream());
-                var worksheet = package.Workbook.Worksheets[0];
+                var worksheet = package.Workbook.Worksheets["recipe"];
                 var rowCount = worksheet.Dimension.Rows;
-                for (int row = 3; row <= 90; row++)
+                for (int row = 77; row <= 90; row++)
                 {
                     #region validate each row. if fail -> continue
-
+                    Console.WriteLine(worksheet.Cells[row, 3].Value?.ToString());
                     //rating
                     float temp;
                     if (worksheet.Cells[row, 4].Value?.ToString() == null) continue;
@@ -151,7 +152,6 @@ namespace BE_tasteal.Business.Recipe
                     //time
                     if (worksheet.Cells[row, 6].Value?.ToString() == null) continue;
                     //if (worksheet.Cells[row, 7].Value?.ToString() == null) continue;
-                    if (!IsValidTimeFormat(worksheet.Cells[row, 6].Value?.ToString())) continue;
                     //if (!IsValidTimeFormat(worksheet.Cells[row, 7].Value?.ToString())) continue;
 
                     //serving size > 0
@@ -173,11 +173,7 @@ namespace BE_tasteal.Business.Recipe
                     entity.rating = float.Parse(worksheet.Cells[row, 4].Value.ToString());
                     entity.image = worksheet.Cells[row, 5].Value?.ToString();
 
-                    entity.totalTime = worksheet.Cells[row, 6].Value.ToString();
-                    TimeSpan duration = ParseDuration(entity.totalTime);
-                    DateTime currentTime = DateTime.UtcNow;
-                    DateTime newTime = currentTime.Add(duration);
-                    entity.totalTime = newTime.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+                    entity.totalTime = int.Parse(worksheet.Cells[row, 6].Value?.ToString());
 
                     entity.active_time = worksheet.Cells[row, 7].Value?.ToString();
                     entity.serving_size = int.Parse(worksheet.Cells[row, 8].Value?.ToString());
@@ -186,7 +182,7 @@ namespace BE_tasteal.Business.Recipe
                     entity.is_private = prv;// parsed in validate
                     entity.ingredients = ParseIngredients(worksheet.Cells[row, 12].Value.ToString());
                     entity.directions = ParseDirection(worksheet.Cells[row, 14].Value.ToString());
-                    entity.author = "13b865f7-d6a6-4204-a349-7f379b232f0c";
+                    entity.author = "Ah3AvtwmXrfuvGFo8sjSO2IOpCg1";
                     #endregion
                    
 
@@ -272,9 +268,13 @@ namespace BE_tasteal.Business.Recipe
 
             return parsedData;
         }
-        public async Task<RecipeRes> RecipeDetail(int id)
+        public async Task<RecipeRes?> RecipeDetail(int id)
         {
             var recipeEntity = await _recipeResposity.FindByIdAsync(id);
+            if(recipeEntity == null)
+            {
+                return null;
+            }
             if (recipeEntity != null)
             {
                 RecipeRes recipeRes = new RecipeRes();
@@ -330,11 +330,19 @@ namespace BE_tasteal.Business.Recipe
             else
                 return new RecipeRes();
         }
+        public async Task<List<RecipeRes>> GetRecipes(List<int> id)
+        {
+            List<RecipeRes> recipes = new List<RecipeRes>();
+            foreach(int idItem in id)
+            {
+                var recipe = await RecipeDetail(idItem);
+                recipes.Add(recipe);
+            }
 
+            return recipes;
+        }
         public async Task<List<RecipeEntity>> GetAllRecipe(PageReq page)
         {
-            var test = await RecipeDetail(2);
-
             List<RecipeEntity> result = await _recipeResposity.GetAll(page);
             return result;
         }
@@ -345,6 +353,32 @@ namespace BE_tasteal.Business.Recipe
         public async Task<int> DeleteRecipe(int id)
         {
             return await _recipeResposity.DeleteRecipeAsync(id);
+        }
+
+        public List<RecipeEntity> getRecommendRecipesByIngredientIds(List<int> ingredientIds, PageReq _page)
+        {
+            var validIngredientIds = ingredientIds.Where(id => _context.ingredient.Any(ie => ie.id == id)).ToList();
+
+            int page = _page.page;
+            int pageSize = _page.pageSize;
+            var recipesWithIngredientsCount = _context.recipe_Ingredient
+                .Where(ri => ingredientIds.Contains(ri.ingredient_id))
+                .GroupBy(ri => ri.recipe_id)
+                .Select(g => new { RecipeId = g.Key, IngredientCount = g.Count() })
+                .OrderByDescending(x => x.IngredientCount)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var recipeIds = recipesWithIngredientsCount.Select(r => r.RecipeId).ToList();
+
+            var recipes = _context.recipe
+               .Include(r => r.ingredients)
+               .Where(r => recipeIds.Contains(r.id))
+               .OrderByDescending(r => recipeIds.IndexOf(r.id))
+               .ToList();
+
+            return recipes;
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using BE_tasteal.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BE_tasteal.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231210135937_name-personal-cartv2")]
+    partial class namepersonalcartv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -281,9 +284,6 @@ namespace BE_tasteal.Migrations
                     b.Property<string>("image")
                         .HasColumnType("text");
 
-                    b.Property<bool>("is_lunar_date")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -464,8 +464,8 @@ namespace BE_tasteal.Migrations
                     b.Property<int>("serving_size")
                         .HasColumnType("int");
 
-                    b.Property<int>("totalTime")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("totalTime")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("updatedAt")
                         .HasColumnType("datetime(6)");

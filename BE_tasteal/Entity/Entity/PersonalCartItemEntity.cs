@@ -3,14 +3,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BE_tasteal.Entity.Entity
 {
-    public class PersonalCartItem
+    public class PersonalCartItemEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         public int ingredient_id { get; set; }
         public string account_id { get; set; }
-        public string name { get; set; }
+        public string? name { get; set; }
         public int amount { get; set; }
         public bool is_bought { get; set; }
         [ForeignKey("ingredient_id")]

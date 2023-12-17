@@ -6,10 +6,10 @@ namespace BE_tasteal.Business.User
 {
     public class UserBusiness: IUserBusiness
     {
-        private IAuthorRepo _authorRepo;
-        public UserBusiness(IAuthorRepo authorRepo)
+        private IUserRepo _accountRepo;
+        public UserBusiness(IUserRepo authorRepo)
         {
-            _authorRepo = authorRepo;
+            _accountRepo = authorRepo;
         }
         public async Task<AccountEntity> signup(AccountReq req)
         {
@@ -22,7 +22,7 @@ namespace BE_tasteal.Business.User
             accountEntity.link = req.link;
             accountEntity.quote = req.quote;
 
-            return await _authorRepo.createNewUser(accountEntity);
+            return await _accountRepo.createNewUser(accountEntity);
         }
 
         public async Task<AccountEntity> udpateAccount(AccountReq req)
@@ -36,11 +36,15 @@ namespace BE_tasteal.Business.User
             accountEntity.quote = req.quote;
             accountEntity.link = req.link;
 
-            return await _authorRepo.updateUser(accountEntity);
+            return await _accountRepo.updateUser(accountEntity);
         }
-        public async Task<IEnumerable<AccountEntity>> getAllUser()
+        public async Task<IEnumerable<AccountEntity>> getAllUser(PageReq page)
         {
-            return await _authorRepo.getAllUser();
+            return await _accountRepo.getAllUser( page);
+        }
+        public async Task<AccountEntity> getUser(string userId)
+        {
+            return await _accountRepo.getUser(userId);
         }
     }
 }

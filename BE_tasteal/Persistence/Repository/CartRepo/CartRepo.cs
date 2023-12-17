@@ -1,8 +1,10 @@
-﻿using BE_tasteal.Entity.DTO.Response;
+﻿using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
@@ -121,13 +123,15 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         {
             try
             {
-                // Lấy danh sách các Cart_Item cần xóa dựa trên accountId
                 var cartItemsToDelete = _context.cart_ItemEntities
                                             .Where(ci => ci.cart.accountId == accountId)
                                             .ToList();
-
-                // Xóa các Cart_Item
                 _context.cart_ItemEntities.RemoveRange(cartItemsToDelete);
+
+                var personalCartItems = _context.personalCartItems
+                                            .Where(ci => ci.account_id == accountId)
+                                            .ToList();
+                _context.personalCartItems.RemoveRange(personalCartItems);
 
                 // Lấy danh sách các Cart cần xóa dựa trên accountId
                 var cartsToDelete = _context.cart
@@ -148,11 +152,14 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
                 return false;
             }
         }
-        public bool UpdateBoughtItem(int cartItemId, bool isBought)
+        public bool UpdateBoughtItem(int cartId, int IngredientId, bool isBought)
         {
             try
             {
-                var cartItem = _context.cart_ItemEntities.FirstOrDefault(ci => ci.cartId == cartItemId);
+                var cartItem = _context.cart_ItemEntities
+                    .FirstOrDefault(
+                        ci => ci.cartId == cartId 
+                        && ci.ingredient_id == IngredientId);
 
                 if (cartItem != null)
                 {                   
@@ -171,6 +178,74 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+        public List<PersonalCartItemEntity> GetPersonalCartItemsWithIngredients(string accountId)
+        {
+            var cartItemsWithIngredients = _context.personalCartItems
+                .Where(item => item.account_id == accountId)
+                .Include(item => item.ingredient) 
+                .ToList();
+
+            return cartItemsWithIngredients;
+        }
+        public async Task<bool> PostPersonalCartItem(PersonalCartItemReq request)
+        {
+            try
+            {
+                var ingredient = await _context.ingredient.FindAsync(request.ingredient_id);
+               
+                if (ingredient == null)
+                {
+                    return false;
+                }
+
+                var personalCartItem = new PersonalCartItemEntity
+                {
+                    ingredient_id = request.ingredient_id,
+                    account_id = request.account_id,
+                    amount = request.amount,
+                    is_bought = request.is_bought
+                };
+
+                _context.personalCartItems.Add(personalCartItem);
+                int result = await _context.SaveChangesAsync();
+                if (result <= 0)
+                    return false;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+
+        }
+        public async Task<bool> PutPersonalCartItem(PersonalCartItemUpdateReq request)
+        {
+            try
+            {
+                var personalCartItem = await _context.personalCartItems.FindAsync(request.id);
+                if (personalCartItem == null)
+                {
+                    return false;
+                }
+
+                personalCartItem.name = request.name;
+                personalCartItem.amount = request.amount;
+                personalCartItem.is_bought = request.is_bought;
+
+                _context.Entry(personalCartItem).State = EntityState.Modified;
+
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
                 return false;
             }
         }

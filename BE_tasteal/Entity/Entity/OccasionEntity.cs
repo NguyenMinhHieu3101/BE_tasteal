@@ -17,5 +17,6 @@ namespace BE_tasteal.Entity.Entity
         public string? image { get; set; }
         public DateTime start_at { get; set; }
         public DateTime end_at { get; set; }
+        public bool  is_lunar_date { get; set; }
     }
 }

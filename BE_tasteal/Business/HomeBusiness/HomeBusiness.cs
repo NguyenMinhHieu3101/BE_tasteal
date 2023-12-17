@@ -10,12 +10,12 @@ namespace BE_tasteal.Business.HomeBusiness
     public class HomeBusiness : IHomeBusiness
     {
         private readonly IRecipeRepository _recipeRepository;
-        private readonly IAuthorRepo _authorRepo;
+        private readonly IUserRepo _authorRepo;
         private readonly IOccasionRepo _occasionRepo;
         private readonly ILogger<IHomeBusiness> _logger;
         public HomeBusiness(
             IRecipeRepository recipeRepository,
-            IAuthorRepo authorRepo,
+            IUserRepo authorRepo,
             IOccasionRepo occasionRepo,
             ILogger<IHomeBusiness> logger)
         {

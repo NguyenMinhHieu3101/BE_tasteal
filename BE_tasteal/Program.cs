@@ -69,7 +69,7 @@ try
         services.AddScoped<IRecipeSearchRepo, RecipeSearchRepo>();
         services.AddScoped<IIngredientRepo, IngredientRepo>();
         services.AddScoped<IOccasionRepo, OccasionRepo>();
-        services.AddScoped<IAuthorRepo, AuthorRepo>();
+        services.AddScoped<IUserRepo, UserRepo>();
         services.AddScoped<INutritionRepo, NutritionRepo>();
         services.AddScoped<IDirectionRepo,  DirectionRepo>();
         services.AddScoped<ICommentRepo, CommentRepo>();

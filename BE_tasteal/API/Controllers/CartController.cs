@@ -1,4 +1,6 @@
 ﻿using BE_tasteal.Business.Cart;
+using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BE_tasteal.API.Controllers
@@ -94,11 +96,54 @@ namespace BE_tasteal.API.Controllers
         [Route("cartitemstatus")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult updateCartItemStatus(int CartItemId, bool isBought)
+        public IActionResult updateCartItemStatus(int cartID, int ingredientId, bool isBought)
         {
             try
             {
-                return Ok(_cartBusiness.UpdateBoughtItem(CartItemId, isBought));
+                return Ok(_cartBusiness.UpdateBoughtItem(cartID, ingredientId, isBought));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        [Route("personalcarts")]
+        public async Task<ActionResult<PersonalCartItemEntity>> GetPersonalCartItem(string userId)
+        {
+            try
+            {
+                var result = _cartBusiness.GetPersonalCartItemsWithIngredients(userId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("personalcart")]
+        public async Task<ActionResult<PersonalCartItemEntity>> PostPersonalCartItem(PersonalCartItemReq request)
+        {
+            try
+            {
+                var result = await _cartBusiness.PostPersonalCartItem(request);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut()]
+        [Route("personalcart")]
+        public async Task<IActionResult> PutPersonalCartItem(PersonalCartItemUpdateReq request)
+        {
+            try
+            {
+                var result = await _cartBusiness.PutPersonalCartItem(request);
+                return Ok(result);
             }
             catch (Exception ex)
             {

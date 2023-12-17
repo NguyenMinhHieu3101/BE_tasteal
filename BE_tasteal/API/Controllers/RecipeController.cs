@@ -81,11 +81,27 @@ namespace BE_tasteal.API.Controllers
         [Route("GetRecipe")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RecipeEntity>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetRecipe(int id)
+        public async Task<IActionResult> GetRecipes(int id)
         {
             try
             {
                 var recipes = await _recipeBusiness.RecipeDetail(id);
+                return Ok(recipes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+        [HttpPost]
+        [Route("GetRecipes")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetRecipe(List<int> id)
+        {
+            try
+            {
+                var recipes = await _recipeBusiness.GetRecipes(id);
                 return Ok(recipes);
             }
             catch (Exception ex)

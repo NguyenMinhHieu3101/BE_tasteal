@@ -17,7 +17,7 @@ namespace BE_tasteal.Entity
                 .ForMember(destination => destination.id, destination => destination.Ignore())
                 .ForMember(source => source.name, destination => destination.MapFrom(src => src.name))
                 .ForMember(source => source.rating, destination => destination.MapFrom(src => src.rating))
-                .ForMember(source => source.totalTime, destination => destination.MapFrom(src => DateTime.ParseExact(src.active_time, format, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeUniversal)))
+                .ForMember(source => source.totalTime, destination => destination.MapFrom(src => src.totalTime))
                 .ForMember(source => source.active_time, destination => destination.MapFrom(src => DateTime.ParseExact(src.active_time, format, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeUniversal)))
                 .ForMember(source => source.serving_size, destination => destination.MapFrom(src => src.serving_size))
                 .ForMember(source => source.introduction, destination => destination.MapFrom(src => src.introduction))
