@@ -1,5 +1,4 @@
-﻿using BE_tasteal.API.AppSettings;
-using BE_tasteal.Entity.DTO.Request;
+﻿using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
@@ -155,7 +154,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
             int page = filter.page;
             int offset = (page - 1) * pageSize;
 
-            IQueryable<RecipeEntity> query = _context.recipe
+            IQueryable<RecipeEntity> query = _context.RecipeEntity
                                                .Include(r => r.account)
                                                .Include(r => r.nutrition_info);
             if (filter.isDescend)
@@ -180,7 +179,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
             int offset = (page - 1) * pageSize;
 
 
-            IQueryable<RecipeEntity> query = _context.recipe
+            IQueryable<RecipeEntity> query = _context.RecipeEntity
                                                .Include(r => r.account)
                                                .Include(r => r.nutrition_info);
             if (filter.isDescend)
@@ -220,7 +219,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         {
             int offset = (req.page - 1) * req.pageSize;
 
-            IEnumerable<RecipeEntity> recipes = await _context.recipe
+            IEnumerable<RecipeEntity> recipes = await _context.RecipeEntity
                 .OrderBy(r => r.id)
                 .Include (r => r.account)
                 .Skip(offset)
@@ -289,12 +288,15 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         }
         public List<RecipeEntity> getRecommendRecipesByIngredientIds(List<int> ingredientIds, PageReq _page)
         {
-            var validIngredientIds = ingredientIds.Where(id => _context.ingredient.Any(ie => ie.id == id)).ToList();
-
             int page = _page.page;
             int pageSize = _page.pageSize;
+            var validIngredientIds = _context.IngredientEntity
+            .Where(ie => ingredientIds.Contains(ie.id))
+            .Select(ie => ie.id)
+            .ToList();
+
             var recipesWithIngredientsCount = _context.recipe_Ingredient
-                .Where(ri => ingredientIds.Contains(ri.ingredient_id))
+                .Where(ri => validIngredientIds.Contains(ri.ingredient_id))
                 .GroupBy(ri => ri.recipe_id)
                 .Select(g => new { RecipeId = g.Key, IngredientCount = g.Count() })
                 .OrderByDescending(x => x.IngredientCount)
@@ -304,11 +306,22 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
 
             var recipeIds = recipesWithIngredientsCount.Select(r => r.RecipeId).ToList();
 
-            var recipes = _context.recipe
-               .Include(r => r.ingredients)
-               .Where(r => recipeIds.Contains(r.id))
-               .OrderByDescending(r => recipeIds.IndexOf(r.id))
-               .ToList();
+            var recipes = _context.RecipeEntity
+                .Where(r => recipeIds.Contains(r.id))
+                .ToList();
+
+            var ingredientMap = _context.recipe_Ingredient
+                .Where(ri => recipeIds.Contains(ri.recipe_id))
+                .Select(ri => new { ri.recipe_id, ri.ingredient })
+                .ToLookup(ri => ri.recipe_id, ri => ri.ingredient);
+
+            foreach (var recipe in recipes)
+            {
+                if (ingredientMap.Contains(recipe.id))
+                {
+                    recipe.ingredients = ingredientMap[recipe.id].ToList();
+                }
+            }
 
             return recipes;
         }

@@ -194,7 +194,7 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         {
             try
             {
-                var ingredient = await _context.ingredient.FindAsync(request.ingredient_id);
+                var ingredient = await _context.IngredientEntity.FindAsync(request.ingredient_id);
                
                 if (ingredient == null)
                 {

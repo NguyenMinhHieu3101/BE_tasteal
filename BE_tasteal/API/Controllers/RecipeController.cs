@@ -139,6 +139,20 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.ToString());
             }
         }
-        
+        [HttpPost]
+        [Route("RecommendRecipes")]
+        public  IActionResult getRecommendRecipesByIngredientIds(
+            [FromBody] recommendRecipeReq req)
+        {
+            try
+            {
+                var recipes =  _recipeBusiness.getRecommendRecipesByIngredientIds(req.IngredientIds, req.Page);
+                return Ok(recipes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
         }
         public bool IngredientValid(string name)
         {
-            var type = _context.ingredient.FirstOrDefault(e => e.name == name);
+            var type = _context.IngredientEntity.FirstOrDefault(e => e.name == name);
             if (type != null)
             {
                 return true;
@@ -38,13 +38,13 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
 
         public async Task<IngredientEntity> GetIngredientByName(string name)
         {
-            return await _context.ingredient
+            return await _context.IngredientEntity
                 .Include(e => e.nutrition_info)
                 .FirstOrDefaultAsync(e => e.name == name);
         }
         public async Task<IngredientEntity> GetIngredientById(int id)
         {
-            return await _context.ingredient
+            return await _context.IngredientEntity
                 .Include(e => e.nutrition_info)
                 .FirstOrDefaultAsync(e => e.id == id);
         }
@@ -77,7 +77,7 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
         }
         public async Task<List<IngredientEntity>> GetAllIngredient()
         {
-            var ingredientsWithType = await _context.ingredient
+            var ingredientsWithType = await _context.IngredientEntity
                 .Include(i => i.ingredient_type)
                 .Include(i => i.nutrition_info)
                 .ToListAsync();
