@@ -2,7 +2,6 @@
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 
 namespace BE_tasteal.API.Controllers
 {
@@ -21,15 +20,11 @@ namespace BE_tasteal.API.Controllers
         [Route("allcart")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AllCart(string accountId)
+        public IActionResult AllCart(string accountId)
         {
             try
             {
-                var allCart = await _cartBusiness.GetCartByAccountId(accountId);
-                if(allCart == null)
-                {
-                    return BadRequest("User not found");
-                }
+                var allCart = _cartBusiness.GetCartByAccountId(accountId);
                 return Ok(allCart);
             }
             catch (Exception ex)
@@ -41,12 +36,11 @@ namespace BE_tasteal.API.Controllers
         [Route("servingsize")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult UpdateServingSize(int CardId, [Range(1, int.MaxValue)] int servingSize)
+        public IActionResult UpdateServingSize(int CardId, int servingSize)
         {
             try
             {
-                var result = _cartBusiness.UpdateServingSize(CardId, servingSize);
-                return Ok();
+                return Ok(_cartBusiness.UpdateServingSize(CardId, servingSize));
             }
             catch (Exception ex)
             {

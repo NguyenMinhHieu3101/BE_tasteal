@@ -72,8 +72,6 @@ namespace BE_tasteal.API.Controllers
             try
             {
                 var account = await _userBusiness.getUser(accountId);
-                if (account == null)
-                    return BadRequest("account invalid");
                 return Ok(account);
             }
             catch (Exception e)

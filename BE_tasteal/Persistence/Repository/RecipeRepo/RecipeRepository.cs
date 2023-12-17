@@ -287,23 +287,5 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 return result;
             }
         }
-        public  List<RecipeEntity>? getRecipeByUserId(string id, PageReq page)
-        {
-
-            var accountExists = _context.accountEntities.Any(a => a.uid == id);
-
-            if (!accountExists)
-            {
-                return null; // Return null if the account doesn't exist
-            }
-
-            var recipes = _context.recipe
-                .Where(r => r.account != null && r.account.uid == id)
-                .Skip((page.page - 1) * page.pageSize)
-                .Take(page.pageSize)
-                .ToList();
-
-            return recipes;
-        }
     }
 }

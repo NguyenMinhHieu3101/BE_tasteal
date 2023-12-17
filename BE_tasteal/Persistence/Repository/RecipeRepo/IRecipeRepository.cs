@@ -18,6 +18,5 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         Task<List<KeyWordRes>> GetKeyWords();
         Task<int> DeleteRecipeAsync(int id);
         Task<List<RecipeEntity>> GetAll(PageReq req);
-        List<RecipeEntity>? getRecipeByUserId(string id, PageReq page);
     }
 }

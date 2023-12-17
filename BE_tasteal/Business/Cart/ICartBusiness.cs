@@ -5,8 +5,8 @@ namespace BE_tasteal.Business.Cart
 {
     public interface ICartBusiness
     {
-        Task<bool> UpdateServingSize(int CardId,int servingSize);
-        Task<IEnumerable<CartEntity>?> GetCartByAccountId(string accountId);
+        bool UpdateServingSize(int CardId,int servingSize);
+        IEnumerable<CartEntity> GetCartByAccountId(string accountId);
         IEnumerable<Cart_ItemEntity> GetItemByCartId(List<int> cartIds);
         bool DeleteCart(int cartId);
         bool DeleleCartByAccountId(string accountId);

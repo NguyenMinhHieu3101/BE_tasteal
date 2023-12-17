@@ -42,7 +42,7 @@ namespace BE_tasteal.Business.User
         {
             return await _accountRepo.getAllUser( page);
         }
-        public async Task<AccountEntity?> getUser(string userId)
+        public async Task<AccountEntity> getUser(string userId)
         {
             return await _accountRepo.getUser(userId);
         }

@@ -137,25 +137,6 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.ToString());
             }
         }
-        [HttpPost]
-        [Route("recipeByUserId")]
-        public async Task<IActionResult> getRecipeByUserId(
-            [FromQuery] string userId,
-            [FromBody] PageReq page)
-        {
-            try
-            {
-                var recipes = _recipeBusiness.getRecipeByUserId(userId, page);
-                if(recipes == null)
-                {
-                    return BadRequest("User invalid");
-                }
-                return Ok(recipes);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.ToString());
-            }
-        }
+        
     }
 }

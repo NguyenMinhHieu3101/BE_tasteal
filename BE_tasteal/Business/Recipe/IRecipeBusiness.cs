@@ -15,6 +15,5 @@ namespace BE_tasteal.Business.Recipe
         Task<List<KeyWordRes>> GetKeyWords();
         Task<int> DeleteRecipe(int id);
         Task<List<RecipeRes>> GetRecipes(List<int> id);
-        List<RecipeEntity>? getRecipeByUserId(string id, PageReq page);
     }
 }
