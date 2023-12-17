@@ -53,11 +53,11 @@ namespace BE_tasteal.API.Controllers
         [Route("allusers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> getAllUsers()
+        public async Task<IActionResult> getAllUsers(PageReq page)
         {
             try
             {
-                var account = await _userBusiness.getAllUser();
+                var account = await _userBusiness.getAllUser(page);
                 return Ok(account);
             }
             catch (Exception e)

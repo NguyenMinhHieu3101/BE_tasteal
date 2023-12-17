@@ -8,7 +8,7 @@
         public string? introduction { get; set; }
         public string? link { get; set; }
         public string? slogan { get; set; }
-        public stringv? quote { get; set; }
+        public string? quote { get; set; }
         public int? RecipeCount { get; set; }
     }
 }

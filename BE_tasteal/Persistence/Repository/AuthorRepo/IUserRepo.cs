@@ -10,7 +10,7 @@ namespace BE_tasteal.Persistence.Repository.AuthorRepo
         IEnumerable<AuthorRes> AuthorMostRecipe(PageFilter filter);
         Task<AccountEntity> createNewUser(AccountEntity account);
         Task<AccountEntity> updateUser(AccountEntity account);
-        Task<IEnumerable<AccountEntity>> getAllUser();
+        Task<IEnumerable<AccountEntity>> getAllUser(PageReq page);
         Task<AccountEntity> getUser(string userId);
     }
 }

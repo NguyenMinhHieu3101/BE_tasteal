@@ -99,31 +99,38 @@ namespace BE_tasteal.Persistence.Repository.AuthorRepo
                 return updatedAccount;
             }
         }
-        public async Task<IEnumerable<AccountEntity>> getAllUser()
+        public async Task<IEnumerable<AccountEntity>> getAllUser(PageReq pageReq)
         {
+            int pageSize = pageReq.pageSize;
+            int page = pageReq.page;
+            int offset = (page - 1) * pageSize;
             using (var connection = _connection.GetConnection())
             {
+               
+                var insertQuery = "Select * from account LIMIT @offset, @pageSize";
 
-                var insertQuery = "Select * from account";
-
-                var accounts = await connection.QueryAsync<AccountEntity>(insertQuery);
+                var accounts = await connection.QueryAsync<AccountEntity>(insertQuery, new
+                {
+                    offset = offset,
+                    pageSize = pageSize,
+                });
 
                 return accounts;
             }
         }
         public async Task<AccountEntity> getUser(string userId)
         {
-            //return await _context.Set<AccountEntity>().FindAsync(userId);
-            using (var connection = _connection.GetConnection())
-            {
-                var query = "select * from account where uid = @UID";
+            return await _context.Set<AccountEntity>().FindAsync(userId);
+            //using (var connection = _connection.GetConnection())
+            //{
+            //    var query = "select * from account where uid = @UID";
 
-                var result = await connection.QueryFirstAsync<AccountEntity>(query, new
-                {
-                    UID = userId
-                });
-                return result;
-            }
+            //    var result = await connection.QueryFirstAsync<AccountEntity>(query, new
+            //    {
+            //        UID = userId
+            //    });
+            //    return result;
+            //}
         }
     }
 }
