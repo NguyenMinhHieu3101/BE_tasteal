@@ -22,11 +22,11 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         {
 
         }
-        public async Task<List<int>> Search(RecipeSearchReq input)
+        public async Task<List<RecipeEntity>> Search(RecipeSearchReq input)
         {
             using (var connection = _connection.GetConnection())
             {
-                string sql = @"SELECT r.id
+                string sql = @"SELECT distinct r.*
                     FROM Recipe r
                     JOIN Recipe_Ingredient ri ON r.id = ri.recipe_id
                     JOIN Ingredient i ON ri.ingredient_id = i.id
@@ -68,7 +68,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                     string keywordSql = "  ";
                     List<string> keywordCondition = new List<string>();
 
-                    int index = 0; // Initialize index for parameter names
+                    int index = 0; 
 
                     foreach (var pattern in input.KeyWords)
                     {
@@ -105,7 +105,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 parameters.Add("pageSize", pageSize);
                 Console.WriteLine(sql);
 
-                var result = await connection.QueryAsync<int>(sql, parameters);
+                var result = await connection.QueryAsync<RecipeEntity>(sql, parameters);
                
                 return result.ToList();
             }
