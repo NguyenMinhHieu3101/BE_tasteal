@@ -106,7 +106,7 @@ namespace BE_tasteal.Business.Recipe
         {
             throw new NotImplementedException();
         }
-        public async Task<List<RecipeEntity>> Search(RecipeSearchReq option)
+        public async Task<List<RecipeSearchRes>> Search(RecipeSearchReq option)
         {
             return await _recipeSearchRepo.Search(option);
         }
@@ -279,6 +279,7 @@ namespace BE_tasteal.Business.Recipe
             {
                 RecipeRes recipeRes = new RecipeRes();
                 //bind
+                recipeRes.id = recipeEntity.id;
                 recipeRes.name = recipeEntity.name;
                 recipeRes.rating = recipeEntity.rating;
                 recipeRes.totalTime = recipeEntity.totalTime;
@@ -356,6 +357,10 @@ namespace BE_tasteal.Business.Recipe
         public async Task<int> DeleteRecipe(int id)
         {
             return await _recipeResposity.DeleteRecipeAsync(id);
+        }
+        public List<RecipeEntity> getRecommendRecipesByIngredientIds(List<int> ingredientIds, PageReq _page)
+        {
+            return _recipeResposity.getRecommendRecipesByIngredientIds(ingredientIds, _page);
         }
     }
 }

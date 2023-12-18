@@ -78,7 +78,7 @@ namespace BE_tasteal.API.Controllers
             }
         }
         [HttpPost]
-        [Route("GetRecipe")]
+        [Route("GetRecipeById")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<RecipeEntity>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetRecipes(int id)
@@ -96,7 +96,7 @@ namespace BE_tasteal.API.Controllers
             }
         }
         [HttpPost]
-        [Route("GetRecipes")]
+        [Route("GetRecipesById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetRecipe(List<int> id)
@@ -139,6 +139,20 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.ToString());
             }
         }
-        
+        [HttpPost]
+        [Route("RecommendRecipes")]
+        public  IActionResult getRecommendRecipesByIngredientIds(
+            [FromBody] recommendRecipeReq req)
+        {
+            try
+            {
+                var recipes =  _recipeBusiness.getRecommendRecipesByIngredientIds(req.IngredientIds, req.Page);
+                return Ok(recipes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
     }
 }

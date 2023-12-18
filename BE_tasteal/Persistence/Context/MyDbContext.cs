@@ -9,11 +9,11 @@ namespace BE_tasteal.Persistence.Context
 
         #region DB Set
         public DbSet<Recipe_IngredientEntity> recipe_Ingredient { get; set; }
-        public DbSet<IngredientEntity> ingredient { get; set; }
+        public DbSet<IngredientEntity> IngredientEntity { get; set; }
         public DbSet<Ingredient_TypeEntity> ingredient_Type { get; set; }
         public DbSet<Nutrition_InfoEntity> nutrition_Info { get; set; }
         public DbSet<Recipe_DirectionEntity> recipe_Direction { get; set; }
-        public DbSet<RecipeEntity> recipe { get; set; }
+        public DbSet<RecipeEntity> RecipeEntity { get; set; }
         public DbSet<AccountEntity> accountEntities { get; set; }
         public DbSet<Pantry_ItemEntity> pantry_ItemEntities { get; set; }
         public DbSet<Cart_ItemEntity> cart_ItemEntities { get; set; }
