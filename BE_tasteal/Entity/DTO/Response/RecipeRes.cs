@@ -4,6 +4,7 @@ namespace BE_tasteal.Entity.DTO.Response
 {
     public class RecipeRes
     {
+        public int id { get; set; }
         public string? name { get; set; }
         public float rating { get; set; }
         public int totalTime { get; set; }

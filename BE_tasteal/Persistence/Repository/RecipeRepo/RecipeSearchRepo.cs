@@ -22,7 +22,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         {
 
         }
-        public async Task<List<RecipeEntity>> Search(RecipeSearchReq input)
+        public async Task<List<RecipeSearchRes>> Search(RecipeSearchReq input)
         {
             using (var connection = _connection.GetConnection())
             {
@@ -31,6 +31,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                     JOIN Recipe_Ingredient ri ON r.id = ri.recipe_id
                     JOIN Ingredient i ON ri.ingredient_id = i.id
                     JOIN Nutrition_info ni on ni.id = r.nutrition_info_id 
+                    JOIN recipe_occasion ro on ro.recipe_id = r.id
                    "
                 ;
 
@@ -105,9 +106,45 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 parameters.Add("pageSize", pageSize);
                 Console.WriteLine(sql);
 
-                var result = await connection.QueryAsync<RecipeEntity>(sql, parameters);
-               
-                return result.ToList();
+                var recipe = await connection.QueryAsync<RecipeEntity>(sql, parameters);
+
+
+                var result = new List<RecipeSearchRes>();
+                foreach(var item in recipe)
+                {
+                    RecipeSearchRes recipeSearchRes = new RecipeSearchRes
+                    {
+                        id = item.id,
+                        name = item.name,
+                        rating = item.rating,
+                        totalTime = item.totalTime,
+                        active_time = item.active_time,
+                        serving_size = item.serving_size,
+                        introduction = item.introduction,
+                        author_note = item.author_note,
+                        is_private = item.is_private,
+                        image = item.image,
+                        author = item.author,
+                        nutrition_info_id = item.nutrition_info_id,
+                        createdAt = item.createdAt,
+                        updatedAt = item.updatedAt,
+                        account = item.account,
+                        nutrition_info = item   .nutrition_info,
+                        ingredients = item.ingredients,
+                        direction = item.direction,
+                        calories = 0
+                    };
+
+                    string caloQuery = @"select * from nutrition_info where id =  @ID";
+                    var nutri = await connection.QueryFirstAsync<Nutrition_InfoEntity>(caloQuery, new
+                    {
+                        ID = item.nutrition_info_id
+                    });
+                    recipeSearchRes.calories = nutri.calories;
+                    result.Add(recipeSearchRes);
+                }
+
+                return result;
             }
 
         }
