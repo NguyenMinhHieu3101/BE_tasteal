@@ -2,6 +2,8 @@
 using BE_tasteal.Business.Recipe;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
+using BE_tasteal.Persistence.Repository.KeyWordRepo;
+using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -13,10 +15,16 @@ namespace BE_tasteal.API.Controllers
     public class RecipeController : Controller
     {
         private readonly IRecipeBusiness<RecipeReq, RecipeEntity> _recipeBusiness;
+        private readonly IRecipeRepository _recipeRepository;
+        private readonly KeyWordRepo _keyWordRepo;
         public RecipeController(
-            IRecipeBusiness<RecipeReq, RecipeEntity> recipeBusiness)
+            IRecipeBusiness<RecipeReq, RecipeEntity> recipeBusiness,
+            KeyWordRepo keyWordRepo, 
+            IRecipeRepository recipeRepository)
         {
             _recipeBusiness = recipeBusiness;
+            _keyWordRepo = keyWordRepo;
+            _recipeRepository = recipeRepository;
         }
         [HttpPost]
         [Route("Add")]
@@ -111,13 +119,13 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.ToString());
             }
         }
-        [HttpGet]
+        [HttpPost]
         [Route("keywords")]
-        public async Task<IActionResult> GetKeyWord()
+        public async Task<IActionResult> GetKeyWord([FromQuery] string test)
         {
             try
             {
-                var recipes = await _recipeBusiness.GetKeyWords();
+                var recipes = await _keyWordRepo.useGpt(test);
                 return Ok(recipes);
             }
             catch (Exception ex)
@@ -147,6 +155,24 @@ namespace BE_tasteal.API.Controllers
             try
             {
                 var recipes =  _recipeBusiness.getRecommendRecipesByIngredientIds(req.IngredientIds, req.Page);
+                return Ok(recipes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+        [HttpPost]
+        [Route("introduction")]
+        public async Task<IActionResult> updateIntro(
+            [FromQuery] int id,
+            [FromBody] string intro)
+        {
+            try
+            {
+                var recipes = await _recipeRepository.FindByIdAsync(id);
+                recipes.introduction = intro;
+                await _recipeRepository.UpdateAsync(recipes);
                 return Ok(recipes);
             }
             catch (Exception ex)

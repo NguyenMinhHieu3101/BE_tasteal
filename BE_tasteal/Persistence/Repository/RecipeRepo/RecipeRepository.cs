@@ -325,5 +325,9 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
 
             return recipes;
         }
+        public RecipeEntity get(int id)
+        {
+
+        }
     }
 }
