@@ -1,4 +1,5 @@
 ﻿using BE_tasteal.Business.Ingredient;
+using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,16 +41,28 @@ namespace BE_tasteal.API.Controllers
 
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("getall")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IngredientEntity>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAllIngredient()
+        public async Task<IActionResult> GetAllIngredient(PageReq page)
         {
             try
             {
-                var ingredients = await _ingredientBusiness.GetIngredients();
-                return Ok(ingredients);
+                var result = await _ingredientBusiness.GetAllIngredient(page);
+                
+                if (result.Item1.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                var response = new
+                {
+                    maxPage = result.Item2,
+                    ingredients = result.Item1
+                };
+
+                return Ok(response);
             }
             catch (Exception ex)
             {
