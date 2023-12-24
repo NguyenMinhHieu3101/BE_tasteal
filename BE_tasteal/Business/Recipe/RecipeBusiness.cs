@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
+using BE_tasteal.Persistence.Repository.OccasionRepo;
 
 namespace BE_tasteal.Business.Recipe
 {
@@ -28,6 +29,7 @@ namespace BE_tasteal.Business.Recipe
         private readonly IDirectionRepo _directionRepo;
         private readonly ICommentRepo _commentRepo;
         private readonly ILogger<RecipeEntity> _logger;
+        private readonly IRecipe_OccasionRepo _OccasionRepo;
         public RecipeBusiness(IMapper mapper,
            IRecipeRepository recipeResposity,
            IRecipeSearchRepo recipeSearchRepo,
@@ -36,7 +38,8 @@ namespace BE_tasteal.Business.Recipe
            INutritionRepo nutritionRepo,
            IDirectionRepo directionRepo,
            ICommentRepo commentRepo,
-            ILogger<RecipeEntity> logger)
+            ILogger<RecipeEntity> logger,
+            IRecipe_OccasionRepo OccasionRepo)
         {
             _mapper = mapper;
             _logger = logger;
@@ -47,6 +50,7 @@ namespace BE_tasteal.Business.Recipe
             _nutritionRepo = nutritionRepo;
             _directionRepo = directionRepo;
             _commentRepo = commentRepo;
+            _OccasionRepo = OccasionRepo;
         }
         public async Task<RecipeEntity?> Add(RecipeReq entity)
         {
@@ -99,6 +103,17 @@ namespace BE_tasteal.Business.Recipe
 
             ////update nutrition for recipe
             await _recipeResposity.UpdateNutrition(newRecipe, listEngredient);
+
+            if(entity.occasions != null)
+            {
+                foreach(var  occasion in entity.occasions)
+                {
+                    Recipe_OccasionEntity recipe_OccasionEntity = new Recipe_OccasionEntity();
+                    recipe_OccasionEntity.occasion_id = occasion;
+                    recipe_OccasionEntity.recipe_id = newRecipe.id;
+                    await _OccasionRepo.InsertAsync(recipe_OccasionEntity);
+                }
+            }
 
             return newRecipe;
         }

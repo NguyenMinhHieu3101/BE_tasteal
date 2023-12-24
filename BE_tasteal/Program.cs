@@ -77,6 +77,7 @@ try
         services.AddScoped<ICartRepo, CartRepo>();
         services.AddScoped<CookBookRepo, CookBookRepo>();
         services.AddScoped<KeyWordRepo, KeyWordRepo>();
+        services.AddScoped<IRecipe_OccasionRepo, Recipe_OccasionRepo>();
 
         services.AddDbContext<MyDbContext>(option =>
         {

@@ -2,7 +2,9 @@
 using BE_tasteal.Business.Recipe;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
+using BE_tasteal.Persistence.Repository.AuthorRepo;
 using BE_tasteal.Persistence.Repository.KeyWordRepo;
+using BE_tasteal.Persistence.Repository.OccasionRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -16,15 +18,21 @@ namespace BE_tasteal.API.Controllers
     {
         private readonly IRecipeBusiness<RecipeReq, RecipeEntity> _recipeBusiness;
         private readonly IRecipeRepository _recipeRepository;
+        private readonly IOccasionRepo _ocasionRepo;
         private readonly KeyWordRepo _keyWordRepo;
+        private readonly IUserRepo _userRepo;
         public RecipeController(
             IRecipeBusiness<RecipeReq, RecipeEntity> recipeBusiness,
             KeyWordRepo keyWordRepo, 
-            IRecipeRepository recipeRepository)
+            IRecipeRepository recipeRepository,
+            IOccasionRepo occasionRepo,
+            IUserRepo userRepo)
         {
             _recipeBusiness = recipeBusiness;
             _keyWordRepo = keyWordRepo;
             _recipeRepository = recipeRepository;
+            _ocasionRepo = occasionRepo;    
+            _userRepo = userRepo;
         }
         [HttpPost]
         [Route("Add")]
@@ -33,6 +41,18 @@ namespace BE_tasteal.API.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> AddRecipe([FromBody] RecipeReq _recipe)
         {
+            if(_recipe.occasions != null)
+            {
+                foreach(var item in  _recipe.occasions)
+                {
+                    if (_ocasionRepo.FindByIdAsync(item) != null)
+                        return BadRequest("Occasion id invalid");
+                }
+            }
+            if(_userRepo.FindByIdAsync(_recipe.author) == null)
+            {
+                return BadRequest("User id invalid");
+            }
             return Created(string.Empty, await _recipeBusiness.Add(_recipe));
         }
         [HttpPost]

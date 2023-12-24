@@ -36,5 +36,7 @@ namespace BE_tasteal.Entity.Entity
         public List<IngredientEntity>? ingredients { get; set; }
         [NotMapped]
         public List<Recipe_DirectionEntity>? direction { get; set; }
+        [NotMapped]
+        public List<Recipe_OccasionEntity>? occasions { get; set; }
     }
 }
