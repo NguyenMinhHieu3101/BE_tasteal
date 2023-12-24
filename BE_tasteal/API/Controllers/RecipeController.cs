@@ -17,22 +17,16 @@ namespace BE_tasteal.API.Controllers
     public class RecipeController : Controller
     {
         private readonly IRecipeBusiness<RecipeReq, RecipeEntity> _recipeBusiness;
-        private readonly IRecipeRepository _recipeRepository;
-        private readonly IOccasionRepo _ocasionRepo;
+
         private readonly KeyWordRepo _keyWordRepo;
-        private readonly IUserRepo _userRepo;
         public RecipeController(
             IRecipeBusiness<RecipeReq, RecipeEntity> recipeBusiness,
-            KeyWordRepo keyWordRepo, 
-            IRecipeRepository recipeRepository,
+            KeyWordRepo keyWordRepo,
             IOccasionRepo occasionRepo,
             IUserRepo userRepo)
         {
             _recipeBusiness = recipeBusiness;
             _keyWordRepo = keyWordRepo;
-            _recipeRepository = recipeRepository;
-            _ocasionRepo = occasionRepo;    
-            _userRepo = userRepo;
         }
         [HttpPost]
         [Route("Add")]
@@ -41,19 +35,18 @@ namespace BE_tasteal.API.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> AddRecipe([FromBody] RecipeReq _recipe)
         {
-            if(_recipe.occasions != null)
+            try
             {
-                foreach(var item in  _recipe.occasions)
-                {
-                    if (_ocasionRepo.FindByIdAsync(item) != null)
-                        return BadRequest("Occasion id invalid");
-                }
+                var recipe = await _recipeBusiness.Add(_recipe);
+                if (recipe == null)
+                    return BadRequest("validate fail");
+                return Created(string.Empty, recipe);
             }
-            if(_userRepo.FindByIdAsync(_recipe.author) == null)
+           catch (Exception ex)
             {
-                return BadRequest("User id invalid");
+                Console.WriteLine(ex.ToString());
+                return BadRequest("fail");
             }
-            return Created(string.Empty, await _recipeBusiness.Add(_recipe));
         }
         [HttpPost]
         [Route("Search")]
@@ -175,24 +168,6 @@ namespace BE_tasteal.API.Controllers
             try
             {
                 var recipes =  _recipeBusiness.getRecommendRecipesByIngredientIds(req.IngredientIds, req.Page);
-                return Ok(recipes);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.ToString());
-            }
-        }
-        [HttpPost]
-        [Route("introduction")]
-        public async Task<IActionResult> updateIntro(
-            [FromQuery] int id,
-            [FromBody] string intro)
-        {
-            try
-            {
-                var recipes = await _recipeRepository.FindByIdAsync(id);
-                recipes.introduction = intro;
-                await _recipeRepository.UpdateAsync(recipes);
                 return Ok(recipes);
             }
             catch (Exception ex)

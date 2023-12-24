@@ -30,6 +30,8 @@ namespace BE_tasteal.Business.Recipe
         private readonly ICommentRepo _commentRepo;
         private readonly ILogger<RecipeEntity> _logger;
         private readonly IRecipe_OccasionRepo _OccasionRepo;
+        private readonly IOccasionRepo _ocasionRepo;
+  
         public RecipeBusiness(IMapper mapper,
            IRecipeRepository recipeResposity,
            IRecipeSearchRepo recipeSearchRepo,
@@ -39,7 +41,8 @@ namespace BE_tasteal.Business.Recipe
            IDirectionRepo directionRepo,
            ICommentRepo commentRepo,
             ILogger<RecipeEntity> logger,
-            IRecipe_OccasionRepo OccasionRepo)
+            IRecipe_OccasionRepo OccasionRepo,
+            IOccasionRepo occasionRepo)
         {
             _mapper = mapper;
             _logger = logger;
@@ -51,9 +54,24 @@ namespace BE_tasteal.Business.Recipe
             _directionRepo = directionRepo;
             _commentRepo = commentRepo;
             _OccasionRepo = OccasionRepo;
+            _ocasionRepo = occasionRepo;
         }
         public async Task<RecipeEntity?> Add(RecipeReq entity)
         {
+            if (entity.occasions != null)
+            {
+                foreach (var item in entity.occasions)
+                {
+                    var occasion = await _ocasionRepo.FindByIdAsync(item);
+                    if (occasion == null)
+                        return null;
+                }
+            }
+            if (await _authorRepo.FindByIdAsync(entity.author) == null)
+            {
+                return null;
+            }
+
             var newRecipeEntity = _mapper.Map<RecipeEntity>(entity);
             if (newRecipeEntity.is_private == null)
                 newRecipeEntity.is_private = false;
@@ -106,13 +124,18 @@ namespace BE_tasteal.Business.Recipe
 
             if(entity.occasions != null)
             {
-                foreach(var  occasion in entity.occasions)
+                List<Recipe_OccasionEntity> recipe_Occasions = new List<Recipe_OccasionEntity>();
+              
+                foreach (var  occasion in entity.occasions)
                 {
                     Recipe_OccasionEntity recipe_OccasionEntity = new Recipe_OccasionEntity();
                     recipe_OccasionEntity.occasion_id = occasion;
                     recipe_OccasionEntity.recipe_id = newRecipe.id;
-                    await _OccasionRepo.InsertAsync(recipe_OccasionEntity);
+                    var item = await _OccasionRepo.InsertAsync(recipe_OccasionEntity);
+                    if(item !=null)
+                        recipe_Occasions.Add(item);
                 }
+                newRecipe.occasions = recipe_Occasions;
             }
 
             return newRecipe;
