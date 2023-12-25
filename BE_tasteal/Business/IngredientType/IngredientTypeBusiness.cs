@@ -26,7 +26,7 @@ namespace BE_tasteal.Business.IngredientType
             {
                 name = ingredientType.name,
             };
-            return await _ingredientTypeRepo.CreateIngredientType(item);
+            return await _ingredientTypeRepo.InsertAsync(item);
         }
         public async Task<Ingredient_TypeEntity> UpdateIngredientType(UpdateIngredientTypeReq ingredientType)
            {
@@ -43,7 +43,9 @@ namespace BE_tasteal.Business.IngredientType
             {
                 id = ingredientType.id,
             };
-            return await _ingredientTypeRepo.DeleteIngredientType(item.id);
+            var ingre = await _ingredientTypeRepo.FindByIdAsync(ingredientType.id);
+            await _ingredientTypeRepo.DeleteAsync(ingre);
+            return ingre;
            }
     }
 }

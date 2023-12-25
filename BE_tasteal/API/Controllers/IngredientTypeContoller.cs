@@ -1,5 +1,6 @@
 ﻿using BE_tasteal.Business.IngredientType;
 using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BE_tasteal.API.Controllers
@@ -31,15 +32,19 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
-        [Route("getbyid")]
+        [HttpGet]
+        [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetIngredientTypeByID(DAGIngredientTypeReq item)
+        public async Task<IActionResult> GetIngredientTypeByID(int id)
         {
             try
             {
+                DAGIngredientTypeReq item = new DAGIngredientTypeReq { id = id };
                 var all = await _ingredientTypeBusiness.GetIngredientTypeById(item);
+
+                if (all == null)
+                    return BadRequest("id invalid");
                 return Ok(all);
             }
             catch (Exception ex)
@@ -80,13 +85,14 @@ namespace BE_tasteal.API.Controllers
             }
         }
         [HttpDelete]
-        [Route("delete")]
+        [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteIngredientType(DAGIngredientTypeReq item)
+        public async Task<IActionResult> DeleteIngredientType(int id)
         {
             try
             {
+                DAGIngredientTypeReq item = new DAGIngredientTypeReq { id = id };
                 var all = await _ingredientTypeBusiness.DeleteIngredientType(item);
                 return Ok(all);
             }
