@@ -22,7 +22,6 @@ namespace BE_tasteal.Persistence.Repository.GenericRepository
 
             return entity;
         }
-
         public async Task<T> InsertAsync(T entity)
         {
             _context.Attach(entity);
@@ -32,7 +31,6 @@ namespace BE_tasteal.Persistence.Repository.GenericRepository
 
             return entityEntry.Entity;
         }
-
         public async Task UpdateAsync(T entity, Func<T, bool> predicate = default!)
         {
             if (predicate != default)
@@ -59,7 +57,6 @@ namespace BE_tasteal.Persistence.Repository.GenericRepository
         {
             await _context.SaveChangesAsync();
         }
-
         private void DetachLocal(Func<T, bool> predicate)
         {
             var local = _context.Set<T>().Local.FirstOrDefault(predicate);
