@@ -8,7 +8,7 @@ namespace BE_tasteal.Entity.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        public int ingredient_id { get; set; }
+        public int? ingredient_id { get; set; }
         public string account_id { get; set; }
         public string? name { get; set; }
         public int amount { get; set; }
