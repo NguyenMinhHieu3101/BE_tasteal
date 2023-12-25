@@ -1,4 +1,5 @@
 ﻿using BE_tasteal.Business;
+using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
@@ -75,13 +76,22 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
             _logger.LogInformation("Add new nutrition info: " + entityEntry.Entity);
             return entityEntry.Entity;
         }
-        public async Task<List<IngredientEntity>> GetAllIngredient()
+        public async Task<(List<IngredientEntity>, int)> GetAllIngredient(PageReq _page)
         {
+            int pageNumber = _page.page;
+            int pageSize = _page.pageSize;
+
+            var totalIngredients = await _context.IngredientEntity.CountAsync();
+
+            int totalPages = (int)Math.Ceiling(totalIngredients / (double)pageSize);
+
             var ingredientsWithType = await _context.IngredientEntity
                 .Include(i => i.ingredient_type)
                 .Include(i => i.nutrition_info)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
-            return ingredientsWithType;
+            return (ingredientsWithType, totalPages);
         }
         /// <summary>
         /// func add new ingredient

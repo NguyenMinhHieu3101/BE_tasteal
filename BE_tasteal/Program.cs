@@ -18,6 +18,7 @@ using BE_tasteal.Persistence.Repository.Direction;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using BE_tasteal.Persistence.Repository.IngredientRepo;
 using BE_tasteal.Persistence.Repository.IngredientTypeRepo;
+using BE_tasteal.Persistence.Repository.KeyWordRepo;
 using BE_tasteal.Persistence.Repository.NutritionRepo;
 using BE_tasteal.Persistence.Repository.OccasionRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
@@ -79,6 +80,8 @@ try
         services.AddScoped<ICommentRepo, CommentRepo>();
         services.AddScoped<ICartRepo, CartRepo>();
         services.AddScoped<CookBookRepo, CookBookRepo>();
+        services.AddScoped<KeyWordRepo, KeyWordRepo>();
+        services.AddScoped<IRecipe_OccasionRepo, Recipe_OccasionRepo>();
 
         services.AddDbContext<MyDbContext>(option =>
         {
