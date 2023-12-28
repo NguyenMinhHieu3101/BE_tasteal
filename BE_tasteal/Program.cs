@@ -2,6 +2,7 @@ using BE_tasteal.API.AppSettings;
 using BE_tasteal.API.Middleware;
 using BE_tasteal.Business;
 using BE_tasteal.Business.Cart;
+using BE_tasteal.Business.Comment;
 using BE_tasteal.Business.HomeBusiness;
 using BE_tasteal.Business.Ingredient;
 using BE_tasteal.Business.Recipe;
@@ -64,6 +65,7 @@ try
         services.AddScoped<IHomeBusiness, HomeBusiness>();
         services.AddScoped<ICartBusiness, CartBusiness>();
         services.AddScoped<IUserBusiness, UserBusiness>();
+        services.AddScoped<ICommentBusiness, CommentBusiness>();
 
         //repo
         services.AddScoped<IRecipeRepository, RecipeRepository>();
@@ -78,6 +80,7 @@ try
         services.AddScoped<CookBookRepo, CookBookRepo>();
         services.AddScoped<KeyWordRepo, KeyWordRepo>();
         services.AddScoped<IRecipe_OccasionRepo, Recipe_OccasionRepo>();
+
 
         services.AddDbContext<MyDbContext>(option =>
         {
