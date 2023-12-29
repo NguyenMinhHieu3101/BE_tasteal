@@ -28,10 +28,10 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
             {
                 string sql = @"SELECT distinct r.*
                     FROM Recipe r
-                    JOIN Recipe_Ingredient ri ON r.id = ri.recipe_id
-                    JOIN Ingredient i ON ri.ingredient_id = i.id
-                    JOIN Nutrition_info ni on ni.id = r.nutrition_info_id 
-                    JOIN recipe_occasion ro on ro.recipe_id = r.id
+                    LEFT JOIN Recipe_Ingredient ri ON r.id = ri.recipe_id
+                    LEFT JOIN Ingredient i ON ri.ingredient_id = i.id
+                    LEFT JOIN Nutrition_info ni on ni.id = r.nutrition_info_id 
+                    LEFT JOIN recipe_occasion ro on ro.recipe_id = r.id
                    "
                 ;
 
@@ -74,8 +74,8 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                     foreach (var pattern in input.KeyWords)
                     {
                         string parameterName = $"Pattern{index}"; 
-                        keywordCondition.Add($"LOWER(introduction) REGEXP LOWER(@{parameterName})");
-                        keywordCondition.Add($"LOWER(r.name) REGEXP LOWER(@{parameterName})");
+                        keywordCondition.Add($" LOWER(introduction) REGEXP LOWER(@{parameterName}) ");
+                        keywordCondition.Add($" LOWER(r.name) REGEXP LOWER(@{parameterName}) ");
                         parameters.Add(parameterName, pattern); 
                         index++;
                     }
