@@ -27,6 +27,8 @@ namespace BE_tasteal.Persistence.Context
         public DbSet<OccasionEntity> occasionEntities { get; set; }
         public DbSet<Plan_ItemEntity> plan_ItemEntities { get; set; }
         public DbSet<PersonalCartItemEntity> personalCartItems { get; set; }
+
+        public DbSet<KeyWord> keyWords { get; set; }
         #endregion
 
         #region model creating
