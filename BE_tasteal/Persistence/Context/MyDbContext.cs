@@ -8,26 +8,26 @@ namespace BE_tasteal.Persistence.Context
         public MyDbContext(DbContextOptions options) : base(options) { }
 
         #region DB Set
-        public DbSet<Recipe_IngredientEntity> recipe_Ingredient { get; set; }
-        public DbSet<IngredientEntity> IngredientEntity { get; set; }
-        public DbSet<Ingredient_TypeEntity> ingredient_Type { get; set; }
-        public DbSet<Nutrition_InfoEntity> nutrition_Info { get; set; }
-        public DbSet<Recipe_DirectionEntity> recipe_Direction { get; set; }
-        public DbSet<RecipeEntity> RecipeEntity { get; set; }
-        public DbSet<AccountEntity> accountEntities { get; set; }
-        public DbSet<Pantry_ItemEntity> pantry_ItemEntities { get; set; }
-        public DbSet<Cart_ItemEntity> cart_ItemEntities { get; set; }
-        public DbSet<CartEntity> cart { get; set; }
-        public DbSet<CookBook_RecipeEntity> cookBook_RecipeEntities { get; set; }
-        public DbSet<CookBookEntity> cookBookEntities { get; set; }
-        public DbSet<RatingEntity> ratingEntities { get; set; }
-        public DbSet<CommentEntity> commentEntities { get; set; }
-        public DbSet<PlanEntity> planEntities { get; set; }
-        public DbSet<Recipe_OccasionEntity> recipe_OccasionEntities { get; set; }
-        public DbSet<OccasionEntity> occasionEntities { get; set; }
-        public DbSet<Plan_ItemEntity> plan_ItemEntities { get; set; }
-        public DbSet<PersonalCartItem> personalCartItems { get; set; }
-        public DbSet<KeyWord> keyWords { get; set; }
+        public DbSet<Recipe_IngredientEntity> Recipe_Ingredient { get; set; }
+        public DbSet<IngredientEntity> Ingredient { get; set; }
+        public DbSet<Ingredient_TypeEntity> Ingredient_Type { get; set; }
+        public DbSet<Nutrition_InfoEntity> Nutrition_Info { get; set; }
+        public DbSet<Recipe_DirectionEntity> Recipe_Direction { get; set; }
+        public DbSet<RecipeEntity> Recipe { get; set; }
+        public DbSet<AccountEntity> Account { get; set; }
+        public DbSet<Pantry_ItemEntity> Pantry_Item { get; set; }
+        public DbSet<Cart_ItemEntity> Cart_Item { get; set; }
+        public DbSet<CartEntity> Cart { get; set; }
+        public DbSet<CookBook_RecipeEntity> CookBook_Recipe { get; set; }
+        public DbSet<CookBookEntity> CookBook { get; set; }
+        public DbSet<RatingEntity> Rating { get; set; }
+        public DbSet<CommentEntity> Comment { get; set; }
+        public DbSet<PlanEntity> Plan { get; set; }
+        public DbSet<Recipe_OccasionEntity> Recipe_Occasion { get; set; }
+        public DbSet<OccasionEntity> Occasion { get; set; }
+        public DbSet<Plan_ItemEntity> Plan_Item { get; set; }
+        public DbSet<PersonalCartItemEntity> PersonalCartItems { get; set; }
+        public DbSet<KeyWord> KeyWords { get; set; }
         #endregion
 
         #region model creating
@@ -39,9 +39,6 @@ namespace BE_tasteal.Persistence.Context
 
             modelBuilder.Entity<Recipe_DirectionEntity>().HasKey(p =>
                new { p.recipe_id, p.step });
-
-            modelBuilder.Entity<RatingEntity>().HasKey(p =>
-            new { p.recipe_id, p.account_id });
 
             modelBuilder.Entity<Cart_ItemEntity>().HasKey(p =>
                 new { p.ingredient_id, p.cartId });

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BE_tasteal.Migrations
 {
     /// <inheritdoc />
-    public partial class recipe_cookbook_id : Migration
+    public partial class keyword : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,6 +55,21 @@ namespace BE_tasteal.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "KeyWord",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    keyword = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KeyWord", x => x.id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "Nutrition_Info",
                 columns: table => new
                 {
@@ -94,7 +109,8 @@ namespace BE_tasteal.Migrations
                     image = table.Column<string>(type: "text", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     start_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    end_at = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    end_at = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    is_lunar_date = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,7 +203,7 @@ namespace BE_tasteal.Migrations
                     name = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     rating = table.Column<float>(type: "float", nullable: false),
-                    totalTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    totalTime = table.Column<int>(type: "int", nullable: false),
                     active_time = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     serving_size = table.Column<int>(type: "int", nullable: false),
                     introduction = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true)
@@ -248,32 +264,33 @@ namespace BE_tasteal.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "personalCartItems",
+                name: "personalCartItem",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ingredient_id = table.Column<int>(type: "int", nullable: false),
+                    ingredient_id = table.Column<int>(type: "int", nullable: true),
                     account_id = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    name = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     amount = table.Column<int>(type: "int", nullable: false),
                     is_bought = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_personalCartItems", x => x.id);
+                    table.PrimaryKey("PK_personalCartItem", x => x.id);
                     table.ForeignKey(
-                        name: "FK_personalCartItems_Account_account_id",
+                        name: "FK_personalCartItem_Account_account_id",
                         column: x => x.account_id,
                         principalTable: "Account",
                         principalColumn: "uid",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_personalCartItems_Ingredient_ingredient_id",
+                        name: "FK_personalCartItem_Ingredient_ingredient_id",
                         column: x => x.ingredient_id,
                         principalTable: "Ingredient",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -364,7 +381,7 @@ namespace BE_tasteal.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "plan_ItemEntities",
+                name: "plan_item",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "int", nullable: false)
@@ -376,15 +393,15 @@ namespace BE_tasteal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_plan_ItemEntities", x => x.id);
+                    table.PrimaryKey("PK_plan_item", x => x.id);
                     table.ForeignKey(
-                        name: "FK_plan_ItemEntities_Plan_plan_id",
+                        name: "FK_plan_item_Plan_plan_id",
                         column: x => x.plan_id,
                         principalTable: "Plan",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_plan_ItemEntities_Recipe_recipe_id",
+                        name: "FK_plan_item_Recipe_recipe_id",
                         column: x => x.recipe_id,
                         principalTable: "Recipe",
                         principalColumn: "id",
@@ -396,6 +413,8 @@ namespace BE_tasteal.Migrations
                 name: "Rating",
                 columns: table => new
                 {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     recipe_id = table.Column<int>(type: "int", nullable: false),
                     account_id = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -403,7 +422,7 @@ namespace BE_tasteal.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Rating", x => new { x.recipe_id, x.account_id });
+                    table.PrimaryKey("PK_Rating", x => x.id);
                     table.ForeignKey(
                         name: "FK_Rating_Account_account_id",
                         column: x => x.account_id,
@@ -585,13 +604,13 @@ namespace BE_tasteal.Migrations
                 column: "ingredient_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_personalCartItems_account_id",
-                table: "personalCartItems",
+                name: "IX_personalCartItem_account_id",
+                table: "personalCartItem",
                 column: "account_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_personalCartItems_ingredient_id",
-                table: "personalCartItems",
+                name: "IX_personalCartItem_ingredient_id",
+                table: "personalCartItem",
                 column: "ingredient_id");
 
             migrationBuilder.CreateIndex(
@@ -600,19 +619,24 @@ namespace BE_tasteal.Migrations
                 column: "account_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_plan_ItemEntities_plan_id",
-                table: "plan_ItemEntities",
+                name: "IX_plan_item_plan_id",
+                table: "plan_item",
                 column: "plan_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_plan_ItemEntities_recipe_id",
-                table: "plan_ItemEntities",
+                name: "IX_plan_item_recipe_id",
+                table: "plan_item",
                 column: "recipe_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Rating_account_id",
                 table: "Rating",
                 column: "account_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rating_recipe_id",
+                table: "Rating",
+                column: "recipe_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Recipe_author",
@@ -653,13 +677,16 @@ namespace BE_tasteal.Migrations
                 name: "CookBook_Recipe");
 
             migrationBuilder.DropTable(
+                name: "KeyWord");
+
+            migrationBuilder.DropTable(
                 name: "Pantry_Item");
 
             migrationBuilder.DropTable(
-                name: "personalCartItems");
+                name: "personalCartItem");
 
             migrationBuilder.DropTable(
-                name: "plan_ItemEntities");
+                name: "plan_item");
 
             migrationBuilder.DropTable(
                 name: "Rating");

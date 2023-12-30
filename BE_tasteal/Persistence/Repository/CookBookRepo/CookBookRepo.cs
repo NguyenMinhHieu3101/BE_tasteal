@@ -132,7 +132,7 @@ namespace BE_tasteal.Persistence.Repository.CookBookRepo
         }
         public List<CookBook_RecipeEntity> GetCookBookRecipesWithRecipes(int cookBookId)
         {
-            return _context.cookBook_RecipeEntities
+            return _context.CookBook_Recipe
                 .Include(c => c.cook_book.account)
                 .Include(c => c.recipe)
                 .Include(c => c.recipe.account)

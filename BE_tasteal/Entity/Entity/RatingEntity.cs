@@ -6,9 +6,9 @@ namespace BE_tasteal.Entity.Entity
     [Table("Rating")]
     public class RatingEntity
     {
-        //[Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        //public int id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int id { get; set; }
         public int recipe_id { get; set; }
         public string account_id { get; set; }
         public int rating { get; set; }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace BE_tasteal.Entity.Entity
 {
     [Table("personalCartItem")]
-    public class PersonalCartItem
+    public class PersonalCartItemEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

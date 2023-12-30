@@ -20,7 +20,7 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
 
         public bool IngredientTypeValid(string name)
         {
-            var type = _context.ingredient_Type.FirstOrDefault(e => e.name == name);
+            var type = _context.Ingredient_Type.FirstOrDefault(e => e.name == name);
             if (type != null)
             {
                 return true;
@@ -29,7 +29,7 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
         }
         public bool IngredientValid(string name)
         {
-            var type = _context.IngredientEntity.FirstOrDefault(e => e.name == name);
+            var type = _context.Ingredient.FirstOrDefault(e => e.name == name);
             if (type != null)
             {
                 return true;
@@ -39,19 +39,19 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
 
         public async Task<IngredientEntity> GetIngredientByName(string name)
         {
-            return await _context.IngredientEntity
+            return await _context.Ingredient
                 .Include(e => e.nutrition_info)
                 .FirstOrDefaultAsync(e => e.name == name);
         }
         public async Task<IngredientEntity> GetIngredientById(int id)
         {
-            return await _context.IngredientEntity
+            return await _context.Ingredient
                 .Include(e => e.nutrition_info)
                 .FirstOrDefaultAsync(e => e.id == id);
         }
         public async Task<Ingredient_TypeEntity> GetIngredientType(string name)
         {
-            var type = _context.ingredient_Type.FirstOrDefault(e => e.name == name);
+            var type = _context.Ingredient_Type.FirstOrDefault(e => e.name == name);
             if (type != null)
             {
                 return type;
@@ -81,11 +81,11 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
             int pageNumber = _page.page;
             int pageSize = _page.pageSize;
 
-            var totalIngredients = await _context.IngredientEntity.CountAsync();
+            var totalIngredients = await _context.Ingredient.CountAsync();
 
             int totalPages = (int)Math.Ceiling(totalIngredients / (double)pageSize);
 
-            var ingredientsWithType = await _context.IngredientEntity
+            var ingredientsWithType = await _context.Ingredient
                 .Include(i => i.ingredient_type)
                 .Include(i => i.nutrition_info)
                 .Skip((pageNumber - 1) * pageSize)
