@@ -27,7 +27,7 @@ namespace BE_tasteal.Business.Cart
         {
             return _cartRepo.GetCartByAccountId(accountId);
         }
-        public IEnumerable<PersonalCartItemEntity> GetPersonalCartItemsWithIngredients(string accountId)
+        public IEnumerable<PersonalCartItem> GetPersonalCartItemsWithIngredients(string accountId)
         {
             return _cartRepo.GetPersonalCartItemsWithIngredients(accountId);
         }

@@ -13,6 +13,6 @@ namespace BE_tasteal.Business.Cart
         bool UpdateBoughtItem(int cartItemId, int ingredientId, bool isBought);
         Task<bool> PostPersonalCartItem(PersonalCartItemReq request);
         Task<bool> PutPersonalCartItem(PersonalCartItemUpdateReq request);
-        IEnumerable<PersonalCartItemEntity> GetPersonalCartItemsWithIngredients(string accountId);
+        IEnumerable<PersonalCartItem> GetPersonalCartItemsWithIngredients(string accountId);
     }
 }
