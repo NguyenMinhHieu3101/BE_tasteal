@@ -347,7 +347,7 @@ namespace BE_tasteal.Business.Recipe
                     RecipeReq entity = new RecipeReq();
 
                     entity.name = worksheet.Cells[row, 3].Value?.ToString();
-                    entity.rating = float.Parse(worksheet.Cells[row, 4].Value.ToString());
+                    entity.rating = decimal.Parse(worksheet.Cells[row, 4].Value.ToString());
                     entity.image = worksheet.Cells[row, 5].Value?.ToString();
 
                     entity.totalTime = int.Parse(worksheet.Cells[row, 6].Value?.ToString());
