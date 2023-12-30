@@ -194,20 +194,35 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         {
             try
             {
-                var ingredient = await _context.Ingredient.FindAsync(request.ingredient_id);
-               
+                IngredientEntity? ingredient;
+                if (request.ingredient_id != null)
+                    ingredient = await _context.Ingredient.FindAsync(request.ingredient_id);
+                else
+                    ingredient = null;
+
+                PersonalCartItemEntity personalCartItem;
                 if (ingredient == null)
                 {
-                    return false;
+                    personalCartItem = new PersonalCartItemEntity
+                    {
+                        account_id = request.account_id,
+                        amount = request.amount,
+                        is_bought = request.is_bought,
+                        name = request.name,
+                    };
+                }
+                else
+                {
+                    personalCartItem = new PersonalCartItemEntity
+                    {
+                        ingredient_id = request.ingredient_id,
+                        account_id = request.account_id,
+                        amount = request.amount,
+                        is_bought = request.is_bought
+                    };
                 }
 
-                var personalCartItem = new PersonalCartItemEntity
-                {
-                    ingredient_id = request.ingredient_id,
-                    account_id = request.account_id,
-                    amount = request.amount,
-                    is_bought = request.is_bought
-                };
+                
 
                 _context.PersonalCartItems.Add(personalCartItem);
                 int result = await _context.SaveChangesAsync();

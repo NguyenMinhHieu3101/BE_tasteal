@@ -4,8 +4,7 @@ namespace BE_tasteal.Entity.DTO.Request
 {
     public class PersonalCartItemReq
     {
-        [Required]
-        public int ingredient_id { get; set; }
+        public int? ingredient_id { get; set; }
         [Required]
         public string account_id { get; set; }
         public string? name { get; set; }
