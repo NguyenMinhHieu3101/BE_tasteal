@@ -4,7 +4,6 @@ using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Repository.AuthorRepo;
 using BE_tasteal.Persistence.Repository.KeyWordRepo;
-using BE_tasteal.Persistence.Repository.OccasionRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -46,10 +45,33 @@ namespace BE_tasteal.API.Controllers
                     return BadRequest("validate fail");
                 return Created(string.Empty, recipe);
             }
-           catch (Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 return BadRequest("fail");
+            }
+        }
+        [HttpPut]
+        [Route("{recipe_id}")]
+        public async Task<IActionResult> putRecipe(
+            [FromRoute] int recipe_id,
+            [FromBody] RecipeReq _recipe)
+        {
+            try
+            {
+                var (validate, error) = await _recipeBusiness.validateUpdate(recipe_id, _recipe);
+
+                if (validate == false)
+                    return BadRequest(error.ToString());
+
+                var recipe = await _recipeBusiness.updateRecipe(recipe_id, _recipe);
+
+                return Ok("Update success");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
         [HttpPost]
@@ -144,7 +166,7 @@ namespace BE_tasteal.API.Controllers
         {
             try
             {
-                foreach(var item in req.uids)
+                foreach (var item in req.uids)
                 {
                     if (await _userRepo.FindByIdAsync(item) == null)
                         return BadRequest("Uid invalid");
@@ -164,7 +186,8 @@ namespace BE_tasteal.API.Controllers
         }
         [HttpGet]
         [Route("keywords")]
-        public IActionResult GetKeyWord() { 
+        public IActionResult GetKeyWord()
+        {
             try
             {
                 var recipes = _keyWordRepo.GetKeyWord();
@@ -182,7 +205,7 @@ namespace BE_tasteal.API.Controllers
             try
             {
                 var recipes = await _recipeBusiness.DeleteRecipe(recipeId);
-                return Ok(recipes == 1 ? "success" :"fail");
+                return Ok(recipes == 1 ? "success" : "fail");
             }
             catch (Exception ex)
             {
@@ -191,12 +214,12 @@ namespace BE_tasteal.API.Controllers
         }
         [HttpPost]
         [Route("RecommendRecipes")]
-        public  IActionResult getRecommendRecipesByIngredientIds(
+        public IActionResult getRecommendRecipesByIngredientIds(
             [FromBody] recommendRecipeReq req)
         {
             try
             {
-                var recipes =  _recipeBusiness.getRecommendRecipesByIngredientIds(req.IngredientIds, req.Page);
+                var recipes = _recipeBusiness.getRecommendRecipesByIngredientIds(req.IngredientIds, req.Page);
                 return Ok(recipes);
             }
             catch (Exception ex)

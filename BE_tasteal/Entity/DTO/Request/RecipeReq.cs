@@ -9,9 +9,8 @@ namespace BE_tasteal.Entity.DTO.Request
         [Required]
         public string name { get; set; }
         [DefaultValue(0)]
-        [Required]
         [Range(0.0, 5.0, ErrorMessage = "rating in range(0,5)")]
-        public float rating { get; set; }
+        public float? rating { get; set; }
         public string? image { get; set; }
         public int? totalTime { get; set; }
         [ValidateTimeSpanString(ErrorMessage = "string format invalid")]
@@ -23,9 +22,10 @@ namespace BE_tasteal.Entity.DTO.Request
         [MaxLength(255)]
         [DefaultValue("")]
         public string? author_note { get; set; }
-        public bool? is_private { get; set; }
         [Required]
-        public string? author { get; set; }
+        public bool is_private { get; set; }
+        [Required]
+        public string author { get; set; }
         public List<Recipe_IngredientReq>? ingredients { get; set; }
         public List<RecipeDirectionReq>? directions { get; set; }
         public List<int>? occasions { get; set; }

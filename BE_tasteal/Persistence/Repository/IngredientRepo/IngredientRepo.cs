@@ -1,11 +1,11 @@
-﻿using BE_tasteal.Business;
-using BE_tasteal.Entity.DTO.Request;
+﻿using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using static Dapper.SqlMapper;
 
 namespace BE_tasteal.Persistence.Repository.IngredientRepo
 {
@@ -153,7 +153,18 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
                     item.amount = item.amount_per_serving * recipe.serving_size;
                 }
                 return result;
-            }    
-        }    
+            }
+        }
+
+        public async Task deleteIngre_recipe(int recipe_id)
+        {
+            List<Recipe_IngredientEntity> ingredients = _context.Recipe_Ingredient.Where(s => s.recipe_id == recipe_id).ToList();
+            foreach (var item in ingredients)
+            {
+                _context.Set<Recipe_IngredientEntity>().Remove(item);
+                await _context.SaveChangesAsync();
+            }
+
+        }
     }
 }

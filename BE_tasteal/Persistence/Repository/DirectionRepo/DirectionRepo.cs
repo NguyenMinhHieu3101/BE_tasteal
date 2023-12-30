@@ -6,7 +6,7 @@ using Dapper;
 
 namespace BE_tasteal.Persistence.Repository.Direction
 {
-    public class DirectionRepo: GenericRepository<Recipe_DirectionEntity>, IDirectionRepo
+    public class DirectionRepo : GenericRepository<Recipe_DirectionEntity>, IDirectionRepo
     {
         public DirectionRepo(MyDbContext context,
         ConnectionManager connectionManager) : base(context, connectionManager)
@@ -27,6 +27,17 @@ namespace BE_tasteal.Persistence.Repository.Direction
                 var result = connection.Query<DirectionRes>(sql, new { Id = id });
                 return result;
             }
+        }
+
+        public async Task deleteIngre_direction(int recipe_id)
+        {
+            List<Recipe_DirectionEntity> ingredients = _context.Recipe_Direction.Where(s => s.recipe_id == recipe_id).ToList();
+            foreach (var item in ingredients)
+            {
+                _context.Set<Recipe_DirectionEntity>().Remove(item);
+                await _context.SaveChangesAsync();
+            }
+
         }
     }
 }

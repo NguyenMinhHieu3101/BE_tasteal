@@ -8,6 +8,8 @@ namespace BE_tasteal.Business.Recipe
     {
         Task<List<U?>> GetAll();
         Task<U?> Add(T entity);
+        Task<(bool, string)> validateUpdate(int recipe_id, RecipeReq _recipe);
+        Task<RecipeEntity?> updateRecipe(int recipe_id, RecipeReq entity);
         Task<List<RecipeEntity>> AddFromExelAsync(IFormFile file);
         Task<List<RecipeSearchRes>> Search(RecipeSearchReq option);
         Task<List<RecipeEntity>> GetAllRecipe(PageReq page);

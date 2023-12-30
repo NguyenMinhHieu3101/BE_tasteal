@@ -4,8 +4,9 @@ using BE_tasteal.Persistence.Repository.GenericRepository;
 
 namespace BE_tasteal.Persistence.Repository.Direction
 {
-    public interface IDirectionRepo: IGenericRepository<Recipe_DirectionEntity>
+    public interface IDirectionRepo : IGenericRepository<Recipe_DirectionEntity>
     {
-        IEnumerable<DirectionRes> GetDirectionByRecipeId(int id); 
+        IEnumerable<DirectionRes> GetDirectionByRecipeId(int id);
+        Task deleteIngre_direction(int recipe_id);
     }
 }

@@ -7,5 +7,6 @@ namespace BE_tasteal.Business.Ingredient
     {
         Task<List<IngredientEntity>> AddFromExelAsync(IFormFile file);
         Task<(List<IngredientEntity>, int)> GetAllIngredient(PageReq _page);
+
     }
 }
