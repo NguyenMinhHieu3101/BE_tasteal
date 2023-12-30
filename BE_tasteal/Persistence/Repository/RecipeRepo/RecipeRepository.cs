@@ -6,6 +6,7 @@ using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using OpenAI_API.Images;
 using System.Drawing.Printing;
 
 namespace BE_tasteal.Persistence.Repository.RecipeRepo
@@ -326,5 +327,27 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
             return recipes;
         }
       
+        public (List<RecipeEntity>, int) GetRecipesByUserId(RecipeByUids req)
+        {
+            List<RecipeEntity> recipeEntities = new List<RecipeEntity>();
+            foreach(var item in req.uids)
+            {
+                var recipes = _context.Recipe.Where(s => s.author == item).ToList();
+                foreach (var recipe in recipes)
+                {
+                    recipeEntities.Add(recipe);
+                }
+            }
+
+            int maxPage = (int)Math.Ceiling((double)recipeEntities.Count / req.page.pageSize);
+
+            recipeEntities = recipeEntities
+                .Skip((req.page.page - 1) * req.page.pageSize)
+                .Take(req.page.pageSize)
+                .ToList();
+   
+
+            return (recipeEntities, maxPage);
+        }
     }
 }

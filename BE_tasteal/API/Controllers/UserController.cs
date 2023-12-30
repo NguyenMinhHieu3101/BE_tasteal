@@ -2,6 +2,7 @@
 using BE_tasteal.Business.User;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
+using BE_tasteal.Persistence.Repository.AuthorRepo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BE_tasteal.API.Controllers
@@ -12,9 +13,11 @@ namespace BE_tasteal.API.Controllers
     public class UserController : Controller
     {
         private readonly IUserBusiness _userBusiness;
-        public UserController(IUserBusiness userBusiness)
+        private readonly IUserRepo _userRepo;
+        public UserController(IUserBusiness userBusiness, IUserRepo userRepo)
         {
             _userBusiness = userBusiness;
+            _userRepo = userRepo;
         }
         [HttpPost]
         [Route("signup")]
@@ -81,6 +84,28 @@ namespace BE_tasteal.API.Controllers
             catch (Exception e)
             {
                 return BadRequest(e.ToString());
+            }
+        }
+        [HttpPost]
+        [Route("getAccounts")]
+        public async Task<IActionResult> getAccountByListUid(List<string> accountId)
+        {
+            try
+            {
+                List<AccountEntity> users = new List<AccountEntity>();
+                foreach (var item in accountId)
+                {
+                    var user = await _userRepo.FindByIdAsync(item);
+                    if (user == null)
+                        return BadRequest("UserId invalid");
+                    else
+                        users.Add(user);
+                }
+                return Ok(users);
+            }
+            catch(Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
     }

@@ -401,6 +401,12 @@ namespace BE_tasteal.Business.Recipe
             return _recipeResposity.getRecommendRecipesByIngredientIds(ingredientIds, _page);
         }
 
-         
+        public (List<RecipeEntity>, int) GetRecipesByUserId(RecipeByUids req)
+        {
+
+            var result = _recipeResposity.GetRecipesByUserId(req);
+
+            return result;
+        }
     }
 }

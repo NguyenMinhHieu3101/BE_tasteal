@@ -17,16 +17,20 @@ namespace BE_tasteal.API.Controllers
     public class RecipeController : Controller
     {
         private readonly IRecipeBusiness<RecipeReq, RecipeEntity> _recipeBusiness;
+        private readonly IRecipeRepository _recipeRepository;
+        private readonly IUserRepo _userRepo;
 
         private readonly KeyWordRepo _keyWordRepo;
         public RecipeController(
             IRecipeBusiness<RecipeReq, RecipeEntity> recipeBusiness,
             KeyWordRepo keyWordRepo,
-            IOccasionRepo occasionRepo,
-            IUserRepo userRepo)
+            IUserRepo userRepo,
+            IRecipeRepository recipeRepository)
         {
             _recipeBusiness = recipeBusiness;
             _keyWordRepo = keyWordRepo;
+            _recipeRepository = recipeRepository;
+            _userRepo = userRepo;
         }
         [HttpPost]
         [Route("Add")]
@@ -130,6 +134,32 @@ namespace BE_tasteal.API.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.ToString());
+            }
+        }
+        [HttpPost]
+        [Route("GetRecipesByUserId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetRecipesByUserId(RecipeByUids req)
+        {
+            try
+            {
+                foreach(var item in req.uids)
+                {
+                    if (await _userRepo.FindByIdAsync(item) == null)
+                        return BadRequest("Uid invalid");
+                }
+                var (recipes, maxPage) = _recipeBusiness.GetRecipesByUserId(req);
+                var response = new
+                {
+                    recipes = recipes,
+                    maxPage = maxPage
+                };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
         [HttpPost]

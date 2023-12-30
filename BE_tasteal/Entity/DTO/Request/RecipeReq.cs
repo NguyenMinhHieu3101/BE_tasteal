@@ -30,4 +30,12 @@ namespace BE_tasteal.Entity.DTO.Request
         public List<RecipeDirectionReq>? directions { get; set; }
         public List<int>? occasions { get; set; }
     }
+
+    public class RecipeByUids
+    {
+        [Required]
+        public List<string> uids {  get; set; }
+        [Required]
+        public PageReq page { get; set; }
+    }
 }
