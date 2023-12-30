@@ -1,8 +1,10 @@
 ﻿using BE_tasteal.Business.Cart;
 using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Repository.CookBookRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BE_tasteal.API.Controllers
 {
@@ -177,6 +179,13 @@ namespace BE_tasteal.API.Controllers
             {
                 return BadRequest(false);
             }
+        }
+        [HttpGet]
+        [Route("test")]
+        public async Task<IActionResult> favor()
+        {
+            await _cookBookRepo.favor();
+            return Ok();
         }
     }
 }

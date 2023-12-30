@@ -7,14 +7,10 @@ using BE_tasteal.Persistence.Repository.CommentRepo;
 using BE_tasteal.Persistence.Repository.Direction;
 using BE_tasteal.Persistence.Repository.IngredientRepo;
 using BE_tasteal.Persistence.Repository.NutritionRepo;
+using BE_tasteal.Persistence.Repository.OccasionRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
-using Newtonsoft.Json;
 using OfficeOpenXml;
 using System.Text.RegularExpressions;
-using System;
-using System.Text.RegularExpressions;
-using Microsoft.EntityFrameworkCore;
-using BE_tasteal.Persistence.Repository.OccasionRepo;
 
 namespace BE_tasteal.Business.Recipe
 {
@@ -31,7 +27,7 @@ namespace BE_tasteal.Business.Recipe
         private readonly ILogger<RecipeEntity> _logger;
         private readonly IRecipe_OccasionRepo _OccasionRepo;
         private readonly IOccasionRepo _ocasionRepo;
-  
+
         public RecipeBusiness(IMapper mapper,
            IRecipeRepository recipeResposity,
            IRecipeSearchRepo recipeSearchRepo,
@@ -84,7 +80,7 @@ namespace BE_tasteal.Business.Recipe
             List<IngredientEntity> listEngredient = new List<IngredientEntity>();
             foreach (var ingredient in ingredients)
             {
-                if(ingredient.id == null)
+                if (ingredient.id == null)
                 {
                     if (!_ingredientRepo.IngredientValid(ingredient.name))
                     {
@@ -122,23 +118,166 @@ namespace BE_tasteal.Business.Recipe
             ////update nutrition for recipe
             await _recipeResposity.UpdateNutrition(newRecipe, listEngredient);
 
-            if(entity.occasions != null)
+            if (entity.occasions != null)
             {
                 List<Recipe_OccasionEntity> recipe_Occasions = new List<Recipe_OccasionEntity>();
-              
-                foreach (var  occasion in entity.occasions)
+
+                foreach (var occasion in entity.occasions)
                 {
                     Recipe_OccasionEntity recipe_OccasionEntity = new Recipe_OccasionEntity();
                     recipe_OccasionEntity.occasion_id = occasion;
                     recipe_OccasionEntity.recipe_id = newRecipe.id;
                     var item = await _OccasionRepo.InsertAsync(recipe_OccasionEntity);
-                    if(item !=null)
+                    if (item != null)
                         recipe_Occasions.Add(item);
                 }
                 newRecipe.occasions = recipe_Occasions;
             }
 
             return newRecipe;
+        }
+        public async Task<(bool, string)> validateUpdate(int recipe_id, RecipeReq _recipe)
+        {
+            var result = await _recipeResposity.FindByIdAsync(recipe_id);
+            if (result == null)
+            {
+                return (false, "recipe Id invalid");
+
+            }
+
+            if (await _authorRepo.FindByIdAsync(_recipe.author) == null)
+                return (false, "user Id invalid");
+
+            if (_recipe.ingredients != null)
+            {
+                foreach (var item in _recipe.ingredients)
+                {
+                    if (item.id == null && item.isLiquid != null)
+                        return (false, "ingredient format invalid");
+                }
+            }
+
+            if (_recipe.directions != null)
+            {
+                for (int i = 0; i < _recipe.directions.Count; i++)
+                {
+                    if (_recipe.directions[i].step != i + 1)
+                        return (false, "step direction invalid");
+                }
+            }
+
+            if (_recipe.occasions != null)
+            {
+                foreach (var item in _recipe.occasions)
+                {
+                    if (await _ocasionRepo.FindByIdAsync(item) == null)
+                        return (false, "occasion not found");
+                }
+            }
+
+            return (true, "");
+        }
+        public async Task<RecipeEntity?> updateRecipe(int recipe_id, RecipeReq recipe_update)
+        {
+            try
+            {
+                var recipe = await _recipeResposity.FindByIdAsync(recipe_id);
+
+                recipe.name = recipe_update.name;
+                if (recipe_update.rating != null)
+                {
+                    recipe.rating = recipe_update.rating;
+                }
+
+                if (recipe_update.totalTime != null)
+                {
+                    recipe.totalTime = recipe_update.totalTime;
+                }
+
+                recipe.id = recipe_id;
+                recipe.serving_size = recipe_update.serving_size;
+                recipe.introduction = recipe_update.introduction;
+                recipe.author_note = recipe_update.author_note;
+                recipe.is_private = recipe_update.is_private;
+                recipe.author = recipe_update.author;
+
+                if (recipe_update.ingredients != null)
+                {
+                    await _ingredientRepo.deleteIngre_recipe(recipe_id);
+
+
+                    List<IngredientEntity> listEngredient = new List<IngredientEntity>();
+                    foreach (var ingredient in recipe_update.ingredients)
+                    {
+                        if (ingredient.id == null)
+                        {
+                            if (!_ingredientRepo.IngredientValid(ingredient.name))
+                            {
+                                IngredientEntity newIngre = new IngredientEntity
+                                {
+                                    name = ingredient.name,
+                                    isLiquid = ingredient.isLiquid,
+                                    ratio = 1,
+                                    amount = ingredient.amount,
+
+                                };
+                                await _ingredientRepo.InsertIngredient(newIngre, true);
+                            }
+                            var ingreItem = await _ingredientRepo.GetIngredientByName(ingredient.name);
+                            ingreItem.amount = ingredient.amount;
+                            listEngredient.Add(ingreItem);
+                        }
+                        else
+                        {
+                            var ingreItem = await _ingredientRepo.GetIngredientById(ingredient.id ?? 1);
+                            ingreItem.amount = ingredient.amount;
+                            listEngredient.Add(ingreItem);
+                        }
+                    }
+
+                    ////update recipe_ingredient with ingredient and nutri
+                    await _recipeResposity.InsertRecipeIngredient(recipe, listEngredient);
+                    recipe.ingredients = listEngredient;
+
+                    ////update nutrition for recipe
+                    await _recipeResposity.UpdateNutrition(recipe, listEngredient);
+                }
+                else
+                {
+                    await _ingredientRepo.deleteIngre_recipe(recipe_id);
+                }
+
+                if (recipe_update.directions != null)
+                {
+                    await _directionRepo.deleteIngre_direction(recipe_id);
+                    ////add direction 
+                    await _recipeResposity.InsertDirection(recipe, recipe_update.directions);
+                }
+
+                if (recipe_update.occasions != null)
+                {
+                    List<Recipe_OccasionEntity> recipe_Occasions = new List<Recipe_OccasionEntity>();
+
+                    foreach (var occasion in recipe_update.occasions)
+                    {
+                        Recipe_OccasionEntity recipe_OccasionEntity = new Recipe_OccasionEntity();
+                        recipe_OccasionEntity.occasion_id = occasion;
+                        recipe_OccasionEntity.recipe_id = recipe.id;
+                        var item = await _OccasionRepo.InsertAsync(recipe_OccasionEntity);
+                        if (item != null)
+                            recipe_Occasions.Add(item);
+                    }
+                    recipe.occasions = recipe_Occasions;
+                }
+
+                await _recipeResposity.UpdateAsync(recipe);
+                return recipe;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return null;
+            }
         }
         public Task<List<RecipeEntity?>> GetAll()
         {
@@ -154,12 +293,12 @@ namespace BE_tasteal.Business.Recipe
             {
                 //parse
                 List<RecipeReq> listRecipeDto = ParseRecipeFromExcel(file);
- 
+
                 List<RecipeEntity> listRecipe = new List<RecipeEntity>();
                 #region Add
                 foreach (var item in listRecipeDto)
                 {
-                    var recipe = await Add(item);  
+                    var recipe = await Add(item);
                 }
                 #endregion
                 return listRecipe;
@@ -222,7 +361,7 @@ namespace BE_tasteal.Business.Recipe
                     entity.directions = ParseDirection(worksheet.Cells[row, 14].Value.ToString());
                     entity.author = "Ah3AvtwmXrfuvGFo8sjSO2IOpCg1";
                     #endregion
-                   
+
 
                     listRecipeDto.Add(entity);
                 }
@@ -309,7 +448,7 @@ namespace BE_tasteal.Business.Recipe
         public async Task<RecipeRes?> RecipeDetail(int id)
         {
             var recipeEntity = await _recipeResposity.FindByIdAsync(id);
-            if(recipeEntity == null)
+            if (recipeEntity == null)
             {
                 return null;
             }
@@ -353,7 +492,7 @@ namespace BE_tasteal.Business.Recipe
                 var direction = _directionRepo.GetDirectionByRecipeId(recipeEntity.id);
                 recipeRes.directions = direction;
 
-                
+
 
                 //find comment
                 //var comment = _commentRepo.GetCommentByRecipeId(recipeEntity.id);
@@ -361,7 +500,7 @@ namespace BE_tasteal.Business.Recipe
 
                 //find Related Recipe
                 var relatedRecipes = _recipeResposity.GetRelatedRecipeByAuthor(recipeEntity.author);
-                foreach(var related in relatedRecipes)
+                foreach (var related in relatedRecipes)
                 {
                     related.author = recipeRes.author;
                 }
@@ -375,7 +514,7 @@ namespace BE_tasteal.Business.Recipe
         public async Task<List<RecipeRes>> GetRecipes(List<int> id)
         {
             List<RecipeRes> recipes = new List<RecipeRes>();
-            foreach(int idItem in id)
+            foreach (int idItem in id)
             {
                 var recipe = await RecipeDetail(idItem);
                 recipes.Add(recipe);
@@ -401,6 +540,12 @@ namespace BE_tasteal.Business.Recipe
             return _recipeResposity.getRecommendRecipesByIngredientIds(ingredientIds, _page);
         }
 
-         
+        public (List<RecipeEntity>, int) GetRecipesByUserId(RecipeByUids req)
+        {
+
+            var result = _recipeResposity.GetRecipesByUserId(req);
+
+            return result;
+        }
     }
 }

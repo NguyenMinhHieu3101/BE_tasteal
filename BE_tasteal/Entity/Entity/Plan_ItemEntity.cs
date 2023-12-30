@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BE_tasteal.Entity.Entity
 {
+    [Table("plan_item")]
     public class Plan_ItemEntity
     {
         [Key]

@@ -6,6 +6,7 @@ using BE_tasteal.Persistence.Repository.CommentRepo;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using static Dapper.SqlMapper;
 
 namespace BE_tasteal.Persistence.Repository.CookBookRepo
 {
@@ -132,12 +133,31 @@ namespace BE_tasteal.Persistence.Repository.CookBookRepo
         }
         public List<CookBook_RecipeEntity> GetCookBookRecipesWithRecipes(int cookBookId)
         {
-            return _context.cookBook_RecipeEntities
+            return _context.CookBook_Recipe
                 .Include(c => c.cook_book.account)
                 .Include(c => c.recipe)
                 .Include(c => c.recipe.account)
                 .Where(c => c.cook_book_id == cookBookId)
                 .ToList();             
+        }
+        public async Task favor()
+        {
+            List<AccountEntity> allAccounts = _context.Account.ToList(); 
+
+            foreach (var account in allAccounts)
+            {
+                var newCookBookEntry = new CookBookEntity
+                {
+                    name = "Yêu thích",
+                    owner = account.uid 
+                };
+
+                _context.Attach(newCookBookEntry);
+                var entityEntry = await _context.Set<CookBookEntity>().AddAsync(newCookBookEntry);
+
+                await _context.SaveChangesAsync();
+            }
+            
         }
     }
 }

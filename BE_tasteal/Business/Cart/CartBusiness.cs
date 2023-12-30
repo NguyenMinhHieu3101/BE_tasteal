@@ -27,7 +27,7 @@ namespace BE_tasteal.Business.Cart
         {
             return _cartRepo.GetCartByAccountId(accountId);
         }
-        public IEnumerable<PersonalCartItem> GetPersonalCartItemsWithIngredients(string accountId)
+        public IEnumerable<PersonalCartItemEntity> GetPersonalCartItemsWithIngredients(string accountId)
         {
             return _cartRepo.GetPersonalCartItemsWithIngredients(accountId);
         }
@@ -53,9 +53,6 @@ namespace BE_tasteal.Business.Cart
         }
         public async Task<bool> PostPersonalCartItem(PersonalCartItemReq request)
         {
-            if (await _ingredientRepo.FindByIdAsync(request.ingredient_id) == null)
-                return false;
-
             if (await _userRepo.FindByIdAsync(request.account_id) == null)
                 return false;
 

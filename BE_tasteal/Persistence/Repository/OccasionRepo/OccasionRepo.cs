@@ -42,7 +42,16 @@ namespace BE_tasteal.Persistence.Repository.OccasionRepo
             await _context.SaveChangesAsync();
             return entityEntry.Entity;
         }
+        public async Task deleteIngre_occasion(int recipe_id)
+        {
+            List<Recipe_OccasionEntity> ingredients = _context.Recipe_Occasion.Where(s => s.recipe_id == recipe_id).ToList();
+            foreach (var item in ingredients)
+            {
+                _context.Set<Recipe_OccasionEntity>().Remove(item);
+                await _context.SaveChangesAsync();
+            }
 
+        }
         private static DateTime ConvertToDateTime(string inputDateTime)
         {
             // Chuỗi ngày giờ đầu vào

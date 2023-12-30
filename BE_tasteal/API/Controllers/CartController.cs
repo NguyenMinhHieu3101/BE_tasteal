@@ -44,7 +44,7 @@ namespace BE_tasteal.API.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
         [HttpPost]
@@ -109,7 +109,7 @@ namespace BE_tasteal.API.Controllers
         }
         [HttpGet]
         [Route("personalcarts")]
-        public async Task<ActionResult<PersonalCartItem>> GetPersonalCartItem(string userId)
+        public async Task<ActionResult<PersonalCartItemEntity>> GetPersonalCartItem(string userId)
         {
             try
             {
@@ -124,11 +124,13 @@ namespace BE_tasteal.API.Controllers
 
         [HttpPost]
         [Route("personalcart")]
-        public async Task<ActionResult<PersonalCartItem>> PostPersonalCartItem(PersonalCartItemReq request)
+        public async Task<ActionResult<PersonalCartItemEntity>> PostPersonalCartItem(PersonalCartItemReq request)
         {
             try
             {
                 var result = await _cartBusiness.PostPersonalCartItem(request);
+                if(!result)
+                    return BadRequest("IngredientId or UserId invalid");
                 return Ok(result);
             }
             catch (Exception ex)
@@ -136,7 +138,7 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut()]
+        [HttpPut]
         [Route("personalcart")]
         public async Task<IActionResult> PutPersonalCartItem(PersonalCartItemUpdateReq request)
         {

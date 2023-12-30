@@ -8,5 +8,6 @@ namespace BE_tasteal.Persistence.Repository.OccasionRepo
     {
         IEnumerable<OccasionEntity> GetAll();
         Task<OccasionEntity> InsertAsync(OccasionReq occasionId);
+        Task deleteIngre_occasion(int recipe_id);
     }
 }

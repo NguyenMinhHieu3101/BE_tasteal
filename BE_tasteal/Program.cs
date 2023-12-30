@@ -28,6 +28,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Text.Json.Serialization;
 
 Log.Logger = new LoggerConfiguration()
@@ -173,6 +174,7 @@ try
                 options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
                     description.GroupName.ToUpperInvariant());
             }
+            options.DocExpansion(DocExpansion.None);
         });
         app.UseDeveloperExceptionPage();
         // Configure the HTTP request pipeline.

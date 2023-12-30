@@ -19,7 +19,7 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         }
         public IEnumerable<CartEntity> GetCartByAccountId(string accountId)
         {
-            var result = _context.cart.Where(u => u.accountId == accountId)
+            var result = _context.Cart.Where(u => u.accountId == accountId)
                 .Include(c => c.account)
                 .Include(c => c.recipe)
                 .ToList();
@@ -28,7 +28,7 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         public IEnumerable<Cart_ItemEntity> GetItemByCartId(List<int> cartIds)
         {
 
-            IEnumerable<Cart_ItemEntity> cartItems = _context.cart_ItemEntities
+            IEnumerable<Cart_ItemEntity> cartItems = _context.Cart_Item
                 .Where(ci => cartIds.Contains(ci.cartId))
                 .Include(c => c.ingredient)
                 .AsEnumerable();
@@ -98,17 +98,17 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         {
             try
             {
-                var cartItemsToDelete = _context.cart_ItemEntities
+                var cartItemsToDelete = _context.Cart_Item
                                 .Where(ci => ci.cartId == cartId)
                                 .ToList();
-                _context.cart_ItemEntities.RemoveRange(cartItemsToDelete);
+                _context.Cart_Item.RemoveRange(cartItemsToDelete);
 
-                var cartToDelete = _context.cart
+                var cartToDelete = _context.Cart
                             .FirstOrDefault(c => c.id == cartId);
                 if (cartToDelete != null)
                 {
                     // Xóa Cart
-                    _context.cart.Remove(cartToDelete);
+                    _context.Cart.Remove(cartToDelete);
                 }
                 _context.SaveChanges();
                 return  true;
@@ -123,23 +123,23 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         {
             try
             {
-                var cartItemsToDelete = _context.cart_ItemEntities
+                var cartItemsToDelete = _context.Cart_Item
                                             .Where(ci => ci.cart.accountId == accountId)
                                             .ToList();
-                _context.cart_ItemEntities.RemoveRange(cartItemsToDelete);
+                _context.Cart_Item.RemoveRange(cartItemsToDelete);
 
-                var personalCartItems = _context.personalCartItems
+                var personalCartItems = _context.PersonalCartItems
                                             .Where(ci => ci.account_id == accountId)
                                             .ToList();
-                _context.personalCartItems.RemoveRange(personalCartItems);
+                _context.PersonalCartItems.RemoveRange(personalCartItems);
 
                 // Lấy danh sách các Cart cần xóa dựa trên accountId
-                var cartsToDelete = _context.cart
+                var cartsToDelete = _context.Cart
                                      .Where(c => c.accountId == accountId)
                                      .ToList();
 
                 // Xóa các Cart
-                _context.cart.RemoveRange(cartsToDelete);
+                _context.Cart.RemoveRange(cartsToDelete);
 
                 // Lưu các thay đổi vào cơ sở dữ liệu
                 _context.SaveChanges();
@@ -156,7 +156,7 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         {
             try
             {
-                var cartItem = _context.cart_ItemEntities
+                var cartItem = _context.Cart_Item
                     .FirstOrDefault(
                         ci => ci.cartId == cartId 
                         && ci.ingredient_id == IngredientId);
@@ -181,9 +181,9 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
                 return false;
             }
         }
-        public List<PersonalCartItem> GetPersonalCartItemsWithIngredients(string accountId)
+        public List<PersonalCartItemEntity> GetPersonalCartItemsWithIngredients(string accountId)
         {
-            var cartItemsWithIngredients = _context.personalCartItems
+            var cartItemsWithIngredients = _context.PersonalCartItems
                 .Where(item => item.account_id == accountId)
                 .Include(item => item.ingredient) 
                 .ToList();
@@ -194,22 +194,37 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         {
             try
             {
-                var ingredient = await _context.IngredientEntity.FindAsync(request.ingredient_id);
-               
+                IngredientEntity? ingredient;
+                if (request.ingredient_id != null)
+                    ingredient = await _context.Ingredient.FindAsync(request.ingredient_id);
+                else
+                    ingredient = null;
+
+                PersonalCartItemEntity personalCartItem;
                 if (ingredient == null)
                 {
-                    return false;
+                    personalCartItem = new PersonalCartItemEntity
+                    {
+                        account_id = request.account_id,
+                        amount = request.amount,
+                        is_bought = request.is_bought,
+                        name = request.name,
+                    };
+                }
+                else
+                {
+                    personalCartItem = new PersonalCartItemEntity
+                    {
+                        ingredient_id = request.ingredient_id,
+                        account_id = request.account_id,
+                        amount = request.amount,
+                        is_bought = request.is_bought
+                    };
                 }
 
-                var personalCartItem = new PersonalCartItem
-                {
-                    ingredient_id = request.ingredient_id,
-                    account_id = request.account_id,
-                    amount = request.amount,
-                    is_bought = request.is_bought
-                };
+                
 
-                _context.personalCartItems.Add(personalCartItem);
+                _context.PersonalCartItems.Add(personalCartItem);
                 int result = await _context.SaveChangesAsync();
                 if (result <= 0)
                     return false;
@@ -227,7 +242,7 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         {
             try
             {
-                var personalCartItem = await _context.personalCartItems.FindAsync(request.id);
+                var personalCartItem = await _context.PersonalCartItems.FindAsync(request.id);
                 if (personalCartItem == null)
                 {
                     return false;

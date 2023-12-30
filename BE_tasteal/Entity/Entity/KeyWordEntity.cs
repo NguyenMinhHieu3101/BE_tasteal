@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BE_tasteal.Entity.Entity
 {
     [Table("KeyWord")]
-    public class KeyWord
+    public class KeyWordEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

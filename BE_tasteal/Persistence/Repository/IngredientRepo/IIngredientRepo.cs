@@ -16,5 +16,6 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
         Task<IngredientEntity> GetIngredientById(int id);
         Task<IngredientEntity> InsertIngredient(IngredientEntity ingredient, bool flag = false);
         IEnumerable<IngredientRes> GetIngredientsByRecipeId(int recipeId);
+        Task deleteIngre_recipe(int recipe_id);
     }
 }
