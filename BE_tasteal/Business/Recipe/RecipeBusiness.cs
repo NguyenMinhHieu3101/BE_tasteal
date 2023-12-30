@@ -356,8 +356,8 @@ namespace BE_tasteal.Business.Recipe
                 
 
                 //find comment
-                var comment = _commentRepo.GetCommentByRecipeId(recipeEntity.id);
-                recipeRes.comments = comment;
+                //var comment = _commentRepo.GetCommentByRecipeId(recipeEntity.id);
+                //recipeRes.comments = comment;
 
                 //find Related Recipe
                 var relatedRecipes = _recipeResposity.GetRelatedRecipeByAuthor(recipeEntity.author);

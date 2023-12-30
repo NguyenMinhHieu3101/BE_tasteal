@@ -1,6 +1,7 @@
 ﻿using BE_tasteal.Business.Ingredient;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
+using BE_tasteal.Persistence.Repository.IngredientRepo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BE_tasteal.API.Controllers
@@ -11,11 +12,14 @@ namespace BE_tasteal.API.Controllers
     public class IngredientController : Controller
     {
         private readonly IIngredientBusiness _ingredientBusiness;
+        private readonly IIngredientRepo _ingredientRepo;
 
         public IngredientController(
-           IIngredientBusiness ingredientBusiness)
+           IIngredientBusiness ingredientBusiness,
+           IIngredientRepo ingredientRepo)
         {
             _ingredientBusiness = ingredientBusiness;
+            _ingredientRepo = ingredientRepo;
         }
 
         [HttpPost]
@@ -68,6 +72,29 @@ namespace BE_tasteal.API.Controllers
             {
                 Console.WriteLine($"{ex.ToString()}");
                 return BadRequest(ex);
+            }
+        }
+        [HttpDelete]
+        [Route("")]
+        [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(List<IngredientEntity>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> delete([FromQuery] int id)
+        {
+            try
+            {
+                var ingre = await _ingredientRepo.FindByIdAsync(id);
+                if (ingre == null)
+                {
+                    return NotFound("id invalid");
+                }
+
+                await _ingredientRepo.DeleteAsync(ingre);
+                return NoContent();
+            }
+            catch(Exception ex) 
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest(false);
             }
         }
     }

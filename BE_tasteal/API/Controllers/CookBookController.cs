@@ -1,6 +1,7 @@
 ﻿using BE_tasteal.Business.Cart;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Persistence.Repository.CookBookRepo;
+using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BE_tasteal.API.Controllers
@@ -11,9 +12,13 @@ namespace BE_tasteal.API.Controllers
     public class CookBookController : Controller
     {
         private readonly CookBookRepo _cookBookRepo;
-        public CookBookController(CookBookRepo cartBusiness)
+        private readonly IRecipeRepository _recipeRepository;
+        public CookBookController(
+            CookBookRepo cartBusiness,
+            IRecipeRepository recipeRepository)
         {
             _cookBookRepo = cartBusiness;
+            _recipeRepository = recipeRepository;
         }
 
         [HttpGet]
@@ -40,6 +45,8 @@ namespace BE_tasteal.API.Controllers
         {
             try
             {
+                if (await _cookBookRepo.FindByIdAsync(cookBookId) == null)
+                    return BadRequest("cookBookId invalid");
                 var allCart = _cookBookRepo.GetCookBookRecipesWithRecipes(cookBookId);
                 return Ok(allCart);
             }
@@ -154,6 +161,12 @@ namespace BE_tasteal.API.Controllers
         {
             try
             {
+                if (await _recipeRepository.FindByIdAsync(id.recipe_id) == null)
+                    return BadRequest("recipe id invalid");
+                if (await _cookBookRepo.FindByIdAsync(id.cook_book_id) == null)
+                    return BadRequest("cookbook id invalid");
+
+
                 var allCart = await _cookBookRepo.AddRecipeToCookBook(id);
                 if (allCart > 0)
                     return Ok(true);

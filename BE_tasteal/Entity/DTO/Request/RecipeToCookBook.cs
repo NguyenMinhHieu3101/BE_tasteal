@@ -3,6 +3,6 @@
     public class RecipeToCookBook
     {
         public int cook_book_id {  get; set; }
-        public string recipe_id { get; set; }
+        public int recipe_id { get; set; }
     }
 }
