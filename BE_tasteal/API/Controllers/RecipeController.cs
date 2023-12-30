@@ -162,13 +162,12 @@ namespace BE_tasteal.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
-        [HttpPost]
+        [HttpGet]
         [Route("keywords")]
-        public async Task<IActionResult> GetKeyWord([FromQuery] string test)
-        {
+        public IActionResult GetKeyWord() { 
             try
             {
-                var recipes = await _keyWordRepo.useGpt(test);
+                var recipes = _keyWordRepo.GetKeyWord();
                 return Ok(recipes);
             }
             catch (Exception ex)
