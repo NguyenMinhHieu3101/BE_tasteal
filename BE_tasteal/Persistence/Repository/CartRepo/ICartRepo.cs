@@ -13,7 +13,7 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
         bool DeleteCart(int cardId);
         bool DeleleCartByAccountId(string accountId);
         bool UpdateBoughtItem(int cartId, int IngredientId, bool isBought);
-        List<PersonalCartItemEntity> GetPersonalCartItemsWithIngredients(string accountId);
+        List<PersonalCartItem> GetPersonalCartItemsWithIngredients(string accountId);
         Task<bool> PostPersonalCartItem(PersonalCartItemReq request);
         Task<bool> PutPersonalCartItem(PersonalCartItemUpdateReq request);
     }

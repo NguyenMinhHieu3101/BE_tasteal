@@ -14,17 +14,17 @@ namespace BE_tasteal.Persistence.Repository.CommentRepo
         {
 
         }
-        public IEnumerable<CommentRes> GetCommentByRecipeId(int id)
+        public async Task<IEnumerable<CommentRes>?> GetCommentByRecipeId(int id)
         {
             using (var connection = _connection.GetConnection())
             {
                 string sql = @"
-                Select account.uid , account.name , comment.comment  from comment, account
+                Select comment.id as id, account.uid as account_id , account.name as name , comment.comment  from comment, account
                 where comment.account_id = account.uid
                 and comment.recipe_id = @Id
                 ";
 
-                var result = connection.Query<CommentRes>(sql, new { Id = id });
+                var result = await connection.QueryAsync<CommentRes>(sql, new { Id = id });
 
                 return result;
             }

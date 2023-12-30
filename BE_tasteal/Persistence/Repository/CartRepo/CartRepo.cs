@@ -181,7 +181,7 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
                 return false;
             }
         }
-        public List<PersonalCartItemEntity> GetPersonalCartItemsWithIngredients(string accountId)
+        public List<PersonalCartItem> GetPersonalCartItemsWithIngredients(string accountId)
         {
             var cartItemsWithIngredients = _context.personalCartItems
                 .Where(item => item.account_id == accountId)
@@ -201,7 +201,7 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
                     return false;
                 }
 
-                var personalCartItem = new PersonalCartItemEntity
+                var personalCartItem = new PersonalCartItem
                 {
                     ingredient_id = request.ingredient_id,
                     account_id = request.account_id,

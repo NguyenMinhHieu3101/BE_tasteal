@@ -109,7 +109,7 @@ namespace BE_tasteal.API.Controllers
         }
         [HttpGet]
         [Route("personalcarts")]
-        public async Task<ActionResult<PersonalCartItemEntity>> GetPersonalCartItem(string userId)
+        public async Task<ActionResult<PersonalCartItem>> GetPersonalCartItem(string userId)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace BE_tasteal.API.Controllers
 
         [HttpPost]
         [Route("personalcart")]
-        public async Task<ActionResult<PersonalCartItemEntity>> PostPersonalCartItem(PersonalCartItemReq request)
+        public async Task<ActionResult<PersonalCartItem>> PostPersonalCartItem(PersonalCartItemReq request)
         {
             try
             {

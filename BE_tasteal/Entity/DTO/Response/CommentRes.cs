@@ -2,7 +2,8 @@
 {
     public class CommentRes
     {
-        public string uid {  get; set; }
+        public int id { get; set; }
+        public string account_id {  get; set; }
         public string name { get; set; }
         public string comment { get; set; }
     }

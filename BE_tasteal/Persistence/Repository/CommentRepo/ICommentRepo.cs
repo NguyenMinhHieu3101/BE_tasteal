@@ -6,6 +6,6 @@ namespace BE_tasteal.Persistence.Repository.CommentRepo
 {
     public interface ICommentRepo : IGenericRepository<CommentEntity>
     {
-        IEnumerable<CommentRes> GetCommentByRecipeId(int id);
+        Task<IEnumerable<CommentRes>?> GetCommentByRecipeId(int id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Repository.IngredientRepo;
 using OfficeOpenXml;
@@ -130,9 +131,9 @@ namespace BE_tasteal.Business.Ingredient
         }
 
 
-        public async Task<List<IngredientEntity>> GetIngredients()
+        public async Task<(List<IngredientEntity>, int)> GetAllIngredient(PageReq _page)
         {
-            return await _ingredientRepo.GetAllIngredient();
+            return await _ingredientRepo.GetAllIngredient(_page);
         }
     }
 }

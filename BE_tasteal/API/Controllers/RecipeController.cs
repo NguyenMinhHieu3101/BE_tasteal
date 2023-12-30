@@ -2,6 +2,10 @@
 using BE_tasteal.Business.Recipe;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
+using BE_tasteal.Persistence.Repository.AuthorRepo;
+using BE_tasteal.Persistence.Repository.KeyWordRepo;
+using BE_tasteal.Persistence.Repository.OccasionRepo;
+using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -13,10 +17,16 @@ namespace BE_tasteal.API.Controllers
     public class RecipeController : Controller
     {
         private readonly IRecipeBusiness<RecipeReq, RecipeEntity> _recipeBusiness;
+
+        private readonly KeyWordRepo _keyWordRepo;
         public RecipeController(
-            IRecipeBusiness<RecipeReq, RecipeEntity> recipeBusiness)
+            IRecipeBusiness<RecipeReq, RecipeEntity> recipeBusiness,
+            KeyWordRepo keyWordRepo,
+            IOccasionRepo occasionRepo,
+            IUserRepo userRepo)
         {
             _recipeBusiness = recipeBusiness;
+            _keyWordRepo = keyWordRepo;
         }
         [HttpPost]
         [Route("Add")]
@@ -25,7 +35,18 @@ namespace BE_tasteal.API.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> AddRecipe([FromBody] RecipeReq _recipe)
         {
-            return Created(string.Empty, await _recipeBusiness.Add(_recipe));
+            try
+            {
+                var recipe = await _recipeBusiness.Add(_recipe);
+                if (recipe == null)
+                    return BadRequest("validate fail");
+                return Created(string.Empty, recipe);
+            }
+           catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest("fail");
+            }
         }
         [HttpPost]
         [Route("Search")]
@@ -111,13 +132,13 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.ToString());
             }
         }
-        [HttpGet]
+        [HttpPost]
         [Route("keywords")]
-        public async Task<IActionResult> GetKeyWord()
+        public async Task<IActionResult> GetKeyWord([FromQuery] string test)
         {
             try
             {
-                var recipes = await _recipeBusiness.GetKeyWords();
+                var recipes = await _keyWordRepo.useGpt(test);
                 return Ok(recipes);
             }
             catch (Exception ex)

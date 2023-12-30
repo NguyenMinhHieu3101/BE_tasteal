@@ -1,6 +1,8 @@
 ﻿using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
+using BE_tasteal.Persistence.Repository.AuthorRepo;
 using BE_tasteal.Persistence.Repository.CartRepo;
+using BE_tasteal.Persistence.Repository.IngredientRepo;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;
 
@@ -9,16 +11,23 @@ namespace BE_tasteal.Business.Cart
     public class CartBusiness: ICartBusiness
     {
         private readonly ICartRepo _cartRepo;
-        public CartBusiness(ICartRepo cartRepo) 
+        private readonly IUserRepo _userRepo;
+        private readonly IIngredientRepo _ingredientRepo;
+        public CartBusiness(
+            ICartRepo cartRepo,
+            IUserRepo userRepo,
+            IIngredientRepo ingredientRepo) 
         {
             _cartRepo = cartRepo;
+            _userRepo = userRepo;
+            _ingredientRepo = ingredientRepo;
         }
 
         public IEnumerable<CartEntity> GetCartByAccountId(string accountId)
         {
             return _cartRepo.GetCartByAccountId(accountId);
         }
-        public IEnumerable<PersonalCartItemEntity> GetPersonalCartItemsWithIngredients(string accountId)
+        public IEnumerable<PersonalCartItem> GetPersonalCartItemsWithIngredients(string accountId)
         {
             return _cartRepo.GetPersonalCartItemsWithIngredients(accountId);
         }
@@ -44,6 +53,12 @@ namespace BE_tasteal.Business.Cart
         }
         public async Task<bool> PostPersonalCartItem(PersonalCartItemReq request)
         {
+            if (await _ingredientRepo.FindByIdAsync(request.ingredient_id) == null)
+                return false;
+
+            if (await _userRepo.FindByIdAsync(request.account_id) == null)
+                return false;
+
             var result = await _cartRepo.PostPersonalCartItem(request);
             return result;
         }

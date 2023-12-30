@@ -26,7 +26,8 @@ namespace BE_tasteal.Persistence.Context
         public DbSet<Recipe_OccasionEntity> recipe_OccasionEntities { get; set; }
         public DbSet<OccasionEntity> occasionEntities { get; set; }
         public DbSet<Plan_ItemEntity> plan_ItemEntities { get; set; }
-        public DbSet<PersonalCartItemEntity> personalCartItems { get; set; }
+        public DbSet<PersonalCartItem> personalCartItems { get; set; }
+        public DbSet<KeyWord> keyWords { get; set; }
         #endregion
 
         #region model creating
@@ -40,7 +41,7 @@ namespace BE_tasteal.Persistence.Context
                new { p.recipe_id, p.step });
 
             modelBuilder.Entity<RatingEntity>().HasKey(p =>
-               new { p.recipe_id, p.account_id });
+            new { p.recipe_id, p.account_id });
 
             modelBuilder.Entity<Cart_ItemEntity>().HasKey(p =>
                 new { p.ingredient_id, p.cartId });
