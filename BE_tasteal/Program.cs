@@ -6,6 +6,7 @@ using BE_tasteal.Business.Comment;
 using BE_tasteal.Business.HomeBusiness;
 using BE_tasteal.Business.Ingredient;
 using BE_tasteal.Business.IngredientType;
+using BE_tasteal.Business.PantryItem;
 using BE_tasteal.Business.Recipe;
 using BE_tasteal.Business.User;
 using BE_tasteal.Entity.DTO.Request;
@@ -22,6 +23,7 @@ using BE_tasteal.Persistence.Repository.IngredientTypeRepo;
 using BE_tasteal.Persistence.Repository.KeyWordRepo;
 using BE_tasteal.Persistence.Repository.NutritionRepo;
 using BE_tasteal.Persistence.Repository.OccasionRepo;
+using BE_tasteal.Persistence.Repository.PantryItemRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -70,6 +72,7 @@ try
         services.AddScoped<ICartBusiness, CartBusiness>();
         services.AddScoped<IUserBusiness, UserBusiness>();
         services.AddScoped<ICommentBusiness, CommentBusiness>();
+        services.AddScoped<IPantryItemBusiness, PantryItemBusiness>();
 
         //repo
         services.AddScoped<IRecipeRepository, RecipeRepository>();
@@ -85,6 +88,7 @@ try
         services.AddScoped<CookBookRepo, CookBookRepo>();
         services.AddScoped<KeyWordRepo, KeyWordRepo>();
         services.AddScoped<IRecipe_OccasionRepo, Recipe_OccasionRepo>();
+        services.AddScoped<IPantryItemRepo, PantryItemRepo>();
 
 
         services.AddDbContext<MyDbContext>(option =>
