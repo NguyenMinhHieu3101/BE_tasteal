@@ -142,7 +142,7 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
                     RECIPE = recipeId
                 });
 
-                string sql = @"SELECT i.name, i.image, ri.amount_per_serving, i.isLiquid 
+                string sql = @"SELECT i.id, i.name, i.image, ri.amount_per_serving, i.isLiquid 
                       FROM Ingredient i
                       INNER JOIN Recipe_Ingredient ri ON i.id = ri.ingredient_id
                       WHERE ri.recipe_id = @RecipeId";
