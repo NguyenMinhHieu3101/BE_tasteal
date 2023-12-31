@@ -3,6 +3,7 @@ using System;
 using BE_tasteal.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BE_tasteal.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231231043648_pantry")]
+    partial class pantry
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -444,8 +447,8 @@ namespace BE_tasteal.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<decimal>("rating")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<int>("rating")
+                        .HasColumnType("int");
 
                     b.Property<int>("recipe_id")
                         .HasColumnType("int");
@@ -497,8 +500,8 @@ namespace BE_tasteal.Migrations
                     b.Property<int?>("nutrition_info_id")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("rating")
-                        .HasColumnType("decimal(65,30)");
+                    b.Property<float?>("rating")
+                        .HasColumnType("float");
 
                     b.Property<int>("serving_size")
                         .HasColumnType("int");
