@@ -4,10 +4,7 @@ using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using OpenAI_API.Images;
-using System.Drawing.Printing;
 
 namespace BE_tasteal.Persistence.Repository.RecipeRepo
 {
@@ -222,7 +219,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
 
             IEnumerable<RecipeEntity> recipes = await _context.Recipe
                 .OrderBy(r => r.id)
-                .Include (r => r.account)
+                .Include(r => r.account)
                 .Skip(offset)
                 .Take(req.pageSize)
                 .ToListAsync();
@@ -275,7 +272,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         }
         public async Task<int> DeleteRecipeAsync(int id)
         {
-            using(var connection = _connection.GetConnection())
+            using (var connection = _connection.GetConnection())
             {
                 string query = @"delete from recipe
                 where id = @RECIPEID";
@@ -291,46 +288,37 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         {
             int page = _page.page;
             int pageSize = _page.pageSize;
-            var validIngredientIds = _context.Ingredient
-            .Where(ie => ingredientIds.Contains(ie.id))
-            .Select(ie => ie.id)
-            .ToList();
 
-            var recipesWithIngredientsCount = _context.Recipe_Ingredient
-                .Where(ri => validIngredientIds.Contains(ri.ingredient_id))
+            var query = _context.Recipe_Ingredient
+                .Where(ri => ingredientIds.Contains(ri.ingredient_id))
                 .GroupBy(ri => ri.recipe_id)
-                .Select(g => new { RecipeId = g.Key, IngredientCount = g.Count() })
+                .Select(g => new
+                {
+                    RecipeId = g.Key,
+                    IngredientCount = g.Count()
+                })
                 .OrderByDescending(x => x.IngredientCount)
-                .Skip((page - 1) * pageSize)
+                .Select(x => x.RecipeId)
+                .ToList();
+
+            var recipes = _context.Recipe
+                .Where(r => query.Contains(r.id))
+                .ToList();
+
+            // Sắp xếp các công thức dựa trên thứ tự đã được sắp xếp từ trước
+            var sortedRecipes =
+                query.Select(id => recipes.First(r => r.id == id))
+            .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
 
-            var recipeIds = recipesWithIngredientsCount.Select(r => r.RecipeId).ToList();
-
-            var recipes = _context.Recipe
-                .Where(r => recipeIds.Contains(r.id))
-                .ToList();
-
-            var ingredientMap = _context.Recipe_Ingredient
-                .Where(ri => recipeIds.Contains(ri.recipe_id))
-                .Select(ri => new { ri.recipe_id, ri.ingredient })
-                .ToLookup(ri => ri.recipe_id, ri => ri.ingredient);
-
-            foreach (var recipe in recipes)
-            {
-                if (ingredientMap.Contains(recipe.id))
-                {
-                    recipe.ingredients = ingredientMap[recipe.id].ToList();
-                }
-            }
-
-            return recipes;
+            return sortedRecipes;
         }
-      
+
         public (List<RecipeEntity>, int) GetRecipesByUserId(RecipeByUids req)
         {
             List<RecipeEntity> recipeEntities = new List<RecipeEntity>();
-            foreach(var item in req.uids)
+            foreach (var item in req.uids)
             {
                 var recipes = _context.Recipe.Where(s => s.author == item).ToList();
                 foreach (var recipe in recipes)
@@ -345,7 +333,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 .Skip((req.page.page - 1) * req.page.pageSize)
                 .Take(req.page.pageSize)
                 .ToList();
-   
+
 
             return (recipeEntities, maxPage);
         }

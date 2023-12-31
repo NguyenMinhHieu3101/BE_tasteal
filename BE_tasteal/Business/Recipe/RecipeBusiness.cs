@@ -499,7 +499,7 @@ namespace BE_tasteal.Business.Recipe
                 //recipeRes.comments = comment;
 
                 //find Related Recipe
-                var relatedRecipes = _recipeResposity.GetRelatedRecipeByAuthor(recipeEntity.author);
+                var relatedRecipes = _recipeResposity.GetRelatedRecipeByAuthor(recipeEntity.author).Take(3);
                 foreach (var related in relatedRecipes)
                 {
                     related.author = recipeRes.author;
