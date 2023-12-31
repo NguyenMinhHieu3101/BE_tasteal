@@ -9,12 +9,12 @@ namespace BE_tasteal.Entity.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        public string? account_id { get; set; }
+        public int? pantry_id { get; set; }
         public int? ingredient_id { get; set; }
         public int amount { get; set; }
-        [ForeignKey("account_id")]
-        public AccountEntity? account { get; set; }
+        [ForeignKey("pantry_id")]
+        public PantryEntity? Pantry { get; set; }
         [ForeignKey("ingredient_id")]
-        public IngredientEntity? IngredientEntity { get; set; }
+        public IngredientEntity? Ingredient { get; set; }
     }
 }
