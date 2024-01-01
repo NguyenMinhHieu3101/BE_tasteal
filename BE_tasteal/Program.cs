@@ -23,6 +23,7 @@ using BE_tasteal.Persistence.Repository.KeyWordRepo;
 using BE_tasteal.Persistence.Repository.NutritionRepo;
 using BE_tasteal.Persistence.Repository.OccasionRepo;
 using BE_tasteal.Persistence.Repository.Pantry;
+using BE_tasteal.Persistence.Repository.PlanRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -88,6 +89,8 @@ try
         services.AddScoped<KeyWordRepo, KeyWordRepo>();
         services.AddScoped<IRecipe_OccasionRepo, Recipe_OccasionRepo>();
         services.AddScoped<IPantryRepo, PantryRepo>();
+        services.AddScoped<IPlanItemRepo, PlanItemRepo>();
+        services.AddScoped<IPlanRepo, PlanRepo>();
 
         services.AddDbContext<MyDbContext>(option =>
         {
