@@ -13,6 +13,7 @@ using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.AuthorRepo;
+using BE_tasteal.Persistence.Repository.CartItemRepo;
 using BE_tasteal.Persistence.Repository.CartRepo;
 using BE_tasteal.Persistence.Repository.CommentRepo;
 using BE_tasteal.Persistence.Repository.CookBookRepo;
@@ -70,6 +71,7 @@ try
         services.AddScoped<IIngredientTypeBusiness, IngredientTypeBusiness>();
         services.AddScoped<IHomeBusiness, HomeBusiness>();
         services.AddScoped<ICartBusiness, CartBusiness>();
+        services.AddScoped<ICartItemBusiness, CartItemBusiness>();
         services.AddScoped<IUserBusiness, UserBusiness>();
         services.AddScoped<ICommentBusiness, CommentBusiness>();
         services.AddScoped<IPantryItemBusiness, PantryItemBusiness>();
@@ -85,6 +87,7 @@ try
         services.AddScoped<IDirectionRepo, DirectionRepo>();
         services.AddScoped<ICommentRepo, CommentRepo>();
         services.AddScoped<ICartRepo, CartRepo>();
+        services.AddScoped<ICartItemRepo, CartItemRepo>();
         services.AddScoped<CookBookRepo, CookBookRepo>();
         services.AddScoped<KeyWordRepo, KeyWordRepo>();
         services.AddScoped<IRecipe_OccasionRepo, Recipe_OccasionRepo>();
