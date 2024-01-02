@@ -12,6 +12,16 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
   <ItemGroup>
+    <Compile Remove="Business\Cart - Copy\**" />
+    <Compile Remove="Business\NewFolder\**" />
+    <Content Remove="Business\Cart - Copy\**" />
+    <Content Remove="Business\NewFolder\**" />
+    <EmbeddedResource Remove="Business\Cart - Copy\**" />
+    <EmbeddedResource Remove="Business\NewFolder\**" />
+    <None Remove="Business\Cart - Copy\**" />
+    <None Remove="Business\NewFolder\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Dapper" Version="2.1.4" />
@@ -41,6 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Business\Recipe\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
