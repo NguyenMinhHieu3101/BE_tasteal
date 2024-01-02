@@ -13,6 +13,10 @@ namespace BE_tasteal.Entity.Entity
         public string account_id { get; set; }
         [Column(TypeName = "text")]
         public string? comment { get; set; }
+        public string? image { get; set; }
+        public DateTime? created_at { get; set; }
+        public DateTime? updated_at { get; set; }
+
         [ForeignKey("recipe_id")]
         public RecipeEntity Recipe { get; set; }
         [ForeignKey("account_id")]

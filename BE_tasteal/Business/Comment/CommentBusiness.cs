@@ -20,7 +20,8 @@ namespace BE_tasteal.Business.Comment
 
         public async Task<IEnumerable<CommentRes>?> GetCommentByRecipeId(int recipe_id)
         {
-            if (await _recipeRepository.FindByIdAsync(recipe_id) == null) {
+            if (await _recipeRepository.FindByIdAsync(recipe_id) == null)
+            {
                 return null;
             }
             var result = await _commentRepo.GetCommentByRecipeId(recipe_id);
@@ -34,6 +35,9 @@ namespace BE_tasteal.Business.Comment
                 recipe_id = recipe_id,
                 account_id = req.account_id,
                 comment = req.comment,
+                image = req.image,
+                updated_at = DateTime.Now,
+                created_at = DateTime.Now,
             };
             var result = await _commentRepo.InsertAsync(commentEntity);
             return result;
@@ -42,10 +46,12 @@ namespace BE_tasteal.Business.Comment
         {
             return await _commentRepo.FindByIdAsync(id);
         }
-        public async Task<CommentEntity?> UpdateCommentAsync(int recipe_id, int comment_id, string commentUpdate)
+        public async Task<CommentEntity?> UpdateCommentAsync(int recipe_id, int comment_id, CommentReqPut commentUpdate)
         {
             var result = await _commentRepo.FindByIdAsync(comment_id);
-            result.comment = commentUpdate;
+            result.comment = commentUpdate.comment;
+            result.image = commentUpdate.image;
+            result.updated_at = DateTime.Now;
             await _commentRepo.UpdateAsync(result);
             return result;
         }
@@ -53,7 +59,7 @@ namespace BE_tasteal.Business.Comment
         public async Task<CommentEntity?> DeleteCommentAsync(int recipe_id, int comment_id)
         {
             var result = await _commentRepo.FindByIdAsync(comment_id);
-            if(result != null)
+            if (result != null)
             {
                 await _commentRepo.DeleteAsync(result);
             }

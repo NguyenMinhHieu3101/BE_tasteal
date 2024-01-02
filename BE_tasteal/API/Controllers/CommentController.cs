@@ -1,10 +1,8 @@
 ﻿using BE_tasteal.Business.Comment;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Persistence.Repository.AuthorRepo;
-using BE_tasteal.Persistence.Repository.CookBookRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
 
 namespace BE_tasteal.API.Controllers
 {
@@ -17,7 +15,7 @@ namespace BE_tasteal.API.Controllers
         private readonly IRecipeRepository _recipeRepository;
         private readonly IUserRepo _userRepo;
         public CommentController(
-            ICommentBusiness commentBusiness, 
+            ICommentBusiness commentBusiness,
             IRecipeRepository recipeRepository,
             IUserRepo userRepo)
         {
@@ -28,14 +26,12 @@ namespace BE_tasteal.API.Controllers
 
         [HttpGet]
         [Route("Recipe/{recipe_id}/Comments")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> getRecipeComments(int recipe_id)
         {
-          
+
             try
             {
-                if(await _recipeRepository.FindByIdAsync(recipe_id) == null)
+                if (await _recipeRepository.FindByIdAsync(recipe_id) == null)
                 {
                     return BadRequest("Recipe id invalid");
                 }
@@ -48,7 +44,7 @@ namespace BE_tasteal.API.Controllers
             }
             catch (Exception ex)
             {
-               return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
         [HttpPost]
@@ -71,7 +67,7 @@ namespace BE_tasteal.API.Controllers
                     return BadRequest("User id invalid");
                 }
                 var result = await _commentBusiness.InsertCommentAsync(recipe_id, req);
-                if(result == null)
+                if (result == null)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
                 }
@@ -100,7 +96,7 @@ namespace BE_tasteal.API.Controllers
                 {
                     return BadRequest("Comment id invalid");
                 }
-                var result = await _commentBusiness.UpdateCommentAsync(recipe_id, id, req.comment);
+                var result = await _commentBusiness.UpdateCommentAsync(recipe_id, id, req);
                 if (result == null)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
@@ -130,7 +126,7 @@ namespace BE_tasteal.API.Controllers
                 {
                     return BadRequest("Comment id invalid");
                 }
-                if(comment.recipe_id != recipe_id)
+                if (comment.recipe_id != recipe_id)
                 {
                     return BadRequest("Comment does not belong to recipe");
                 }

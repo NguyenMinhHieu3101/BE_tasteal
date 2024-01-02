@@ -18,8 +18,6 @@ namespace BE_tasteal.API.Controllers
         }
         [HttpPost]
         [Route("allcart")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult AllCart(string accountId)
         {
             try
@@ -129,7 +127,7 @@ namespace BE_tasteal.API.Controllers
             try
             {
                 var result = await _cartBusiness.PostPersonalCartItem(request);
-                if(!result)
+                if (!result)
                     return BadRequest("IngredientId or UserId invalid");
                 return Ok(result);
             }

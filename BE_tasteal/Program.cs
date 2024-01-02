@@ -1,11 +1,11 @@
 using BE_tasteal.API.AppSettings;
 using BE_tasteal.API.Middleware;
-using BE_tasteal.Business;
 using BE_tasteal.Business.Cart;
 using BE_tasteal.Business.Comment;
 using BE_tasteal.Business.HomeBusiness;
 using BE_tasteal.Business.Ingredient;
 using BE_tasteal.Business.IngredientType;
+using BE_tasteal.Business.Pantry;
 using BE_tasteal.Business.PantryItem;
 using BE_tasteal.Business.Recipe;
 using BE_tasteal.Business.User;
@@ -24,6 +24,8 @@ using BE_tasteal.Persistence.Repository.IngredientTypeRepo;
 using BE_tasteal.Persistence.Repository.KeyWordRepo;
 using BE_tasteal.Persistence.Repository.NutritionRepo;
 using BE_tasteal.Persistence.Repository.OccasionRepo;
+using BE_tasteal.Persistence.Repository.Pantry;
+using BE_tasteal.Persistence.Repository.PlanRepo;
 using BE_tasteal.Persistence.Repository.PantryItemRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
@@ -73,8 +75,9 @@ try
         services.AddScoped<ICartBusiness, CartBusiness>();
         services.AddScoped<ICartItemBusiness, CartItemBusiness>();
         services.AddScoped<IUserBusiness, UserBusiness>();
-        services.AddScoped<ICommentBusiness, CommentBusiness>();
-        services.AddScoped<IPantryItemBusiness, PantryItemBusiness>();
+        services.AddScoped<ICommentBusiness, CommentBusiness>()
+        services.AddScoped<PantryBusiness, PantryBusiness>()
+        services.AddScoped<IPantryItemBusiness, PantryItemBusiness>()
 
         //repo
         services.AddScoped<IRecipeRepository, RecipeRepository>();
@@ -91,6 +94,9 @@ try
         services.AddScoped<CookBookRepo, CookBookRepo>();
         services.AddScoped<KeyWordRepo, KeyWordRepo>();
         services.AddScoped<IRecipe_OccasionRepo, Recipe_OccasionRepo>();
+        services.AddScoped<IPantryRepo, PantryRepo>();
+        services.AddScoped<IPlanItemRepo, PlanItemRepo>();
+        services.AddScoped<IPlanRepo, PlanRepo>();
         services.AddScoped<IPantryItemRepo, PantryItemRepo>();
 
 
