@@ -13,7 +13,7 @@ namespace BE_tasteal.Persistence.Repository.CommentRepo
         {
 
         }
-        public async Task<IEnumerable<CommentRes>?> GetCommentByRecipeId(int id)
+        public async Task<IEnumerable<CommentRes>> GetCommentByRecipeId(int id)
         {
             using (var connection = _connection.GetConnection())
             {

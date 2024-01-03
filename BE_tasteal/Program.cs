@@ -25,8 +25,8 @@ using BE_tasteal.Persistence.Repository.KeyWordRepo;
 using BE_tasteal.Persistence.Repository.NutritionRepo;
 using BE_tasteal.Persistence.Repository.OccasionRepo;
 using BE_tasteal.Persistence.Repository.Pantry;
-using BE_tasteal.Persistence.Repository.PlanRepo;
 using BE_tasteal.Persistence.Repository.PantryItemRepo;
+using BE_tasteal.Persistence.Repository.PlanRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -75,9 +75,9 @@ try
         services.AddScoped<ICartBusiness, CartBusiness>();
         services.AddScoped<ICartItemBusiness, CartItemBusiness>();
         services.AddScoped<IUserBusiness, UserBusiness>();
-        services.AddScoped<ICommentBusiness, CommentBusiness>()
-        services.AddScoped<PantryBusiness, PantryBusiness>()
-        services.AddScoped<IPantryItemBusiness, PantryItemBusiness>()
+        services.AddScoped<ICommentBusiness, CommentBusiness>();
+        services.AddScoped<PantryBusiness, PantryBusiness>();
+        services.AddScoped<IPantryItemBusiness, PantryItemBusiness>();
 
         //repo
         services.AddScoped<IRecipeRepository, RecipeRepository>();
