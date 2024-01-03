@@ -11,5 +11,12 @@ namespace BE_tasteal.Persistence.Repository.OccasionRepo
         {
 
         }
+        public List<int>? getListIdOccasionByRecipeId(int recipeId)
+        {
+            var list = _context.Recipe_Occasion
+                        .Where(c => c.recipe_id == recipeId)
+                        .Select(c => c.occasion_id).ToList();
+            return list;
+        }
     }
 }

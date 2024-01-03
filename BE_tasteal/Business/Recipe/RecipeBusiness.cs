@@ -25,7 +25,7 @@ namespace BE_tasteal.Business.Recipe
         private readonly IDirectionRepo _directionRepo;
         private readonly ICommentRepo _commentRepo;
         private readonly ILogger<RecipeEntity> _logger;
-        private readonly IRecipe_OccasionRepo _OccasionRepo;
+        private readonly IRecipe_OccasionRepo _recipe_OccasionRepo;
         private readonly IOccasionRepo _ocasionRepo;
 
         public RecipeBusiness(IMapper mapper,
@@ -49,7 +49,7 @@ namespace BE_tasteal.Business.Recipe
             _nutritionRepo = nutritionRepo;
             _directionRepo = directionRepo;
             _commentRepo = commentRepo;
-            _OccasionRepo = OccasionRepo;
+            _recipe_OccasionRepo = OccasionRepo;
             _ocasionRepo = occasionRepo;
         }
         public async Task<RecipeEntity?> Add(RecipeReq entity)
@@ -127,7 +127,7 @@ namespace BE_tasteal.Business.Recipe
                     Recipe_OccasionEntity recipe_OccasionEntity = new Recipe_OccasionEntity();
                     recipe_OccasionEntity.occasion_id = occasion;
                     recipe_OccasionEntity.recipe_id = newRecipe.id;
-                    var item = await _OccasionRepo.InsertAsync(recipe_OccasionEntity);
+                    var item = await _recipe_OccasionRepo.InsertAsync(recipe_OccasionEntity);
                     if (item != null)
                         recipe_Occasions.Add(item);
                 }
@@ -263,7 +263,7 @@ namespace BE_tasteal.Business.Recipe
                         Recipe_OccasionEntity recipe_OccasionEntity = new Recipe_OccasionEntity();
                         recipe_OccasionEntity.occasion_id = occasion;
                         recipe_OccasionEntity.recipe_id = recipe.id;
-                        var item = await _OccasionRepo.InsertAsync(recipe_OccasionEntity);
+                        var item = await _recipe_OccasionRepo.InsertAsync(recipe_OccasionEntity);
                         if (item != null)
                             recipe_Occasions.Add(item);
                     }
@@ -495,8 +495,8 @@ namespace BE_tasteal.Business.Recipe
 
 
                 //find comment
-                //var comment = _commentRepo.GetCommentByRecipeId(recipeEntity.id);
-                //recipeRes.comments = comment;
+                var comment = await _commentRepo.GetCommentByRecipeId(recipeEntity.id);
+                recipeRes.comments = comment.Take(10);
 
                 //find Related Recipe
                 var relatedRecipes = _recipeResposity.GetRelatedRecipeByAuthor(recipeEntity.author).Take(3);
@@ -505,6 +505,21 @@ namespace BE_tasteal.Business.Recipe
                     related.author = recipeRes.author;
                 }
                 recipeRes.relatedRecipes = relatedRecipes;
+
+                //occasion
+                recipeRes.occasions = new List<OccasionEntity>();
+
+                var list_id_occasion = _recipe_OccasionRepo.getListIdOccasionByRecipeId(2);
+                if (list_id_occasion != null)
+                {
+                    foreach (var item in list_id_occasion)
+                    {
+                        var occasion = await _ocasionRepo.FindByIdAsync(item);
+                        if (occasion != null)
+                            recipeRes.occasions.Add(occasion);
+                    }
+                }
+
 
                 return recipeRes;
             }

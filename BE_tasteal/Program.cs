@@ -6,12 +6,15 @@ using BE_tasteal.Business.HomeBusiness;
 using BE_tasteal.Business.Ingredient;
 using BE_tasteal.Business.IngredientType;
 using BE_tasteal.Business.RatingBusiness;
+using BE_tasteal.Business.Pantry;
+using BE_tasteal.Business.PantryItem;
 using BE_tasteal.Business.Recipe;
 using BE_tasteal.Business.User;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.AuthorRepo;
+using BE_tasteal.Persistence.Repository.CartItemRepo;
 using BE_tasteal.Persistence.Repository.CartRepo;
 using BE_tasteal.Persistence.Repository.CommentRepo;
 using BE_tasteal.Persistence.Repository.CookBookRepo;
@@ -23,6 +26,9 @@ using BE_tasteal.Persistence.Repository.KeyWordRepo;
 using BE_tasteal.Persistence.Repository.NutritionRepo;
 using BE_tasteal.Persistence.Repository.OccasionRepo;
 using BE_tasteal.Persistence.Repository.RatingRepo;
+using BE_tasteal.Persistence.Repository.Pantry;
+using BE_tasteal.Persistence.Repository.PantryItemRepo;
+using BE_tasteal.Persistence.Repository.PlanRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -69,9 +75,12 @@ try
         services.AddScoped<IIngredientTypeBusiness, IngredientTypeBusiness>();
         services.AddScoped<IHomeBusiness, HomeBusiness>();
         services.AddScoped<ICartBusiness, CartBusiness>();
+        services.AddScoped<ICartItemBusiness, CartItemBusiness>();
         services.AddScoped<IUserBusiness, UserBusiness>();
         services.AddScoped<ICommentBusiness, CommentBusiness>();
         services.AddScoped<IRatingBusiness, RatingBusiness>();
+        services.AddScoped<PantryBusiness, PantryBusiness>();
+        services.AddScoped<IPantryItemBusiness, PantryItemBusiness>();
 
         //repo
         services.AddScoped<IRecipeRepository, RecipeRepository>();
@@ -84,10 +93,15 @@ try
         services.AddScoped<IDirectionRepo, DirectionRepo>();
         services.AddScoped<ICommentRepo, CommentRepo>();
         services.AddScoped<ICartRepo, CartRepo>();
+        services.AddScoped<ICartItemRepo, CartItemRepo>();
         services.AddScoped<CookBookRepo, CookBookRepo>();
         services.AddScoped<KeyWordRepo, KeyWordRepo>();
         services.AddScoped<IRecipe_OccasionRepo, Recipe_OccasionRepo>();
         services.AddScoped<IRatingRepo, RatingRepo>();
+        services.AddScoped<IPantryRepo, PantryRepo>();
+        services.AddScoped<IPlanItemRepo, PlanItemRepo>();
+        services.AddScoped<IPlanRepo, PlanRepo>();
+        services.AddScoped<IPantryItemRepo, PantryItemRepo>();
 
 
         services.AddDbContext<MyDbContext>(option =>

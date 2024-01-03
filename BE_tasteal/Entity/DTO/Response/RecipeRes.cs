@@ -18,7 +18,7 @@ namespace BE_tasteal.Entity.DTO.Response
         public IEnumerable<DirectionRes> directions { get; set; }
         public IEnumerable<CommentRes> comments { get; set; }
         public DateTime? createAt { get; set; }
+        public List<OccasionEntity>? occasions { get; set; }
         public IEnumerable<RelatedRecipeRes>? relatedRecipes { get; set; }
-
     }
 }
