@@ -2,25 +2,20 @@ using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
+using BE_tasteal.Persistence.Repository.AuthorRepo;
 using BE_tasteal.Persistence.Repository.GenericRepository;
-using BE_tasteal.Utils;
 using Dapper;
-using Microsoft.Extensions.FileSystemGlobbing.Internal;
-using System.Data.Common;
-using System.Globalization;
-using System.Text;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BE_tasteal.Persistence.Repository.RecipeRepo
 {
     public class RecipeSearchRepo : GenericRepository<RecipeEntity>, IRecipeSearchRepo
     {
+        private readonly IUserRepo _userRepo;
         public RecipeSearchRepo(MyDbContext context,
-           ConnectionManager connectionManager) : base(context, connectionManager)
+           ConnectionManager connectionManager,
+           IUserRepo userRepo) : base(context, connectionManager)
         {
-
+            _userRepo = userRepo;
         }
         public async Task<List<RecipeSearchRes>> Search(RecipeSearchReq input)
         {
@@ -52,7 +47,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
 
                 if (input.OccasionID?.Any() == true)
                 {
-                    
+
                     conditions.Add("ro.occasion_id IN @OccasionIds");
                     parameters.Add("OccasionIds", input.OccasionID);
                 }
@@ -69,14 +64,14 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                     string keywordSql = "  ";
                     List<string> keywordCondition = new List<string>();
 
-                    int index = 0; 
+                    int index = 0;
 
                     foreach (var pattern in input.KeyWords)
                     {
-                        string parameterName = $"Pattern{index}"; 
+                        string parameterName = $"Pattern{index}";
                         keywordCondition.Add($" LOWER(introduction) REGEXP LOWER(@{parameterName}) ");
                         keywordCondition.Add($" LOWER(r.name) REGEXP LOWER(@{parameterName}) ");
-                        parameters.Add(parameterName, pattern); 
+                        parameters.Add(parameterName, pattern);
                         index++;
                     }
 
@@ -87,7 +82,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
 
                 if (input.Calories != null)
                 {
-                    
+
                     conditions.Add(@"( ni.calories > @MIN and ni.calories < @MAX )");
                     parameters.Add("MIN", input.Calories.min);
                     parameters.Add("MAX", input.Calories.max);
@@ -110,7 +105,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
 
 
                 var result = new List<RecipeSearchRes>();
-                foreach(var item in recipe)
+                foreach (var item in recipe)
                 {
                     RecipeSearchRes recipeSearchRes = new RecipeSearchRes
                     {
@@ -129,7 +124,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                         createdAt = item.createdAt,
                         updatedAt = item.updatedAt,
                         account = item.account,
-                        nutrition_info = item   .nutrition_info,
+                        nutrition_info = item.nutrition_info,
                         ingredients = item.ingredients,
                         direction = item.direction,
                         calories = 0
@@ -141,6 +136,11 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                         ID = item.nutrition_info_id
                     });
                     recipeSearchRes.calories = nutri.calories;
+
+                    var user = await _userRepo.FindByIdAsync(item.author);
+
+                    recipeSearchRes.account = user;
+
                     result.Add(recipeSearchRes);
                 }
 
@@ -148,7 +148,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
             }
 
         }
-       
+
     }
 }
 
