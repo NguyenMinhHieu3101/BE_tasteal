@@ -18,7 +18,7 @@ namespace BE_tasteal.Persistence.Repository.PantryItemRepo
         {
 
         }
-        public async Task<Pantry_ItemEntity> addPantryItem(PantryItemReq req)
+        public async Task<Pantry_ItemEntity> addPantryItem(CreatePantryItemReq req)
         {
             using (var connection = _connection.GetConnection())
             {
@@ -81,6 +81,56 @@ namespace BE_tasteal.Persistence.Repository.PantryItemRepo
                 return true;
             }
 
+        }
+        public async Task<Pantry_ItemEntity> updatePantryItem (UpdatePantryItemReq req)
+        {
+            using (var connection = _connection.GetConnection())
+            {
+                var query = "UPDATE pantry_item SET amount=@amount where id =@id ";
+                await connection.ExecuteAsync(query, new
+                {
+                    id = req.id,
+                    amount=req.number
+                });
+                Pantry_ItemEntity pantryItem = await _context.Pantry_Item.
+                   Where(r => r.id == req.id).
+                   Include(r => r.Pantry).
+                   Include(r => r.Ingredient).FirstAsync();
+
+                return pantryItem;
+            }
+        }
+        public async Task<Pantry_ItemEntity> getPantryItem(int id)
+        {
+            using (var connection = _connection.GetConnection())
+            {
+                Pantry_ItemEntity pantryItem = await _context.Pantry_Item.
+                   Where(r => r.id == id).
+                   Include(r => r.Pantry).
+                   Include(r => r.Ingredient).FirstAsync();
+
+                return pantryItem;
+            }
+        }
+        public async Task<List<Pantry_ItemEntity>> getAllPantryItem(GetAllPantryItemReq req)
+        {
+            using (var connection = _connection.GetConnection())
+            {
+                PantryEntity pantry = await _context.Pantry.
+                 Where(r => r.account_id == req.account_id).FirstAsync();
+
+                int offset = (req.page - 1) * req.pageSize;
+
+                IEnumerable <Pantry_ItemEntity> pantryItems = await _context.Pantry_Item.
+                   Where(r => r.pantry_id == pantry.id).
+                   Include(r => r.Pantry).
+                   Include(r => r.Ingredient).
+                   Skip(offset).
+                   Take(req.pageSize).  
+                   ToListAsync();
+
+                return pantryItems.ToList();
+            }
         }
     }
 }

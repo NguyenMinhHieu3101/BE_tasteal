@@ -20,7 +20,7 @@ namespace BE_tasteal.API.Controllers
         [Route("pantry_item")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddPantryItem(PantryItemReq item)
+        public async Task<IActionResult> AddPantryItem(CreatePantryItemReq item)
         {
             try
             {
@@ -41,6 +41,54 @@ namespace BE_tasteal.API.Controllers
             try
             {
                 var all = await _iPantryItemBusiness.removePantryItem(id);
+                return Ok(all);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut]
+        [Route("pantry_item")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdatePantryItem(UpdatePantryItemReq req)
+        {
+            try
+            {
+                var all = await _iPantryItemBusiness.updatePantryItem(req);
+                return Ok(all);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        [Route("pantry_item")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetPantryItem(int id)
+        {
+            try
+            {
+                var all = await _iPantryItemBusiness.getPantryItem(id);
+                return Ok(all);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost]
+        [Route("all_pantry_item")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAllPantryItem(GetAllPantryItemReq req)
+        {
+            try
+            {
+                var all = await _iPantryItemBusiness.getAllPantryItem(req);
                 return Ok(all);
             }
             catch (Exception ex)
