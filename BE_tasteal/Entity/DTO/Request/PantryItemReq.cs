@@ -8,7 +8,7 @@ namespace BE_tasteal.Entity.DTO.Request
         public string account_id { get; set; }
         [Required]
         public int ingredient_id  { get; set; }
-        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "number >= 1")]
         public int number { get; set; }
 
     }

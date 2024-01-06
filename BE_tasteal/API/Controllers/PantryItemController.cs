@@ -17,7 +17,7 @@ namespace BE_tasteal.API.Controllers
             _iPantryItemBusiness = iPantryItemBusiness;
         }
         [HttpPost]
-        [Route("add_pantry_item")]
+        [Route("pantry_item")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddPantryItem(PantryItemReq item)
@@ -32,15 +32,15 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
-        [Route("remove_pantry_item")]
+        [HttpDelete]
+        [Route("pantry_item/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> RemovePantryItem(PantryItemReq item)
+        public async Task<IActionResult> RemovePantryItem(int id)
         {
             try
             {
-                var all = await _iPantryItemBusiness.removePantryItem(item);
+                var all = await _iPantryItemBusiness.removePantryItem(id);
                 return Ok(all);
             }
             catch (Exception ex)
