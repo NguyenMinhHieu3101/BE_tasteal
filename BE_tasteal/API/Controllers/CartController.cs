@@ -1,7 +1,9 @@
 ﻿using BE_tasteal.Business.Cart;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
+using BE_tasteal.Persistence.Repository.AuthorRepo;
 using BE_tasteal.Persistence.Repository.CartRepo;
+using BE_tasteal.Persistence.Repository.IngredientRepo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BE_tasteal.API.Controllers
@@ -13,13 +15,19 @@ namespace BE_tasteal.API.Controllers
     {
         private readonly ICartBusiness _cartBusiness;
         private readonly ICartRepo _cartRepo;
+        private readonly IUserRepo _userRepo;
+        private readonly IIngredientRepo _ingredientRepo;
 
         public CartController(
             ICartBusiness cartBusiness,
-            ICartRepo cartRepo)
+            ICartRepo cartRepo,
+            IUserRepo userRepo,
+            IIngredientRepo ingredientRepo)
         {
             _cartBusiness = cartBusiness;
             _cartRepo = cartRepo;
+            _userRepo = userRepo;
+            _ingredientRepo = ingredientRepo;
         }
         [HttpPost]
         [Route("allcart")]
@@ -135,9 +143,23 @@ namespace BE_tasteal.API.Controllers
         {
             try
             {
+                if (await _userRepo.FindByIdAsync(request.account_id) == null)
+                {
+                    return BadRequest("userId invalid");
+                }
+
+                if (await _ingredientRepo.FindByIdAsync(request?.ingredient_id) == null)
+                {
+                    return BadRequest("ingredientId invalid");
+                }
+
                 var result = await _cartBusiness.PostPersonalCartItem(request);
-                if (!result)
-                    return BadRequest("IngredientId or UserId invalid");
+
+                if (result == null)
+                {
+                    return BadRequest(null);
+                }
+
                 return Ok(result);
             }
             catch (Exception ex)

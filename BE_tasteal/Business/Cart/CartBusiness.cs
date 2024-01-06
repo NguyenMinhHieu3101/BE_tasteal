@@ -3,12 +3,10 @@ using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Repository.AuthorRepo;
 using BE_tasteal.Persistence.Repository.CartRepo;
 using BE_tasteal.Persistence.Repository.IngredientRepo;
-using Microsoft.EntityFrameworkCore;
-using System.Numerics;
 
 namespace BE_tasteal.Business.Cart
 {
-    public class CartBusiness: ICartBusiness
+    public class CartBusiness : ICartBusiness
     {
         private readonly ICartRepo _cartRepo;
         private readonly IUserRepo _userRepo;
@@ -16,7 +14,7 @@ namespace BE_tasteal.Business.Cart
         public CartBusiness(
             ICartRepo cartRepo,
             IUserRepo userRepo,
-            IIngredientRepo ingredientRepo) 
+            IIngredientRepo ingredientRepo)
         {
             _cartRepo = cartRepo;
             _userRepo = userRepo;
@@ -49,13 +47,10 @@ namespace BE_tasteal.Business.Cart
         }
         public bool UpdateBoughtItem(int cartId, int ingredientId, bool isBought)
         {
-            return _cartRepo.UpdateBoughtItem(cartId, ingredientId, isBought);    
+            return _cartRepo.UpdateBoughtItem(cartId, ingredientId, isBought);
         }
-        public async Task<bool> PostPersonalCartItem(PersonalCartItemReq request)
+        public async Task<PersonalCartItemEntity?> PostPersonalCartItem(PersonalCartItemReq request)
         {
-            if (await _userRepo.FindByIdAsync(request.account_id) == null)
-                return false;
-
             var result = await _cartRepo.PostPersonalCartItem(request);
             return result;
         }

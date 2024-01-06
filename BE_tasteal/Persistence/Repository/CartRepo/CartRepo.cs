@@ -4,6 +4,7 @@ using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using static Dapper.SqlMapper;
 
 namespace BE_tasteal.Persistence.Repository.CartRepo
 {
@@ -189,7 +190,7 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
 
             return cartItemsWithIngredients;
         }
-        public async Task<bool> PostPersonalCartItem(PersonalCartItemReq request)
+        public async Task<PersonalCartItemEntity?> PostPersonalCartItem(PersonalCartItemReq request)
         {
             try
             {
@@ -221,19 +222,16 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
                     };
                 }
 
+                _context.Attach(personalCartItem);
+                var entityEntry = await _context.Set<PersonalCartItemEntity>().AddAsync(personalCartItem);
+                _context.SaveChanges();
 
-
-                _context.PersonalCartItems.Add(personalCartItem);
-                int result = await _context.SaveChangesAsync();
-                if (result <= 0)
-                    return false;
-
-                return true;
+                return entityEntry.Entity;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return false;
+                return null;
             }
 
         }

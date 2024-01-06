@@ -7,7 +7,7 @@ using BE_tasteal.Business.Ingredient;
 using BE_tasteal.Business.IngredientType;
 using BE_tasteal.Business.Pantry;
 using BE_tasteal.Business.PantryItem;
-using BE_tasteal.Business.RatingBusiness;
+
 using BE_tasteal.Business.Recipe;
 using BE_tasteal.Business.User;
 using BE_tasteal.Entity.DTO.Request;
@@ -28,7 +28,6 @@ using BE_tasteal.Persistence.Repository.OccasionRepo;
 using BE_tasteal.Persistence.Repository.Pantry;
 using BE_tasteal.Persistence.Repository.PantryItemRepo;
 using BE_tasteal.Persistence.Repository.PlanRepo;
-using BE_tasteal.Persistence.Repository.RatingRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
