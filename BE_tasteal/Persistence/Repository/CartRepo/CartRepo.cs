@@ -76,11 +76,12 @@ namespace BE_tasteal.Persistence.Repository.CartRepo
                     string updateCart = @"
                         update cart
                         set serving_size = @SIZE
-                        where cartId = @CARTID
+                        where id = @CARTID
                         ";
                     var updateItem = connection.Execute(updateCart, new
                     {
-                        SIZE = servingSize
+                        SIZE = servingSize,
+                        CARTID = CardId
                     });
 
                     return true;
