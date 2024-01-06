@@ -1,6 +1,7 @@
 ﻿using BE_tasteal.Business.Cart;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
+using BE_tasteal.Persistence.Repository.CartRepo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BE_tasteal.API.Controllers
@@ -11,10 +12,14 @@ namespace BE_tasteal.API.Controllers
     public class CartController : Controller
     {
         private readonly ICartBusiness _cartBusiness;
+        private readonly ICartRepo _cartRepo;
 
-        public CartController(ICartBusiness cartBusiness)
+        public CartController(
+            ICartBusiness cartBusiness,
+            ICartRepo cartRepo)
         {
             _cartBusiness = cartBusiness;
+            _cartRepo = cartRepo;
         }
         [HttpPost]
         [Route("allcart")]
@@ -62,17 +67,18 @@ namespace BE_tasteal.API.Controllers
         }
         [HttpDelete]
         [Route("cart")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult DeleteCart(int cartId)
+        public async Task<ActionResult> DeleteCart(int cartId)
         {
             try
             {
+                if (await _cartRepo.FindByIdAsync(cartId) == null)
+                    return BadRequest("cartId invalid");
                 return Ok(_cartBusiness.DeleteCart(cartId));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+
             }
         }
         [HttpDelete]
@@ -147,7 +153,8 @@ namespace BE_tasteal.API.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+
             }
         }
     }
