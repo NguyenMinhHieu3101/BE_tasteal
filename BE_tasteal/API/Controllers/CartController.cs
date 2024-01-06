@@ -39,11 +39,13 @@ namespace BE_tasteal.API.Controllers
         [Route("servingsize")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult UpdateServingSize(int CardId, int servingSize)
+        public async Task<IActionResult> UpdateServingSize(int cartId, int servingSize)
         {
             try
             {
-                return Ok(_cartBusiness.UpdateServingSize(CardId, servingSize));
+                if (await _cartRepo.FindByIdAsync(cartId) == null)
+                    return BadRequest("cartId invalid");
+                return Ok(_cartBusiness.UpdateServingSize(cartId, servingSize));
             }
             catch (Exception ex)
             {
@@ -58,6 +60,7 @@ namespace BE_tasteal.API.Controllers
         {
             try
             {
+
                 return Ok(_cartBusiness.GetItemByCartId(cartIds));
             }
             catch (Exception ex)

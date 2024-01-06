@@ -47,14 +47,14 @@ namespace BE_tasteal.API.Controllers
 
         [HttpPost]
         [Route("getall")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<IngredientEntity>))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAllIngredient(PageReq page)
+
+        public async Task<IActionResult> GetAllIngredient(
+            [FromBody] PageReq page)
         {
             try
             {
                 var result = await _ingredientBusiness.GetAllIngredient(page);
-                
+
                 if (result.Item1.Count == 0)
                 {
                     return NotFound();
@@ -91,7 +91,7 @@ namespace BE_tasteal.API.Controllers
                 await _ingredientRepo.DeleteAsync(ingre);
                 return NoContent();
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 return BadRequest(false);
