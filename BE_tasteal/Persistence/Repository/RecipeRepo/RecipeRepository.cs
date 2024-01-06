@@ -222,7 +222,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
                 .Include(r => r.account)
                 .Skip(offset)
                 .Take(req.pageSize)
-                .ToListAsync();
+                .ToListAsync(); 
 
             return recipes.ToList();
         }

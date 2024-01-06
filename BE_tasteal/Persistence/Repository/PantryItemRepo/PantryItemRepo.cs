@@ -1,9 +1,12 @@
-﻿using BE_tasteal.Entity.DTO.Request;
+﻿using BE_tasteal.API.AppSettings;
+using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Migrations;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace BE_tasteal.Persistence.Repository.PantryItemRepo
@@ -15,7 +18,7 @@ namespace BE_tasteal.Persistence.Repository.PantryItemRepo
         {
 
         }
-        public async Task<bool> addPantryItem(PantryItemReq req)
+        public async Task<Pantry_ItemEntity> addPantryItem(CreatePantryItemReq req)
         {
             using (var connection = _connection.GetConnection())
             {
@@ -47,9 +50,6 @@ namespace BE_tasteal.Persistence.Repository.PantryItemRepo
                 }
                   
                 
-
-                try
-                {
                      query = "INSERT INTO pantry_item (pantry_id, ingredient_id, amount) VALUES (@pantry_id, @ingredient_id, @amount) " +
                "ON DUPLICATE KEY UPDATE amount = amount + @amount";
                     await connection.ExecuteAsync(query, new
@@ -58,68 +58,79 @@ namespace BE_tasteal.Persistence.Repository.PantryItemRepo
                         ingredient_id = req.ingredient_id,
                         amount = req.number
                     });
-                }
-                catch (Exception ex)
-                {
-                    return false;
-                }
-                return true;
+                
+                Pantry_ItemEntity pantryItem = await _context.Pantry_Item.
+                    Where(r => r.pantry_id == item.id && r.ingredient_id==req.ingredient_id).
+                    Include(r => r.Pantry).
+                    Include(r => r.Ingredient).FirstAsync();
+
+                    
+                return pantryItem;
             }
         }
 
-        public async Task<bool> removePantryItem (PantryItemReq req)
+        public async Task<bool> removePantryItem (int id)
         {
             using (var connection = _connection.GetConnection())
             {
-                var pantry_item = new Pantry_ItemEntity
+                var query = "DELETE FROM pantry_item where id =@id";
+                await connection.ExecuteAsync(query, new
                 {
-                    ingredient_id = req.ingredient_id,
-                };
-
-                var query = "select * from pantry where account_id = @account_id";
-                var result = await connection.QueryFirstOrDefaultAsync<PantryEntity>(query, new
-                {
-                    account_id = req.account_id
+                    id= id
                 });
-
-                pantry_item.pantry_id = result.id;
-
-                query = "select * from pantry_item where pantry_id = @pantry_id and ingredient_id = @ingredient_id";
-                var result1 = await connection.QueryFirstOrDefaultAsync<Pantry_ItemEntity>(query, new
-                {
-                    pantry_id = pantry_item.pantry_id,
-                    ingredient_id = req.ingredient_id
-                });
-                
-                if (result1 == null)
-                {
-                    return false;
-                }
-
-                pantry_item.amount = result1.amount;
-
-                if (pantry_item.amount <= req.number)
-                {
-                    query = "delete from pantry_item where pantry_id = @pantry_id and ingredient_id = @ingredient_id";
-                    _ = await connection.ExecuteAsync(query, new
-                    {
-                        pantry_id = pantry_item.pantry_id,
-                        ingredient_id = pantry_item.ingredient_id
-                    });
-                }
-                else
-                {
-                    query = "update pantry_item set amount = amount - @amount where pantry_id = @pantry_id and ingredient_id = @ingredient_id";
-                    _ = await connection.ExecuteAsync(query, new
-                    {
-                        amount = req.number,
-                        pantry_id = pantry_item.pantry_id,
-                        ingredient_id = pantry_item.ingredient_id
-                    });
-                }
                 return true;
             }
 
+        }
+        public async Task<Pantry_ItemEntity> updatePantryItem (UpdatePantryItemReq req)
+        {
+            using (var connection = _connection.GetConnection())
+            {
+                var query = "UPDATE pantry_item SET amount=@amount where id =@id ";
+                await connection.ExecuteAsync(query, new
+                {
+                    id = req.id,
+                    amount=req.number
+                });
+                Pantry_ItemEntity pantryItem = await _context.Pantry_Item.
+                   Where(r => r.id == req.id).
+                   Include(r => r.Pantry).
+                   Include(r => r.Ingredient).FirstAsync();
+
+                return pantryItem;
+            }
+        }
+        public async Task<Pantry_ItemEntity> getPantryItem(int id)
+        {
+            using (var connection = _connection.GetConnection())
+            {
+                Pantry_ItemEntity pantryItem = await _context.Pantry_Item.
+                   Where(r => r.id == id).
+                   Include(r => r.Pantry).
+                   Include(r => r.Ingredient).FirstAsync();
+
+                return pantryItem;
+            }
+        }
+        public async Task<List<Pantry_ItemEntity>> getAllPantryItem(GetAllPantryItemReq req)
+        {
+            using (var connection = _connection.GetConnection())
+            {
+                PantryEntity pantry = await _context.Pantry.
+                 Where(r => r.account_id == req.account_id).FirstAsync();
+
+                int offset = (req.page - 1) * req.pageSize;
+
+                IEnumerable <Pantry_ItemEntity> pantryItems = await _context.Pantry_Item.
+                   Where(r => r.pantry_id == pantry.id).
+                   Include(r => r.Pantry).
+                   Include(r => r.Ingredient).
+                   Skip(offset).
+                   Take(req.pageSize).  
+                   ToListAsync();
+
+                return pantryItems.ToList();
+            }
         }
     }
 }
