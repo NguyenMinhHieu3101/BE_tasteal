@@ -3,6 +3,7 @@ using System;
 using BE_tasteal.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BE_tasteal.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231230140240_fix-type")]
+    partial class fixtype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,17 +110,8 @@ namespace BE_tasteal.Migrations
                     b.Property<string>("comment")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("created_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("image")
-                        .HasColumnType("longtext");
-
                     b.Property<int>("recipe_id")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("updated_at")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("id");
 
@@ -320,28 +314,14 @@ namespace BE_tasteal.Migrations
                     b.ToTable("Occasion");
                 });
 
-            modelBuilder.Entity("BE_tasteal.Entity.Entity.PantryEntity", b =>
+            modelBuilder.Entity("BE_tasteal.Entity.Entity.Pantry_ItemEntity", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("account_id")
-                        .IsRequired()
                         .HasColumnType("varchar(255)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("account_id");
-
-                    b.ToTable("Pantry");
-                });
-
-            modelBuilder.Entity("BE_tasteal.Entity.Entity.Pantry_ItemEntity", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
 
                     b.Property<int>("amount")
                         .HasColumnType("int");
@@ -349,14 +329,11 @@ namespace BE_tasteal.Migrations
                     b.Property<int?>("ingredient_id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("pantry_id")
-                        .HasColumnType("int");
-
                     b.HasKey("id");
 
-                    b.HasIndex("ingredient_id");
+                    b.HasIndex("account_id");
 
-                    b.HasIndex("pantry_id");
+                    b.HasIndex("ingredient_id");
 
                     b.ToTable("Pantry_Item");
                 });
@@ -689,30 +666,19 @@ namespace BE_tasteal.Migrations
                     b.Navigation("nutrition_info");
                 });
 
-            modelBuilder.Entity("BE_tasteal.Entity.Entity.PantryEntity", b =>
+            modelBuilder.Entity("BE_tasteal.Entity.Entity.Pantry_ItemEntity", b =>
                 {
                     b.HasOne("BE_tasteal.Entity.Entity.AccountEntity", "account")
                         .WithMany()
-                        .HasForeignKey("account_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("account_id");
 
-                    b.Navigation("account");
-                });
-
-            modelBuilder.Entity("BE_tasteal.Entity.Entity.Pantry_ItemEntity", b =>
-                {
-                    b.HasOne("BE_tasteal.Entity.Entity.IngredientEntity", "Ingredient")
+                    b.HasOne("BE_tasteal.Entity.Entity.IngredientEntity", "IngredientEntity")
                         .WithMany()
                         .HasForeignKey("ingredient_id");
 
-                    b.HasOne("BE_tasteal.Entity.Entity.PantryEntity", "Pantry")
-                        .WithMany()
-                        .HasForeignKey("pantry_id");
+                    b.Navigation("IngredientEntity");
 
-                    b.Navigation("Ingredient");
-
-                    b.Navigation("Pantry");
+                    b.Navigation("account");
                 });
 
             modelBuilder.Entity("BE_tasteal.Entity.Entity.PersonalCartItemEntity", b =>

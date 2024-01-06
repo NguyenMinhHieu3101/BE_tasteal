@@ -6,7 +6,7 @@ namespace BE_tasteal.Entity.DTO.Response
     {
         public int id { get; set; }
         public string? name { get; set; }
-        public float? rating { get; set; }
+        public decimal? rating { get; set; }
         public int? totalTime { get; set; }
         public DateTime? active_time { get; set; }
         public int serving_size { get; set; }

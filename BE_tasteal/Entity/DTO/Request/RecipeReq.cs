@@ -10,7 +10,7 @@ namespace BE_tasteal.Entity.DTO.Request
         public string name { get; set; }
         [DefaultValue(0)]
         [Range(0.0, 5.0, ErrorMessage = "rating in range(0,5)")]
-        public float? rating { get; set; }
+        public decimal? rating { get; set; }
         public string? image { get; set; }
         public int? totalTime { get; set; }
         [ValidateTimeSpanString(ErrorMessage = "string format invalid")]
@@ -34,7 +34,7 @@ namespace BE_tasteal.Entity.DTO.Request
     public class RecipeByUids
     {
         [Required]
-        public List<string> uids {  get; set; }
+        public List<string> uids { get; set; }
         [Required]
         public PageReq page { get; set; }
     }

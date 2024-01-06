@@ -11,7 +11,7 @@ namespace BE_tasteal.Entity.Entity
         public int id { get; set; }
         public int recipe_id { get; set; }
         public string account_id { get; set; }
-        public int rating { get; set; }
+        public decimal rating { get; set; }
         [ForeignKey("account_id")]
         public AccountEntity? account { get; set; }
         [ForeignKey("recipe_id")]
