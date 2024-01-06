@@ -17,10 +17,10 @@ namespace BE_tasteal.API.Controllers
             _iPantryItemBusiness = iPantryItemBusiness;
         }
         [HttpPost]
-        [Route("add_pantry_item")]
+        [Route("pantry_item")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> AddPantryItem(PantryItemReq item)
+        public async Task<IActionResult> AddPantryItem(CreatePantryItemReq item)
         {
             try
             {
@@ -32,15 +32,63 @@ namespace BE_tasteal.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
-        [Route("remove_pantry_item")]
+        [HttpDelete]
+        [Route("pantry_item/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> RemovePantryItem(PantryItemReq item)
+        public async Task<IActionResult> RemovePantryItem(int id)
         {
             try
             {
-                var all = await _iPantryItemBusiness.removePantryItem(item);
+                var all = await _iPantryItemBusiness.removePantryItem(id);
+                return Ok(all);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut]
+        [Route("pantry_item")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdatePantryItem(UpdatePantryItemReq req)
+        {
+            try
+            {
+                var all = await _iPantryItemBusiness.updatePantryItem(req);
+                return Ok(all);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        [Route("pantry_item")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetPantryItem(int id)
+        {
+            try
+            {
+                var all = await _iPantryItemBusiness.getPantryItem(id);
+                return Ok(all);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost]
+        [Route("all_pantry_item")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAllPantryItem(GetAllPantryItemReq req)
+        {
+            try
+            {
+                var all = await _iPantryItemBusiness.getAllPantryItem(req);
                 return Ok(all);
             }
             catch (Exception ex)

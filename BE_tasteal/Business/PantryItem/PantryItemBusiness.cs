@@ -12,14 +12,27 @@ namespace BE_tasteal.Business.PantryItem
         {
             _pantryItemRepo = pantryItemRepo;
         }
-        public async Task<bool> addPantryItem(PantryItemReq req)
+        public async Task<Pantry_ItemEntity> addPantryItem(CreatePantryItemReq req)
         {
             return await _pantryItemRepo.addPantryItem(req);
         }
 
-        public async Task<bool> removePantryItem(PantryItemReq req)
+        public async Task<bool> removePantryItem(int req)
         {
             return await _pantryItemRepo.removePantryItem(req);
+        }
+        public async Task<Pantry_ItemEntity> updatePantryItem(UpdatePantryItemReq req)
+        {
+            return await _pantryItemRepo.updatePantryItem(req);
+        }
+
+        public async Task<Pantry_ItemEntity> getPantryItem(int id)
+        {
+            return await _pantryItemRepo.getPantryItem(id);
+        }
+        public async Task<List<Pantry_ItemEntity>> getAllPantryItem(GetAllPantryItemReq req)
+        {
+            return await _pantryItemRepo.getAllPantryItem(req);
         }
     }
 }
