@@ -62,14 +62,17 @@ namespace BE_tasteal.API.Controllers
         [Route("cookbook-recipe")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteCookBookRecipeById(string id)
+        public async Task<IActionResult> DeleteCookBookRecipeById(int id)
         {
             try
             {
+                if (await _cookBookRepo.findCookBookRecipeAsync(id) == null)
+                    return BadRequest("Id invalid");
+
                 var allCart = await _cookBookRepo.DeleteCookBookRecipeById(id);
                 if (allCart > 0)
                 {
-                    return Ok("success");
+                    return Ok(true);
                 }
                 else
                     return BadRequest(false);
@@ -88,6 +91,11 @@ namespace BE_tasteal.API.Controllers
         {
             try
             {
+                if (await _cookBookRepo.FindByIdAsync(id.cookbook_id) == null)
+                {
+                    return BadRequest("CookBookId invalid");
+                }
+
                 var allCart = await _cookBookRepo.MoveRecipeToNewCookBook(id);
                 if (allCart > 0)
                     return Ok(true);
@@ -126,6 +134,8 @@ namespace BE_tasteal.API.Controllers
         {
             try
             {
+                if (await _cookBookRepo.FindByIdAsync(id) == null)
+                    return BadRequest("CookBook Id invalid");
                 var allCart = await _cookBookRepo.DeleteCookBook(id);
                 if (allCart > 0)
                     return Ok(true);

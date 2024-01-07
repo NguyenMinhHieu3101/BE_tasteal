@@ -31,7 +31,7 @@ namespace BE_tasteal.Persistence.Repository.CookBookRepo
                 return result.ToList();
             }
         }
-        public async Task<int> DeleteCookBookRecipeById(String id)
+        public async Task<int> DeleteCookBookRecipeById(int id)
         {
             using (var connection = _connection.GetConnection())
             {
@@ -45,35 +45,25 @@ namespace BE_tasteal.Persistence.Repository.CookBookRepo
                 return result;
             }
         }
-
+        public async Task<CookBook_RecipeEntity?> findCookBookRecipeAsync(int id)
+        {
+            return await _context.Set<CookBook_RecipeEntity>().FindAsync(id);
+        }
         public async Task<int> MoveRecipeToNewCookBook(NewRecipeCookBookReq newRecipeCookBook)
         {
             var newCookBook = _context.CookBook_Recipe
-                .Where(c => c.id == newRecipeCookBook.cookbook_recipe_id
-                && c.cook_book_id == newRecipeCookBook.cookbook_id);
+                .Where(c => c.id == newRecipeCookBook.cookbook_recipe_id)
+                .FirstOrDefault();
 
-            if (newCookBook != null)
-            {
+            if (newCookBook.cook_book_id == newRecipeCookBook.cookbook_id)
                 return 1;
-            }
 
-            using (var connection = _connection.GetConnection())
-            {
-                string sql = @"
-                update cookbook_recipe
-                set cook_book_id = @NEWBOOKID
-                where id = @Id
-                ";
+            newCookBook.cook_book_id = newRecipeCookBook.cookbook_id;
 
-                var result = await connection.ExecuteAsync(sql,
-                    new
-                    {
-                        NEWBOOKID = newRecipeCookBook.cookbook_id,
-                        Id = newRecipeCookBook.cookbook_recipe_id
-                    });
+            _context.Set<CookBook_RecipeEntity>().Update(newCookBook);
 
-                return result;
-            }
+            await _context.SaveChangesAsync();
+            return 1;
         }
         public async Task<int> RenameCookBook(NewCookBookNameReq cookBook)
         {
@@ -124,7 +114,8 @@ namespace BE_tasteal.Persistence.Repository.CookBookRepo
         {
             var recipeInCookBook = _context.CookBook_Recipe.Where(
                 c => c.recipe_id == recipeToCookBook.recipe_id
-                && c.cook_book_id == recipeToCookBook.cook_book_id);
+                && c.cook_book_id == recipeToCookBook.cook_book_id)
+                .FirstOrDefault();
 
             if (recipeInCookBook != null)
             {
