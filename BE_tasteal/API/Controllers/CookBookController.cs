@@ -1,10 +1,8 @@
-﻿using BE_tasteal.Business.Cart;
-using BE_tasteal.Entity.DTO.Request;
-using BE_tasteal.Entity.Entity;
+﻿using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Persistence.Repository.AuthorRepo;
 using BE_tasteal.Persistence.Repository.CookBookRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BE_tasteal.API.Controllers
 {
@@ -15,12 +13,15 @@ namespace BE_tasteal.API.Controllers
     {
         private readonly CookBookRepo _cookBookRepo;
         private readonly IRecipeRepository _recipeRepository;
+        private readonly IUserRepo _userRepo;
         public CookBookController(
             CookBookRepo cartBusiness,
-            IRecipeRepository recipeRepository)
+            IRecipeRepository recipeRepository,
+            IUserRepo userRepo)
         {
             _cookBookRepo = cartBusiness;
             _recipeRepository = recipeRepository;
+            _userRepo = userRepo;
         }
 
         [HttpGet]
@@ -66,7 +67,7 @@ namespace BE_tasteal.API.Controllers
             try
             {
                 var allCart = await _cookBookRepo.DeleteCookBookRecipeById(id);
-                if(allCart > 0)
+                if (allCart > 0)
                 {
                     return Ok("success");
                 }
@@ -144,11 +145,13 @@ namespace BE_tasteal.API.Controllers
         {
             try
             {
+                if (await _userRepo.FindByIdAsync(id.owner) == null)
+                    return BadRequest("Owner not found");
+
                 var allCart = await _cookBookRepo.CreateNewCookBook(id);
-                if (allCart > 0)
-                    return Ok(true);
-                else
-                    return BadRequest(false);
+
+                return Ok(allCart);
+
             }
             catch (Exception ex)
             {

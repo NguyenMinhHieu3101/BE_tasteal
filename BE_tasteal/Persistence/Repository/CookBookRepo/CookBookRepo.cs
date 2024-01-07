@@ -109,19 +109,16 @@ namespace BE_tasteal.Persistence.Repository.CookBookRepo
                 return result;
             }
         }
-        public async Task<int> CreateNewCookBook(NewCookBookReq newCookBook)
+        public async Task<CookBookEntity> CreateNewCookBook(NewCookBookReq newCookBook)
         {
-            using (var connection = _connection.GetConnection())
+            var cookBook = new CookBookEntity
             {
-                string sql = @"
-                insert into cookbook(name, owner)
-                values( @NAME, @UID )
-                ";
+                name = newCookBook.name,
+                owner = newCookBook.owner,
+            };
 
-                var result = await connection.ExecuteAsync(sql, new { NAME = newCookBook.name, UID = newCookBook.owner });
-
-                return result;
-            }
+            var result = await InsertAsync(cookBook);
+            return result;
         }
         public async Task<int> AddRecipeToCookBook(RecipeToCookBook recipeToCookBook)
         {
