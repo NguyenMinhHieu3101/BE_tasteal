@@ -1,7 +1,6 @@
 ﻿using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
-using BE_tasteal.Persistence.Repository.AuthorRepo;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
 
@@ -16,12 +15,12 @@ namespace BE_tasteal.Persistence.Repository.CartItemRepo
         {
             using (var connection = _connection.GetConnection())
             {
-                foreach ( var recipe_id in req.recipe_ids)
+                foreach (var recipe_id in req.recipe_ids)
                 {
                     var query = "select * from cart where accountId = @account_id and recipeId = @recipe_id";
                     var cart = await connection.QueryFirstOrDefaultAsync<CartEntity>(query, new
                     {
-                        account_id= req.account_id,
+                        account_id = req.account_id,
                         recipe_id = recipe_id,
                     });
                     if (cart != null)
@@ -36,15 +35,15 @@ namespace BE_tasteal.Persistence.Repository.CartItemRepo
                     });
 
                     query = "insert into cart (accountId,recipeId,serving_size) values (@account_id,@recipe_id,@serving_size)";
-                     _ = await connection.ExecuteAsync(query, new
+                    _ = await connection.ExecuteAsync(query, new
                     {
                         account_id = req.account_id,
                         recipe_id = recipe_id,
                         serving_size = recipe.serving_size,
                     });
 
-                     query = "select * from cart where accountId = @account_id and recipeId = @recipe_id";
-                     cart = await connection.QueryFirstOrDefaultAsync<CartEntity>(query, new
+                    query = "select * from cart where accountId = @account_id and recipeId = @recipe_id";
+                    cart = await connection.QueryFirstOrDefaultAsync<CartEntity>(query, new
                     {
                         account_id = req.account_id,
                         recipe_id = recipe_id,
@@ -64,8 +63,8 @@ namespace BE_tasteal.Persistence.Repository.CartItemRepo
                         _ = await connection.ExecuteAsync(query, new
                         {
                             cart_id = cart.id,
-                            ingredient_id=recipe_ingredient.ingredient_id,
-                            amount= recipe_ingredient.amount_per_serving*recipe.serving_size,
+                            ingredient_id = recipe_ingredient.ingredient_id,
+                            amount = recipe_ingredient.amount_per_serving * recipe.serving_size,
                             is_bought = false,
                         });
                     }

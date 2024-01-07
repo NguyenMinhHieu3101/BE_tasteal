@@ -1,5 +1,4 @@
-﻿using BE_tasteal.Business.Cart;
-using BE_tasteal.Business.User;
+﻿using BE_tasteal.Business.User;
 using BE_tasteal.Entity.DTO.Request;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Repository.AuthorRepo;
@@ -74,7 +73,7 @@ namespace BE_tasteal.API.Controllers
         {
             try
             {
-               
+
                 var account = await _userBusiness.getUser(accountId);
                 if (account == null)
                     return BadRequest("Account invalid");
@@ -103,7 +102,25 @@ namespace BE_tasteal.API.Controllers
                 }
                 return Ok(users);
             }
-            catch(Exception e)
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
+        [HttpDelete]
+        [Route("{uid}")]
+        public async Task<IActionResult> getAccountByListUid(string uid)
+        {
+            try
+            {
+                var account = _userRepo.FindByIdAsync(uid);
+                if (account == null)
+                {
+                    return BadRequest("UserId invalid");
+                }
+                return Ok(true);
+            }
+            catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }

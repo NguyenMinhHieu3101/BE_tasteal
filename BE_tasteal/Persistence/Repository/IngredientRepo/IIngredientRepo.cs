@@ -10,6 +10,7 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
         bool IngredientTypeValid(string name);
         bool IngredientValid(string name);
         Task<Ingredient_TypeEntity> GetIngredientType(string name);
+        Task<IngredientEntity?> FindById(int id);
         Task<Nutrition_InfoEntity> InsertNutrition(Nutrition_InfoEntity nutrition);
         Task<(List<IngredientEntity>, int)> GetAllIngredient(PageReq _page);
         Task<IngredientEntity> GetIngredientByName(string name);

@@ -166,5 +166,14 @@ namespace BE_tasteal.Persistence.Repository.IngredientRepo
             }
 
         }
+        public async Task<IngredientEntity?> FindById(int id)
+        {
+            var result = await _context.Ingredient.Where(_ => _.id == id)
+                            .Include(c => c.nutrition_info)
+                            .Include(c => c.ingredient_type)
+                            .FirstOrDefaultAsync();
+
+            return result;
+        }
     }
 }
