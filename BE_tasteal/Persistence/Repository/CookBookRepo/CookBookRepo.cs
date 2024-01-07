@@ -2,7 +2,6 @@
 using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
-using BE_tasteal.Persistence.Repository.CommentRepo;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +48,15 @@ namespace BE_tasteal.Persistence.Repository.CookBookRepo
 
         public async Task<int> MoveRecipeToNewCookBook(NewRecipeCookBookReq newRecipeCookBook)
         {
+            var newCookBook = _context.CookBook_Recipe
+                .Where(c => c.id == newRecipeCookBook.cookbook_recipe_id
+                && c.cook_book_id == newRecipeCookBook.cookbook_id);
+
+            if (newCookBook != null)
+            {
+                return 1;
+            }
+
             using (var connection = _connection.GetConnection())
             {
                 string sql = @"
@@ -57,16 +65,17 @@ namespace BE_tasteal.Persistence.Repository.CookBookRepo
                 where id = @Id
                 ";
 
-                var result = await connection.ExecuteAsync(sql, 
-                    new { 
-                        NEWBOOKID = newRecipeCookBook.cookbook_id, 
+                var result = await connection.ExecuteAsync(sql,
+                    new
+                    {
+                        NEWBOOKID = newRecipeCookBook.cookbook_id,
                         Id = newRecipeCookBook.cookbook_recipe_id
                     });
 
                 return result;
             }
         }
-        public async Task<int> RenameCookBook(NewCookBookNameReq cookBook )
+        public async Task<int> RenameCookBook(NewCookBookNameReq cookBook)
         {
             using (var connection = _connection.GetConnection())
             {
@@ -109,13 +118,22 @@ namespace BE_tasteal.Persistence.Repository.CookBookRepo
                 values( @NAME, @UID )
                 ";
 
-                var result = await connection.ExecuteAsync(sql, new { NAME = newCookBook.name, UID =  newCookBook.owner});
+                var result = await connection.ExecuteAsync(sql, new { NAME = newCookBook.name, UID = newCookBook.owner });
 
                 return result;
             }
         }
         public async Task<int> AddRecipeToCookBook(RecipeToCookBook recipeToCookBook)
         {
+            var recipeInCookBook = _context.CookBook_Recipe.Where(
+                c => c.recipe_id == recipeToCookBook.recipe_id
+                && c.cook_book_id == recipeToCookBook.cook_book_id);
+
+            if (recipeInCookBook != null)
+            {
+                return 1;
+            }
+
             using (var connection = _connection.GetConnection())
             {
                 string sql = @"
@@ -123,10 +141,12 @@ namespace BE_tasteal.Persistence.Repository.CookBookRepo
                 values( @BOOKID, @RECIPEID )
                 ";
 
-                var result = await connection.ExecuteAsync(sql, 
-                    new { 
-                        BOOKID = recipeToCookBook.cook_book_id, 
-                        RECIPEID = recipeToCookBook.recipe_id });
+                var result = await connection.ExecuteAsync(sql,
+                    new
+                    {
+                        BOOKID = recipeToCookBook.cook_book_id,
+                        RECIPEID = recipeToCookBook.recipe_id
+                    });
 
                 return result;
             }
@@ -138,18 +158,18 @@ namespace BE_tasteal.Persistence.Repository.CookBookRepo
                 .Include(c => c.recipe)
                 .Include(c => c.recipe.account)
                 .Where(c => c.cook_book_id == cookBookId)
-                .ToList();             
+                .ToList();
         }
         public async Task favor()
         {
-            List<AccountEntity> allAccounts = _context.Account.ToList(); 
+            List<AccountEntity> allAccounts = _context.Account.ToList();
 
             foreach (var account in allAccounts)
             {
                 var newCookBookEntry = new CookBookEntity
                 {
                     name = "Yêu thích",
-                    owner = account.uid 
+                    owner = account.uid
                 };
 
                 _context.Attach(newCookBookEntry);
@@ -157,7 +177,7 @@ namespace BE_tasteal.Persistence.Repository.CookBookRepo
 
                 await _context.SaveChangesAsync();
             }
-            
+
         }
     }
 }

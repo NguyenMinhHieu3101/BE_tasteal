@@ -2,7 +2,7 @@
 {
     public class NewRecipeCookBookReq
     {
-        public string cookbook_recipe_id { get; set; }
-        public string cookbook_id { get; set; }
+        public int cookbook_recipe_id { get; set; }
+        public int cookbook_id { get; set; }
     }
 }
