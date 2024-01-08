@@ -46,19 +46,11 @@ namespace BE_tasteal.Persistence.Repository.Pantry
             //                    .FromSqlRaw(sql)
             //                    .Select(ri => ri.recipe_id)
             //                    .ToList();
-            var recipeIds = _context.Recipe_Ingredient
-            .Where(ri => req.ingredients.Contains(ri.ingredient_id))
-            .Select(ri => ri.recipe_id)
-            .Distinct()
-            .ToList();
-
-            var groupedIngredients = _context.Recipe_Ingredient
-                .Where(ri => recipeIds.Contains(ri.recipe_id))
+            var recipes = _context.Recipe_Ingredient
                 .GroupBy(ri => ri.recipe_id)
                 .ToDictionary(g => g.Key, g => g.Select(ri => ri.ingredient_id).ToList());
-
-            var filteredRecipeIds = groupedIngredients
-                .Where(pair => req.ingredients.All(pair.Value.Contains))
+            var matchedRecipeIds = recipes
+                .Where(pair => pair.Value.All(ingredient => req.ingredients.Contains(ingredient)))
                 .Select(pair => pair.Key)
                 .ToList();
 
@@ -67,7 +59,7 @@ namespace BE_tasteal.Persistence.Repository.Pantry
             int pageSize = req.page.pageSize;
 
             var listRecipe = _context.Recipe
-                                .Where(r => filteredRecipeIds.Contains(r.id))
+                                .Where(r => matchedRecipeIds.Contains(r.id))
                                 .Include(r => r.account)
                                 .Skip((page - 1) * pageSize)
                                 .Take(pageSize);
