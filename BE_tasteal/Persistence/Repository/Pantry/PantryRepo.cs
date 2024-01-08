@@ -35,24 +35,39 @@ namespace BE_tasteal.Persistence.Repository.Pantry
         }
         public List<RecipeEntity> FindGroupIndexContainingAllValues(RecipesIngreAny req)
         {
-            var values = req.ingredients;
+            //var values = req.ingredients;
 
-            string ingre = string.Join(",", values);
-            string count = values.Count.ToString();
-            string sql = $"SELECT recipe_id FROM Recipe_Ingredient WHERE ingredient_id IN ({ingre}) GROUP BY recipe_id HAVING COUNT(DISTINCT ingredient_id) >= {count}";
-            Console.WriteLine(sql);
+            //string ingre = string.Join(",", values);
+            //string count = values.Count.ToString();
+            //string sql = $"SELECT recipe_id FROM Recipe_Ingredient WHERE ingredient_id IN ({ingre}) GROUP BY recipe_id HAVING COUNT(DISTINCT ingredient_id) >= {count}";
+            //Console.WriteLine(sql);
 
-            var listRecipeId = _context.Recipe_Ingredient
-                                .FromSqlRaw(sql)
-                                .Select(ri => ri.recipe_id)
-                                .ToList();
+            //var listRecipeId = _context.Recipe_Ingredient
+            //                    .FromSqlRaw(sql)
+            //                    .Select(ri => ri.recipe_id)
+            //                    .ToList();
+            var recipeIds = _context.Recipe_Ingredient
+            .Where(ri => req.ingredients.Contains(ri.ingredient_id))
+            .Select(ri => ri.recipe_id)
+            .Distinct()
+            .ToList();
+
+            var groupedIngredients = _context.Recipe_Ingredient
+                .Where(ri => recipeIds.Contains(ri.recipe_id))
+                .GroupBy(ri => ri.recipe_id)
+                .ToDictionary(g => g.Key, g => g.Select(ri => ri.ingredient_id).ToList());
+
+            var filteredRecipeIds = groupedIngredients
+                .Where(pair => req.ingredients.All(pair.Value.Contains))
+                .Select(pair => pair.Key)
+                .ToList();
 
 
             int page = req.page.page;
             int pageSize = req.page.pageSize;
 
             var listRecipe = _context.Recipe
-                                .Where(r => listRecipeId.Contains(r.id))
+                                .Where(r => filteredRecipeIds.Contains(r.id))
                                 .Include(r => r.account)
                                 .Skip((page - 1) * pageSize)
                                 .Take(pageSize);
