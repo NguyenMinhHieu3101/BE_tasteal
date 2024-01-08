@@ -39,14 +39,14 @@ namespace BE_tasteal.Persistence.Repository.Pantry
 
             string ingre = string.Join(",", values);
             string count = values.Count.ToString();
-            string sql = $"SELECT recipe_id FROM Recipe_Ingredient WHERE ingredient_id IN ({ingre}) GROUP BY recipe_id HAVING COUNT(DISTINCT ingredient_id) = {count}";
+            string sql = $"SELECT recipe_id FROM Recipe_Ingredient WHERE ingredient_id IN ({ingre}) GROUP BY recipe_id HAVING COUNT(DISTINCT ingredient_id) >= {count}";
             Console.WriteLine(sql);
 
             var listRecipeId = _context.Recipe_Ingredient
                                 .FromSqlRaw(sql)
                                 .Select(ri => ri.recipe_id)
                                 .ToList();
-            //.ToList();
+
 
             int page = req.page.page;
             int pageSize = req.page.pageSize;
