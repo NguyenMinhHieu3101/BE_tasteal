@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BE_tasteal.Entity.Entity
@@ -16,6 +17,8 @@ namespace BE_tasteal.Entity.Entity
         public string? image { get; set; }
         public DateTime? created_at { get; set; }
         public DateTime? updated_at { get; set; }
+        [DefaultValue(false)]
+        public bool isDeleted { get; set; }
 
         [ForeignKey("recipe_id")]
         public RecipeEntity Recipe { get; set; }
