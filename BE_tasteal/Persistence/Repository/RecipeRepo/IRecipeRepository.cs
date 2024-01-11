@@ -20,5 +20,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
         Task<List<RecipeEntity>> GetAll(PageReq req);
         List<RecipeEntity> getRecommendRecipesByIngredientIds(List<int> ingredientIds, PageReq _page);
         (List<RecipeEntity>, int) GetRecipesByUserId(RecipeByUids req);
+        RecipeEntity? FindByIdAsyncWithNutrition(int id);
+        RecipeEntity? closetRecipeDiff(decimal dis1);
     }
 }
