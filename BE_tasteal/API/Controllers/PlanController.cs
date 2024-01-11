@@ -1,9 +1,14 @@
 ﻿using BE_tasteal.API.AppSettings;
 using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.DTO.Response;
+using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Repository.AuthorRepo;
 using BE_tasteal.Persistence.Repository.PlanRepo;
 using BE_tasteal.Persistence.Repository.RecipeRepo;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace BE_tasteal.API.Controllers
 {
@@ -93,6 +98,129 @@ namespace BE_tasteal.API.Controllers
                 return Ok(result);
             }
             catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
+        [HttpPost]
+        [Route("recommendMealPlan")]
+        public async Task<IActionResult> getRecommendMealPlan(RecommendMealPlanReq req)
+        {
+            try
+            {
+                List<RecipeEntity> userRecipe = new List<RecipeEntity>();
+                decimal userCalo = 0;
+               foreach(var item in req.recipe_ids)
+                {
+                    var recipe = _recipeRepository.FindByIdAsyncWithNutrition(item);
+                    if (recipe == null)
+                        return BadRequest("Recipe id invalid");
+
+                    userRecipe.Add(recipe);
+                    userCalo += recipe.nutrition_info.calories ?? 0;
+                }
+
+                decimal standardCalo = 0;
+
+                if(req.gender) //nam
+                {
+                    standardCalo = (((decimal)13.397 * req.weight) + ((decimal)4.799 * req.height) - ((decimal)5.677 * (decimal)req.age) + (decimal)88.362);
+                }
+                else
+                {
+                    standardCalo = (((decimal)9.247 * req.weight) + ((decimal)3.098 * req.height) - ((decimal)4.330 * (decimal)req.age) + (decimal)447.593);
+                }
+
+                standardCalo = standardCalo * req.rate;
+
+               
+
+
+                if((standardCalo * 92 / 100) <= userCalo && userCalo <= (standardCalo * 108 / 100))
+                {
+                    RecommendMealPlanRes response = new RecommendMealPlanRes();
+                    response.state = "equal";
+                    response.recipe_add_ids = new List<planRecipe>();
+                    response.recipe_remove_ids = new List<planRecipe>();
+                    response.standard_calories = standardCalo;
+                    response.real_calories = userCalo;
+
+                    return Ok(response);
+                }
+
+                decimal dis = Math.Abs(standardCalo - userCalo);
+
+                if (userCalo > standardCalo)
+                {
+                    var minCaloRecip = userRecipe
+                        .OrderBy(r => r.nutrition_info.calories)
+                        .FirstOrDefault();
+
+                    var newCalo = userCalo - minCaloRecip.nutrition_info.calories ?? 0;
+                    var dis1 = standardCalo - newCalo;
+
+                    if ((standardCalo * 92 / 100) <= newCalo && newCalo  <= (standardCalo * 108 / 100))
+                    {
+                        RecommendMealPlanRes response = new RecommendMealPlanRes();
+                        response.state = "higher";
+                        response.recipe_add_ids = new List<planRecipe>();
+                        response.recipe_remove_ids = new List<planRecipe>();
+
+                        planRecipe planRecp = new planRecipe
+                        {
+                            id = minCaloRecip.id
+                        };
+                        response.recipe_remove_ids.Add(planRecp);
+                        response.standard_calories = standardCalo;
+                        response.real_calories = userCalo;
+
+                        return Ok(response);
+                    }
+                    else
+                    {
+                        var closetRecipeDiff = _recipeRepository.closetRecipeDiff(dis1);
+
+                        if (closetRecipeDiff != null)
+                        {
+                            RecommendMealPlanRes response = new RecommendMealPlanRes();
+                            response.state = "higher";
+                            response.recipe_add_ids = new List<planRecipe>();
+                            response.recipe_add_ids.Add(new planRecipe { id = closetRecipeDiff.id });
+                            response.recipe_remove_ids = new List<planRecipe>();
+                            response.recipe_remove_ids.Add(new planRecipe { id = minCaloRecip.id });
+                            response.standard_calories = standardCalo;
+                            response.real_calories = newCalo + dis1;
+
+                            return Ok(response);
+                        }
+                        else
+                        {
+                            var recipeN =  _recipeRepository.FindByIdAsyncWithNutrition(92);
+                            int n = (int)Math.Floor(dis1 / recipeN.nutrition_info.calories??1);
+
+                            RecommendMealPlanRes response = new RecommendMealPlanRes();
+                            response.state = "higher";
+                            response.recipe_add_ids = new List<planRecipe>();
+                            response.recipe_add_ids.Add(new planRecipe { id = recipeN.id, amount = n });
+                            response.recipe_remove_ids = new List<planRecipe>();
+                            response.recipe_remove_ids.Add(new planRecipe { id = minCaloRecip.id });
+                            response.standard_calories = standardCalo;
+                            response.real_calories = newCalo + dis1;
+
+                            return Ok(response);
+                        }
+                    }
+
+                }
+
+
+
+
+
+                return Ok();
+            }
+            catch(Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");

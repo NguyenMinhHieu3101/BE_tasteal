@@ -337,5 +337,22 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
 
             return (recipeEntities, maxPage);
         }
+        public  RecipeEntity? FindByIdAsyncWithNutrition(int id)
+        {
+            return _context.Recipe.Where(c=>c.id == id)
+                .Include(c=>c.nutrition_info)
+                .FirstOrDefault();
+        }
+
+        public RecipeEntity? closetRecipeDiff(decimal dis1)
+        {
+            var closet = _context.Recipe
+                        .Include(c => c.nutrition_info)
+                        .Where(c => c.nutrition_info.calories <= dis1)
+                        .OrderBy(r => Math.Abs(r.nutrition_info.calories ?? -dis1))
+                        .FirstOrDefault();
+
+            return closet;
+        }
     }
 }
