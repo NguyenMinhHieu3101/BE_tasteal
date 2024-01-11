@@ -200,6 +200,7 @@ namespace BE_tasteal.Business.Recipe
                 recipe.author_note = recipe_update.author_note;
                 recipe.is_private = recipe_update.is_private;
                 recipe.author = recipe_update.author;
+                recipe.isDeleted = recipe_update.isDeleted;
 
                 if (recipe_update.ingredients != null)
                 {

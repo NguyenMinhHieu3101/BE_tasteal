@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BE_tasteal.Entity.DTO.Request
@@ -13,5 +14,7 @@ namespace BE_tasteal.Entity.DTO.Request
         public string? link { get; set; }
         public string? slogan { get; set; }
         public string? quote { get; set; }
+        [DefaultValue(false)]
+        public bool isDeleted { get; set; }
     }
 }

@@ -21,6 +21,7 @@ namespace BE_tasteal.Business.User
             accountEntity.slogan = req.slogan;
             accountEntity.link = req.link;
             accountEntity.quote = req.quote;
+            accountEntity.isDeleted = req.isDeleted;
 
             return await _accountRepo.createNewUser(accountEntity);
         }
@@ -35,6 +36,7 @@ namespace BE_tasteal.Business.User
             accountEntity.slogan = req.slogan;
             accountEntity.quote = req.quote;
             accountEntity.link = req.link;
+            accountEntity.isDeleted = req.isDeleted;
 
             return await _accountRepo.updateUser(accountEntity);
         }

@@ -25,6 +25,7 @@ namespace BE_tasteal.Entity
                 .ForMember(source => source.is_private, destination => destination.MapFrom(src => src.is_private))
                 .ForMember(source => source.image, destination => destination.MapFrom(src => src.image))
                 .ForMember(source => source.author, destination => destination.MapFrom(src => src.author))
+                .ForMember(source => source.isDeleted, destination => destination.MapFrom(src => src.isDeleted))
                 .ForMember(destination => destination.ingredients, destination => destination.Ignore())
                 .ForMember(destination => destination.occasions, destination => destination.Ignore())
                 .ForMember(destination => destination.direction, destination => destination.Ignore());

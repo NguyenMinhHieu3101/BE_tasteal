@@ -29,6 +29,8 @@ namespace BE_tasteal.Entity.DTO.Request
         public List<Recipe_IngredientReq>? ingredients { get; set; }
         public List<RecipeDirectionReq>? directions { get; set; }
         public List<int>? occasions { get; set; }
+        [DefaultValue(false)]
+        public bool isDeleted { get; set; }
     }
 
     public class RecipeByUids
