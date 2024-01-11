@@ -21,8 +21,8 @@ namespace BE_tasteal.Entity.Entity
         public bool isDeleted { get; set; }
 
         [ForeignKey("recipe_id")]
-        public RecipeEntity Recipe { get; set; }
+        public RecipeEntity? Recipe { get; set; }
         [ForeignKey("account_id")]
-        public AccountEntity Account { get; set; }
+        public AccountEntity? Account { get; set; }
     }
 }
