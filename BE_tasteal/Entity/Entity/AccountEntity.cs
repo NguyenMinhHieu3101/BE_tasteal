@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BE_tasteal.Entity.Entity
@@ -18,5 +19,7 @@ namespace BE_tasteal.Entity.Entity
         public string? slogan { get; set; }
         [Column(TypeName = "text")]
         public string? quote { get; set; }
+        [DefaultValue(false)]
+        public bool isDeleted { get; set; } 
     }
 }

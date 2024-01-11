@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BE_tasteal.Entity.Entity
@@ -28,6 +29,8 @@ namespace BE_tasteal.Entity.Entity
         public int? nutrition_info_id { get; set; }
         public DateTime? createdAt { get; set; }
         public DateTime? updatedAt { get; set; }
+        [DefaultValue(false)]
+        public bool isDeleted { get; set; }
         [ForeignKey("author")]
         public AccountEntity? account { get; set; }
         [ForeignKey("nutrition_info_id")]

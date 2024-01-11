@@ -1,8 +1,10 @@
-﻿using BE_tasteal.Entity.DTO.Response;
+﻿using BE_tasteal.Entity.DTO.Request;
+using BE_tasteal.Entity.DTO.Response;
 using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
+using static Dapper.SqlMapper;
 
 namespace BE_tasteal.Persistence.Repository.CommentRepo
 {
@@ -31,6 +33,32 @@ namespace BE_tasteal.Persistence.Repository.CommentRepo
                 return result;
             }
         }
+        public List<CommentEntity> getAll(PageReq page)
+        {
+            return _context.Comment.Take(page.pageSize).Skip((page.page - 1) * page.pageSize).AsList();
+        }
+        public CommentEntity? get(int id)
+        {
+            return _context.Comment.Where(c => c.id == id).FirstOrDefault();
+        }
+        public async Task<bool> deleteSoft(int id)
+        {
+            try
+            {
+                var cmt = await FindByIdAsync(id);
 
+                if (cmt != null) cmt.isDeleted = true;
+
+                _context.Set<CommentEntity>().Update(cmt);
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
     }
 }
