@@ -55,13 +55,13 @@ namespace BE_tasteal.Persistence.Repository.OccasionRepo
         private static DateTime ConvertToDateTime(string inputDateTime)
         {
             // Chuỗi ngày giờ đầu vào
-            string input = "2023-12-29T08:45:30.123Z"; // Ví dụ chuỗi đầu vào
+            //string input = "2023-12-29T08:45:30.123Z"; // Ví dụ chuỗi đầu vào
 
             // Định dạng của chuỗi đầu vào
             string format = "yyyy-MM-ddTHH:mm:ss.fffZ";
 
             // Chuyển đổi từ chuỗi ngày giờ sang kiểu DateTime
-            if (DateTime.TryParseExact(input, format, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime result))
+            if (DateTime.TryParseExact(inputDateTime, format, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime result))
             {
                 return result;
             }
