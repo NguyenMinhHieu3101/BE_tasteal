@@ -4,6 +4,7 @@ using BE_tasteal.Entity.Entity;
 using BE_tasteal.Persistence.Context;
 using BE_tasteal.Persistence.Repository.GenericRepository;
 using Dapper;
+using Microsoft.EntityFrameworkCore;
 using static Dapper.SqlMapper;
 
 namespace BE_tasteal.Persistence.Repository.CommentRepo
@@ -35,7 +36,7 @@ namespace BE_tasteal.Persistence.Repository.CommentRepo
         }
         public List<CommentEntity> getAll(PageReq page)
         {
-            return _context.Comment.Take(page.pageSize).Skip((page.page - 1) * page.pageSize).AsList();
+            return _context.Comment.Include(c => c.Account).Take(page.pageSize).Skip((page.page - 1) * page.pageSize).AsList();
         }
         public CommentEntity? get(int id)
         {

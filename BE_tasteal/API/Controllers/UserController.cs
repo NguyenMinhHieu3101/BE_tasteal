@@ -39,10 +39,15 @@ namespace BE_tasteal.API.Controllers
         [Route("updateuser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> updateuser(AccountReq accountReq)
+        public async Task<IActionResult> updateuser(AccountEntity accountReq)
         {
             try
             {
+                var acc = await _userRepo.FindByIdAsync(accountReq.uid);
+
+                if (acc == null)
+                    return BadRequest("account not found");
+
                 var entity = await _userBusiness.udpateAccount(accountReq);
                 return Ok(entity);
             }
