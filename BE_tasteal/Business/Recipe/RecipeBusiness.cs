@@ -466,6 +466,7 @@ namespace BE_tasteal.Business.Recipe
                 recipeRes.author_note = recipeEntity.author_note;
                 recipeRes.image = recipeEntity.image;
                 recipeRes.createAt = recipeEntity.createdAt;
+                recipeRes.is_private = recipeEntity.is_private;
 
                 //find author
                 var authorEntity = await _authorRepo.FindByIdAsync(recipeEntity.author);

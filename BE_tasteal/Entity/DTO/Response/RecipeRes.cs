@@ -12,6 +12,7 @@ namespace BE_tasteal.Entity.DTO.Response
         public string? introduction { get; set; }
         public string? author_note { get; set; }
         public string? image { get; set; }
+        public bool is_private { get; set; }
         public AuthorRes author { get; set; }
         public IEnumerable<IngredientRes> ingredients { get; set; }
         public Nutrition_InfoEntity nutrition_info { get; set; }
