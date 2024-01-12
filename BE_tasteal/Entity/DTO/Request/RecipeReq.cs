@@ -1,5 +1,4 @@
-﻿using BE_tasteal.API.Middleware;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace BE_tasteal.Entity.DTO.Request
@@ -13,7 +12,6 @@ namespace BE_tasteal.Entity.DTO.Request
         public decimal? rating { get; set; }
         public string? image { get; set; }
         public int? totalTime { get; set; }
-        [ValidateTimeSpanString(ErrorMessage = "string format invalid")]
         public string? active_time { get; set; }
         public int serving_size { get; set; }
         [MaxLength(500)]

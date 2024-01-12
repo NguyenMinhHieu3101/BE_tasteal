@@ -124,9 +124,12 @@ namespace BE_tasteal.Business.Recipe
 
                 foreach (var occasion in entity.occasions)
                 {
-                    Recipe_OccasionEntity recipe_OccasionEntity = new Recipe_OccasionEntity();
-                    recipe_OccasionEntity.occasion_id = occasion;
-                    recipe_OccasionEntity.recipe_id = newRecipe.id;
+                    Recipe_OccasionEntity recipe_OccasionEntity = new Recipe_OccasionEntity
+                    {
+                        occasion_id = occasion,
+                        recipe_id = newRecipe.id
+                    };
+
                     var item = await _recipe_OccasionRepo.InsertAsync(recipe_OccasionEntity);
                     if (item != null)
                         recipe_Occasions.Add(item);
@@ -512,7 +515,7 @@ namespace BE_tasteal.Business.Recipe
                 //occasion
                 recipeRes.occasions = new List<OccasionEntity>();
 
-                var list_id_occasion = _recipe_OccasionRepo.getListIdOccasionByRecipeId(2);
+                var list_id_occasion = _recipe_OccasionRepo.getListIdOccasionByRecipeId(id);
                 if (list_id_occasion != null)
                 {
                     foreach (var item in list_id_occasion)
