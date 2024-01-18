@@ -31,6 +31,15 @@ namespace BE_tasteal.Persistence.Repository.Pantry
                                 .Skip((page - 1) * pageSize)
                                 .Take(pageSize);
 
+            foreach (var recipe in listRecipe)
+            {
+                // Tính toán danh sách ingredients_miss cho mỗi recipe
+                recipe.ingredients_miss = values.Except(_context.Recipe_Ingredient
+                                                .Where(item => item.recipe_id == recipe.id)
+                                                .Select(item => item.ingredient_id))
+                                                .ToList();
+            }
+
             return listRecipe.ToList();
         }
         public List<RecipeEntity> FindGroupIndexContainingAllValues(RecipesIngreAny req)
