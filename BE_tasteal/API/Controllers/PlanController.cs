@@ -151,27 +151,30 @@ namespace BE_tasteal.API.Controllers
 
                 decimal dis = Math.Abs(standardCalo - userCalo);
 
+
+                var mindifCaloRecipe = userRecipe
+                        .OrderBy(r => Math.Abs(r.nutrition_info.calories ?? -dis))
+                        .FirstOrDefault();
                 if (userCalo > standardCalo)
                 {
-                    var minCaloRecip = userRecipe
-                        .OrderBy(r => r.nutrition_info.calories)
-                        .FirstOrDefault();
-
-                    var newCalo = userCalo - minCaloRecip.nutrition_info.calories ?? 0;
+                    var newCalo = userCalo - mindifCaloRecipe.nutrition_info.calories ?? 0;
                     var dis1 = standardCalo - newCalo;
 
+                    //tru roi ma no nam trong khoang thi tra
                     if ((standardCalo * 92 / 100) <= newCalo && newCalo  <= (standardCalo * 108 / 100))
                     {
                         RecommendMealPlanRes response = new RecommendMealPlanRes();
                         response.state = "higher";
                         response.recipe_add_ids = new List<planRecipe>();
                         response.recipe_remove_ids = new List<planRecipe>();
+                       
 
                         planRecipe planRecp = new planRecipe
                         {
-                            id = minCaloRecip.id
+                            id = mindifCaloRecipe.id
                         };
                         response.recipe_remove_ids.Add(planRecp);
+
                         response.standard_calories = standardCalo;
                         response.real_calories = userCalo;
 
@@ -188,7 +191,7 @@ namespace BE_tasteal.API.Controllers
                             response.recipe_add_ids = new List<planRecipe>();
                             response.recipe_add_ids.Add(new planRecipe { id = closetRecipeDiff.id });
                             response.recipe_remove_ids = new List<planRecipe>();
-                            response.recipe_remove_ids.Add(new planRecipe { id = minCaloRecip.id });
+                            response.recipe_remove_ids.Add(new planRecipe { id = mindifCaloRecipe.id });
                             response.standard_calories = standardCalo;
                             response.real_calories = newCalo + dis1;
 
@@ -204,18 +207,50 @@ namespace BE_tasteal.API.Controllers
                             response.recipe_add_ids = new List<planRecipe>();
                             response.recipe_add_ids.Add(new planRecipe { id = recipeN.id, amount = n });
                             response.recipe_remove_ids = new List<planRecipe>();
-                            response.recipe_remove_ids.Add(new planRecipe { id = minCaloRecip.id });
+                            response.recipe_remove_ids.Add(new planRecipe { id = mindifCaloRecipe.id });
                             response.standard_calories = standardCalo;
                             response.real_calories = newCalo + dis1;
 
                             return Ok(response);
                         }
                     }
-
                 }
+                else
+                {
+                    var closetRecipeDiff = _recipeRepository.closetRecipeDiff(dis);
 
+                    if ((dis * 92 / 100) <= closetRecipeDiff.nutrition_info.calories 
+                        && closetRecipeDiff.nutrition_info.calories <= (dis * 108 / 100)) 
+                    {
+                        RecommendMealPlanRes response = new RecommendMealPlanRes();
+                        response.state = "smaller";
+                        response.recipe_add_ids = new List<planRecipe>();
+                        response.recipe_remove_ids = new List<planRecipe>();
+                        response.recipe_remove_ids.Add(new planRecipe { id = closetRecipeDiff.id });
+             
+                        response.standard_calories = standardCalo;
+                        response.real_calories = userCalo - dis + closetRecipeDiff.nutrition_info.calories??0;
 
+                        return Ok(response);
+                    }
+                    else
+                    {
+                        RecommendMealPlanRes response = new RecommendMealPlanRes();
+                        var recipeN = _recipeRepository.FindByIdAsyncWithNutrition(92);
 
+                        int n = (int)Math.Floor(dis / recipeN.nutrition_info.calories ?? 1);
+
+                        response.state = "smaller";
+                        response.recipe_add_ids = new List<planRecipe>();
+                        response.recipe_add_ids.Add(new planRecipe { id = recipeN.id, amount = n });
+                        response.recipe_remove_ids = new List<planRecipe>();
+                        response.recipe_remove_ids.Add(new planRecipe { id = mindifCaloRecipe.id });
+                        response.standard_calories = standardCalo;
+                        response.real_calories = userCalo - dis + n * recipeN.nutrition_info.calories??0;
+
+                        return Ok(response);
+                    }
+                }
 
 
                 return Ok();
