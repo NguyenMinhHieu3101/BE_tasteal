@@ -42,6 +42,6 @@ namespace BE_tasteal.Entity.Entity
         [NotMapped]
         public List<Recipe_OccasionEntity>? occasions { get; set; }
         [NotMapped]
-        public List<int> ingredients_miss { get; set; }
+        public List<dynamic>? ingredients_miss { get; set; }
     }
 }

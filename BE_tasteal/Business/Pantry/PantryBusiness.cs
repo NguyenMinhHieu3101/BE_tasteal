@@ -13,9 +13,9 @@ namespace BE_tasteal.Business.Pantry
             _pantryRepo = pantryBusiness;
         }
 
-        public List<RecipeEntity> FindGroupIndexContainingAnyValue(RecipesIngreAny req)
+        public async Task<List<RecipeEntity>> FindGroupIndexContainingAnyValue(RecipesIngreAny req)
         {
-            return _pantryRepo.FindGroupIndexContainingAnyValue(req);
+            return await _pantryRepo.FindGroupIndexContainingAnyValue(req);
         }
 
         public List<RecipeEntity> FindGroupIndexContainingAllValues(RecipesIngreAny req)

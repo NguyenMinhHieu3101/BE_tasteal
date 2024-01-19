@@ -6,7 +6,7 @@ namespace BE_tasteal.Persistence.Repository.Pantry
 {
     public interface IPantryRepo : IGenericRepository<PantryEntity>
     {
-        List<RecipeEntity> FindGroupIndexContainingAnyValue(RecipesIngreAny req);
+        Task<List<RecipeEntity>> FindGroupIndexContainingAnyValue(RecipesIngreAny req);
         List<RecipeEntity> FindGroupIndexContainingAllValues(RecipesIngreAny req);
         List<RecipeEntity> FindGroupIndexContainingAnyValuesPantry(RecipesPantryAny req);
         List<RecipeEntity> FindGroupIndexContainingAllValuesPantry(RecipesPantryAny req);

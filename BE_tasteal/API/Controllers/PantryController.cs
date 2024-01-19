@@ -36,7 +36,7 @@ namespace BE_tasteal.API.Controllers
                     if (await _ingredientRepo.FindByIdAsync(item) == null)
                         return BadRequest("ingredient id invalid");
                 }
-                var all = _pantryBusiness.FindGroupIndexContainingAnyValue(req);
+                var all = await _pantryBusiness.FindGroupIndexContainingAnyValue(req);
                 return Ok(all);
             }
             catch (Exception ex)

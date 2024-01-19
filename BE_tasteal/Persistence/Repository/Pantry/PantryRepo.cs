@@ -13,7 +13,7 @@ namespace BE_tasteal.Persistence.Repository.Pantry
         {
 
         }
-        public List<RecipeEntity> FindGroupIndexContainingAnyValue(RecipesIngreAny req)
+        public async Task<List<RecipeEntity>> FindGroupIndexContainingAnyValue(RecipesIngreAny req)
         {
             var values = req.ingredients;
             var listRecipeId = _context.Recipe_Ingredient
@@ -29,15 +29,29 @@ namespace BE_tasteal.Persistence.Repository.Pantry
                                 .Where(r => listRecipeId.Contains(r.id))
                                 .Include(r => r.account)
                                 .Skip((page - 1) * pageSize)
-                                .Take(pageSize);
+                                .Take(pageSize)
+                                .ToList();
+
 
             foreach (var recipe in listRecipe)
             {
-                // Tính toán danh sách ingredients_miss cho mỗi recipe
-                recipe.ingredients_miss = values.Except(_context.Recipe_Ingredient
+                var t = _context.Recipe_Ingredient
                                                 .Where(item => item.recipe_id == recipe.id)
-                                                .Select(item => item.ingredient_id))
+                                                .Select(item => item.ingredient_id)
                                                 .ToList();
+
+                var result = t.Except(values).ToList();
+                recipe.ingredients_miss = new List<dynamic>();
+                foreach (var item in result)
+                {
+                    var ingre = await _context.Set<IngredientEntity>().FindAsync(item);
+                    recipe.ingredients_miss.Add(new
+                    {
+                        id = ingre.id,
+                        name = ingre.name,
+                    });
+                }
+
             }
 
             return listRecipe.ToList();
