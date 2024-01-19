@@ -349,7 +349,7 @@ namespace BE_tasteal.Persistence.Repository.RecipeRepo
             var closet = _context.Recipe
                         .Include(c => c.nutrition_info)
                         .Where(c => c.nutrition_info.calories <= dis1)
-                        .OrderBy(r => Math.Abs(r.nutrition_info.calories ?? -dis1))
+                        .OrderByDescending(r => Math.Abs(r.nutrition_info.calories ??0 - dis1))
                         .FirstOrDefault();
 
             return closet;

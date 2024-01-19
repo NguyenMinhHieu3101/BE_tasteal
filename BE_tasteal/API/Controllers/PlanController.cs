@@ -153,7 +153,7 @@ namespace BE_tasteal.API.Controllers
 
 
                 var mindifCaloRecipe = userRecipe
-                        .OrderBy(r => Math.Abs(r.nutrition_info.calories ?? -dis))
+                        .OrderByDescending(r => Math.Abs(r.nutrition_info.calories ?? 0 - dis))
                         .FirstOrDefault();
                 if (userCalo > standardCalo)
                 {
@@ -225,11 +225,11 @@ namespace BE_tasteal.API.Controllers
                         RecommendMealPlanRes response = new RecommendMealPlanRes();
                         response.state = "smaller";
                         response.recipe_add_ids = new List<planRecipe>();
+                        response.recipe_add_ids.Add(new planRecipe { id = closetRecipeDiff.id });
                         response.recipe_remove_ids = new List<planRecipe>();
-                        response.recipe_remove_ids.Add(new planRecipe { id = closetRecipeDiff.id });
              
                         response.standard_calories = standardCalo;
-                        response.real_calories = userCalo - dis + closetRecipeDiff.nutrition_info.calories??0;
+                        response.real_calories = userCalo + closetRecipeDiff.nutrition_info.calories??0;
 
                         return Ok(response);
                     }
