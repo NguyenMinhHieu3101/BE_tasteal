@@ -158,7 +158,7 @@ namespace BE_tasteal.API.Controllers
                 if (userCalo > standardCalo)
                 {
                     var newCalo = userCalo - mindifCaloRecipe.nutrition_info.calories ?? 0;
-                    var dis1 = standardCalo - newCalo;
+                    var dis1 = Math.Abs( standardCalo - newCalo);
 
                     //tru roi ma no nam trong khoang thi tra
                     if ((standardCalo * 92 / 100) <= newCalo && newCalo  <= (standardCalo * 108 / 100))
@@ -178,7 +178,7 @@ namespace BE_tasteal.API.Controllers
                         response.recipe_remove_ids.Add(planRecp);
 
                         response.standard_calories = standardCalo;
-                        response.real_calories = userCalo;
+                        response.real_calories = newCalo;
 
                         return Ok(response);
                     }
