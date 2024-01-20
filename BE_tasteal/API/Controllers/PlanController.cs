@@ -172,6 +172,8 @@ namespace BE_tasteal.API.Controllers
                         planRecipe planRecp = new planRecipe
                         {
                             id = mindifCaloRecipe.id
+                            ,
+                            amount = 1
                         };
                         response.recipe_remove_ids.Add(planRecp);
 
@@ -189,9 +191,9 @@ namespace BE_tasteal.API.Controllers
                             RecommendMealPlanRes response = new RecommendMealPlanRes();
                             response.state = "higher";
                             response.recipe_add_ids = new List<planRecipe>();
-                            response.recipe_add_ids.Add(new planRecipe { id = closetRecipeDiff.id });
+                            response.recipe_add_ids.Add(new planRecipe { id = closetRecipeDiff.id , amount = 1 });
                             response.recipe_remove_ids = new List<planRecipe>();
-                            response.recipe_remove_ids.Add(new planRecipe { id = mindifCaloRecipe.id });
+                            response.recipe_remove_ids.Add(new planRecipe { id = mindifCaloRecipe.id,  amount = 1 });
                             response.standard_calories = standardCalo;
                             response.real_calories = newCalo + dis1;
 
@@ -207,7 +209,7 @@ namespace BE_tasteal.API.Controllers
                             response.recipe_add_ids = new List<planRecipe>();
                             response.recipe_add_ids.Add(new planRecipe { id = recipeN.id, amount = n });
                             response.recipe_remove_ids = new List<planRecipe>();
-                            response.recipe_remove_ids.Add(new planRecipe { id = mindifCaloRecipe.id });
+                            response.recipe_remove_ids.Add(new planRecipe { id = mindifCaloRecipe.id , amount = 1 });
                             response.standard_calories = standardCalo;
                             response.real_calories = newCalo + dis1;
 
@@ -225,7 +227,7 @@ namespace BE_tasteal.API.Controllers
                         RecommendMealPlanRes response = new RecommendMealPlanRes();
                         response.state = "smaller";
                         response.recipe_add_ids = new List<planRecipe>();
-                        response.recipe_add_ids.Add(new planRecipe { id = closetRecipeDiff.id });
+                        response.recipe_add_ids.Add(new planRecipe { id = closetRecipeDiff.id , amount = 1});
                         response.recipe_remove_ids = new List<planRecipe>();
              
                         response.standard_calories = standardCalo;
@@ -244,7 +246,7 @@ namespace BE_tasteal.API.Controllers
                         response.recipe_add_ids = new List<planRecipe>();
                         response.recipe_add_ids.Add(new planRecipe { id = recipeN.id, amount = n });
                         response.recipe_remove_ids = new List<planRecipe>();
-                        response.recipe_remove_ids.Add(new planRecipe { id = mindifCaloRecipe.id });
+                        response.recipe_remove_ids.Add(new planRecipe { id = mindifCaloRecipe.id, amount = 1 });
                         response.standard_calories = standardCalo;
                         response.real_calories = userCalo - dis + n * recipeN.nutrition_info.calories??0;
 
